@@ -2,6 +2,6 @@
 #include <stdlib.h>
 
 int main() {
-    printf("jajhbaj");
+    printf("jaj");
     return EXIT_SUCCESS;
 }
