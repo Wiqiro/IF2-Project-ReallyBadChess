@@ -1,1 +1,2 @@
-gcc.exe main.c -Werror -Wall -o main.exe
+.c.o:
+	gcc.exe main.c -Werror -Wall -o main.exe
