@@ -2,6 +2,6 @@
 #include <stdlib.h>
 
 int main() {
-    printf("jssdhaj");
+    printf("jssdj");
     return EXIT_SUCCESS;
 }
