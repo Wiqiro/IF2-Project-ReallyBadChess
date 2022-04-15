@@ -1,7 +1,11 @@
-exe
-o
-dll
-so
+# Ignore all
 *
-!/**/
+
+# Unignore all with extensions
 !*.*
+
+# Ignore files with extension
+*.exe
+*.o
+*.dll
+*.so
