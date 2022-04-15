@@ -3,7 +3,7 @@
 
 int main() {
 
-    printf("jsskjdj");
+    printf("jsjdj");
 
     return EXIT_SUCCESS;
 }
