@@ -3,12 +3,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-case** CreateAndInitializeBoard(int size);
+typedef struct square {
+    int type;
+    bool color;
+} square;
 
-void InitializeBoard(case** board, int size);
 
 
+square** CreateAndInitializeBoard(int size);
+
+void InitializeBoard(square** board, int size);
+
+void FreeBoard(square** board, int size);
 
 
 

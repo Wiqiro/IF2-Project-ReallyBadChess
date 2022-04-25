@@ -1,3 +1,13 @@
-void export(**case board, int size);
+#ifndef _DISPLAY_HEADER_
+#define _DISPLAY_HEADER_
 
-void import(**case board, int size);
+#include <board.h>
+
+
+
+void export(square** board, int size);
+
+void import(square** board, int size);
+
+
+#endif
