@@ -3,7 +3,7 @@
 
 int main() {
 
-    printf("fgjsjb");
+    printf("yoyoyoyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
 
     return EXIT_SUCCESS;
 }
