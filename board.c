@@ -30,17 +30,10 @@ square** CreateBoard(int size) {
  */
 void InitializeBoardRandom(square** board, int size){
 
-    //Setting up pieces colors
-    for (int x=0; x<size; x++) {
-        for (int y=0; y<2;y++) {
-            board[x][y].color = black;
-        }
-        for (int y=size-2; y<size;y++) {
-            board[x][y].color = white;
-        }
-    }
+    InitializeBoardColor(board, size);
 
-    //Placing white and black kings
+
+    //Placing the two kings
     board[rand()%size][size-1].type = king;
     board[rand()%size][0].type = king;
 
@@ -61,7 +54,47 @@ void InitializeBoardRandom(square** board, int size){
  * @param board Board to modify (has to be a 8x8 board)
  */
 void InitializeBoardClassic(square** board){
+    
+    InitializeBoardColor(board, 8);
 
+    //placing the empty squares
+
+    //placing the pawns
+
+    //placing the rooks
+    board[0][0].type = rook;
+    board[7][0].type = rook;
+    board[0][7].type = rook;
+    board[7][7].type = rook;
+    //placing the knights
+    board[1][0].type = knight;
+    board[6][0].type = knight;
+    board[1][7].type = knight;
+    board[6][7].type = knight;
+    //placing the bishops
+    board[2][0].type = bishop;
+    board[5][0].type = bishop;
+    board[2][7].type = bishop;
+    board[5][7].type = bishop;
+    
+    //placing the queens
+
+    //placing the kings
+
+
+}
+
+void InitializeBoardColor(square** board, int size) {
+    for (int x=0; x<size; x++) {
+
+        for (int y=0; y<2;y++) {
+            board[x][y].color = black;
+        }
+        for (int y=size-2; y<size;y++) {
+            board[x][y].color = white;
+        }
+
+    }
 }
 
 

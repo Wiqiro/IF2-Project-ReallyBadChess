@@ -55,6 +55,15 @@ void InitializeBoardClassic(square** board);
 
 
 /**
+ * @brief Setup the colors of a specified board (black on the two first rows and white on the rest : color does not matter on empty squares)
+ * 
+ * @param board Board to modify
+ * @param size Size of the board
+ */
+void InitializeBoardColor(square** board, int size);
+
+
+/**
  * @brief Generic print of the chessboard
  * 
  * @param board Board to print
