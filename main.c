@@ -9,7 +9,7 @@
 
 int main() {
 
-    printf("hello world");
+    printf("ééé█████éé");
 
     return EXIT_SUCCESS;
 }

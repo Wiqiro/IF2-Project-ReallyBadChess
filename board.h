@@ -5,21 +5,55 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+//definition of the structure of a board square : type (0=nothing, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
 typedef struct square {
     int type;
     bool color;
 } square;
 
 
-
+/**
+ * @brief Create a And Initialize Board object (square matrix)
+ * 
+ * @param size size of the board (nxn)
+ * @return square** the board created
+ */
 square** CreateAndInitializeBoard(int size);
 
-void InitializeBoard(square** board, int size);
+
+/**
+ * @brief Place the chess pieces randomly (only one king, following the classic rules)
+ * 
+ * @param board Board to modify
+ * @param size Size of the board
+ */
+void InitializeBoardRandom(square** board, int size);
 
 
+/**
+ * @brief Place the pieces on the specified following the classic chess rules
+ * 
+ * @param board Board to modify (has to be a 8x8 board)
+ */
+void InitializeBoardClassic(square** board);
 
+
+/**
+ * @brief Generic print of the chessboard
+ * 
+ * @param board Board to print
+ * @param size Size of the board
+ */
+void SimplePrint(square** board, int size);
+
+
+/**
+ * @brief Free the specified board
+ * 
+ * @param board Board to free
+ * @param size Size of the board
+ */
 void FreeBoard(square** board, int size);
-
 
 
 #endif
