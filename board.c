@@ -31,12 +31,12 @@ square** CreateBoard(int size) {
 void InitializeBoardRandom(square** board, int size){
 
     //Setting up pieces colors
-    for (int i=0; i<size; i++) {
-        for (int j=0; j<2;j++) {
-            board[i][j].color = black;
+    for (int x=0; x<size; x++) {
+        for (int y=0; y<2;y++) {
+            board[x][y].color = black;
         }
-        for (int j=size-2; j<size;j++) {
-            board[i][j].color = white;
+        for (int y=size-2; y<size;y++) {
+            board[x][y].color = white;
         }
     }
 
@@ -46,7 +46,7 @@ void InitializeBoardRandom(square** board, int size){
 
     for(int i=0; i<size; i++) {
         for (int j=0; j<size; j++) {
-            if (j<2 && j>size-3 && board[i][j].type!=king) {
+            if ((j<2 || j>size-3) && board[i][j].type!=king) {
                 board[i][j].type = rand()%5+1; //Placing a random piece (can't be a king)
             }
         }
@@ -72,9 +72,9 @@ void InitializeBoardClassic(square** board){
  * @param size Size of the board
  */
 void SimplePrint(square** board, int size) {
-    for (int i=0; i<size; i++) {
-        for (int j=0; j<size; j++) {
-            printf("%d ",board[i][j].type);
+    for (int y=0; y<size; y++) {
+        for (int x=0; x<size; x++) {
+            printf("%d ",board[x][y].type);
         }
         printf("\n");
     }

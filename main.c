@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     square** board = CreateBoard(size);
-
+    InitializeBoardRandom(board, size);
     SimplePrint(board, size);
     return EXIT_SUCCESS;
 }

@@ -1,22 +1,18 @@
 #OS-related macros
 ifeq ($(OS),Windows_NT)
-    DLLEXT := .dll
 	EXPORTSOURCE = export.bat
 	CLEANCOMMAND = del
 else
-    DLLEXT := .so
 	EXPORTSOURCE = sh exportLD.sh
 	CLEANCOMMAND = rm -rf
 endif
 
 CXX = gcc
-CFLAGS = -Wall -Werror -pedantic -fpic -g
+CFLAGS = -Wall -Werror -pedantic -g
 LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 
 #Library-related macros
-LIBCORENAME = libs
-LIBTARGET :=lib$(LIBCORENAME)$(DLLEXT)
 LIBSOURCE = board moves display save
 LIBSOURCECFILE = $(LIBSOURCE:=.c)
 LIBSOURCEOFILE = $(LIBSOURCE:=.o)
@@ -34,15 +30,10 @@ run: $(TARGET)
 all: $(TARGET) 
 
 #Generating the executable
-$(TARGET): $(EXESOURCEOFILE) $(LIBTARGET)
+$(TARGET): $(EXESOURCEOFILE) $(LIBSOURCEOFILE)
 	@echo "\nGenerating the executable" $@ "from" $<
-	$(CXX) $(EXESOURCEOFILE) -L $(LIBCORENAME) $(LIBSDIR) -o $(TARGET) -lm
+	$(CXX) $(EXESOURCEOFILE) -L $(LIBCORENAME) $(LIBSDIR) -o $(TARGET)  $(LIBSOURCEOFILE)
 
-#Generating the library binary code
-$(LIBTARGET): $(LIBSOURCEOFILE)
-	@echo "\nGenerating the library binary code .so from object files (.o)" $@
-	$(CXX) $(CFLAGS) -shared $(LIBSOURCEOFILE) -o $(LIBTARGET)
-	
 
 #Generating an object file from a C file having the same name
 .c.o:
@@ -51,4 +42,4 @@ $(LIBTARGET): $(LIBSOURCEOFILE)
 
 clean:
 	@echo "Cleaning temporary files"
-	$(CLEANCOMMAND) *.o *~ *.so *.dll *.exe
+	$(CLEANCOMMAND) *.o *.so *.dll *.exe
