@@ -7,14 +7,16 @@
  * @param size size of the board (nxn)
  * @return square** the board created
  */
-square** CreateBoard(int size){
+square** CreateBoard(int size) {
     square** board = (square**)malloc(sizeof(square*)*size);
     for (int i=0; i<size; i++) {
         board[i] = (square*)malloc(sizeof(square)*size);
     }
-    if (board == NULL) {
-        fprintf("ERROR CREATING THE BOARD : not enough memory\n");
+
+    if (board == NULL) {    //handling potential memory errors
+        fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n"); 
     }
+    
     return board;
 }
 
@@ -27,6 +29,28 @@ square** CreateBoard(int size){
  * @param size Size of the board
  */
 void InitializeBoardRandom(square** board, int size){
+
+    //Setting up pieces colors
+    for (int i=0; i<size; i++) {
+        for (int j=0; j<2;j++) {
+            board[i][j].color = black;
+        }
+        for (int j=size-2; j<size;j++) {
+            board[i][j].color = white;
+        }
+    }
+
+    //Placing white and black kings
+    board[rand()%size][size-1].type = king;
+    board[rand()%size][0].type = king;
+
+    for(int i=0; i<size; i++) {
+        for (int j=0; j<size; j++) {
+            if (j<2 && j>size-3 && board[i][j].type!=king) {
+                board[i][j].type = rand()%5+1; //Placing a random piece (can't be a king)
+            }
+        }
+    }
 
 }
 
@@ -48,7 +72,12 @@ void InitializeBoardClassic(square** board){
  * @param size Size of the board
  */
 void SimplePrint(square** board, int size) {
-
+    for (int i=0; i<size; i++) {
+        for (int j=0; j<size; j++) {
+            printf("%d ",board[i][j].type);
+        }
+        printf("\n");
+    }
 }
 
 

@@ -4,11 +4,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
+typedef enum {
+    empty = 0,
+    pawn = 1,
+    bishop = 2,
+    knight = 3,
+    rook = 4,
+    queen = 5,
+    king = 6,
+} piece;
+
+typedef enum {
+    white = 0,
+    black = 1,
+} color;
 
 //definition of the structure of a board square : type (0=nothing, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
 typedef struct square {
-    int type;
-    bool color;
+    piece type;
+    color color;
 } square;
 
 
@@ -18,7 +34,7 @@ typedef struct square {
  * @param size size of the board (nxn)
  * @return square** the board created
  */
-square** CreateAndInitializeBoard(int size);
+square** CreateBoard(int size);
 
 
 /**
