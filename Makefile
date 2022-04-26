@@ -15,9 +15,9 @@ LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 
 #Library-related macros
-LIBCORENAME = display
+LIBCORENAME = libs
 LIBTARGET :=lib$(LIBCORENAME)$(DLLEXT)
-LIBSOURCE = $(LIBCORENAME)
+LIBSOURCE = board moves display save
 LIBSOURCECFILE = $(LIBSOURCE:=.c)
 LIBSOURCEOFILE = $(LIBSOURCE:=.o)
 

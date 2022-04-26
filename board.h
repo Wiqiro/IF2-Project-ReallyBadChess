@@ -16,6 +16,8 @@ square** CreateAndInitializeBoard(int size);
 
 void InitializeBoard(square** board, int size);
 
+
+
 void FreeBoard(square** board, int size);
 
 
