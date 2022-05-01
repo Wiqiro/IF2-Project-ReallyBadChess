@@ -78,7 +78,7 @@ void SimplePrint(square** board, int size);
  * @param board Board to free
  * @param size Size of the board
  */
-void FreeBoard(square** board, int size);
+void FreeBoard(square*** board, int size);
 
 
 #endif

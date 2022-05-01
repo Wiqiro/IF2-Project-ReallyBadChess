@@ -16,7 +16,7 @@
  * @return true  if a piece was captured
  * @return false if no piece were captured
  */
-bool Move(square** board, int size, int startx, int starty, int targx, int targy); //route to the right MoveTest function depending on the type and append MoveExecute
+bool Move(square** board, int size, int startx, int starty, int targx, int targy);
 
 
 /**

@@ -9,14 +9,18 @@
  */
 square** CreateBoard(int size) {
     square** board = (square**)malloc(sizeof(square*)*size);
-    for (int i=0; i<size; i++) {
-        board[i] = (square*)malloc(sizeof(square)*size);
-    }
-
-    if (board == NULL) {    //handling potential memory errors
+    if (board != NULL) {    //handling potential memory errors
+        for (int i=0; i<size; i++) {
+            if (board != NULL) {
+                board[i] = (square*)malloc(sizeof(square)*size);
+            }
+            else {
+                fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n"); 
+            }
+        }
+    } else {
         fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n"); 
     }
-    
     return board;
 }
 
@@ -111,6 +115,7 @@ void SimplePrint(square** board, int size) {
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 
@@ -120,6 +125,6 @@ void SimplePrint(square** board, int size) {
  * @param board Board to free
  * @param size Size of the board
  */
-void FreeBoard(square** board, int size){
+void FreeBoard(square*** board, int size){
 
 }
