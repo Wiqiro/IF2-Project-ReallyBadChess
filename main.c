@@ -15,6 +15,6 @@ int main(int argc, char* argv[]) {
     InitializeBoardRandom(board, size);
     SimplePrint(board, size);
 
-    printf("\n%d",PawnMoveTest(board, size, 7,7,8,5));
+    //printf("\n%d",PawnMoveTest(board, size, 7,7,8,5));
     return EXIT_SUCCESS;
 }
