@@ -14,9 +14,11 @@
  * @return false if no piece were captured
  */
 bool Move(square** board, int size, int startx, int starty, int targx, int targy) {
+    if (board[startx][starty].type == queen) {
+            QueenMoveTest(board, size, startx, starty, targx, targy);
+    }
+
     bool captured=false;
-
-
     return captured;
 }
 
@@ -104,9 +106,9 @@ bool KnightMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return false if the move is not allowed
  */
 bool RookMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool okMove=false;
 
-    return okMove;
+    return false;
+
 }
 
 
@@ -123,9 +125,23 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false if the move is not allowed
  */
 bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool okMove=false;
 
-    return okMove;
+    int movex = targx-startx;
+    int movey = targy-starty;
+
+    int i=0;
+    
+    while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
+        //printf("%d",board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type);
+        i++;
+    }
+
+    //printf("\n%d",i);
+    if (i == fmax(movex,movey)-1) {
+        return true;
+    }
+    
+    return false;
 }
 
 

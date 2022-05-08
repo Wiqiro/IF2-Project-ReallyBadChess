@@ -2,7 +2,6 @@
 #define _MOVES_HEADER_
 
 #include <board.h>
-#include <moves.h>
 
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece --> execute the move if possible
