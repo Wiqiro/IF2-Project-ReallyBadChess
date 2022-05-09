@@ -22,6 +22,45 @@ bool Move(square** board, int size, int startx, int starty, int targx, int targy
     return captured;
 }
 
+/**
+ * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param startx The starting column of the piece
+ * @param starty The starting row of the piece
+ * @param targx The targetted column of move
+ * @param targy The targetted row of move
+ * @return true  if the move is possible
+ * @return false if the move is not possible
+ */
+bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+    switch (board[startx][starty].type)
+    {
+    case 1:
+        return PawnMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    case 2:
+        return BishopMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    case 3:
+        return KnightMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    case 4:
+        return RookMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    case 5:
+        return QueenMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    case 6:
+        return KingMoveTest(board, size, startx, starty, targx, targy);
+        break;
+    
+    default:
+        return false;
+        break;
+    }
+}
 
 /**
  * @brief Test if the move of a specified pawn is possible
@@ -87,9 +126,14 @@ bool BishopMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return false if the move is not allowed
  */
 bool KnightMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool okMove=false;
+    int movex = targx-startx;
+    int movey = targy-starty;
 
-    return okMove;
+    if ((abs(movex) == 2 && abs(movey) == 1) || (abs(movex) == 1 && abs(movey) == 2)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -106,9 +150,7 @@ bool KnightMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return false if the move is not allowed
  */
 bool RookMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-
-    return false;
-
+    return true;
 }
 
 
@@ -130,18 +172,16 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
     int movey = targy-starty;
 
     int i=0;
-    
-    while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
-        //printf("%d",board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type);
+    if (abs(movex) == abs(movey) || movex == 0 || movey == 0) {
+        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
         i++;
+        }
     }
-
-    //printf("\n%d",i);
     if (i == fmax(movex,movey)-1) {
-        return true;
+        return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
+    } else {
+        return false;
     }
-    
-    return false;
 }
 
 
@@ -175,9 +215,16 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false no Check
  */
 bool CheckTest(square** board, int size, int kingposx, int kingposy) {
-    bool check=false;
+    for (int x=0; x<size; x++) {
+        for (int y=0; y<size; y++) {
+            if (board[x][y].type != true) {
 
-    return check;
+            }
+        }
+    }
+
+
+    return false;
 }
 
 

@@ -19,6 +19,20 @@ bool Move(square** board, int size, int startx, int starty, int targx, int targy
 
 
 /**
+ * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param startx The starting column of the piece
+ * @param starty The starting row of the piece
+ * @param targx The targetted column of move
+ * @param targy The targetted row of move
+ * @return true  if the move is possible
+ * @return false if the move is not possible
+ */
+bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+
+/**
  * @brief Test if the move of a specified pawn is possible
  * 
  * @param board Board where the move has to be tested

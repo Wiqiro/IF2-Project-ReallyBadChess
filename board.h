@@ -24,7 +24,7 @@ typedef enum {
     black = 1,
 } color;
 
-//definition of the structure of a board square : type (0=nothing, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
+//definition of the structure of a board square : type (0=empty, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
 typedef struct square {
     piece type;
     color color;
