@@ -15,7 +15,7 @@
  */
 bool Move(square** board, int size, int startx, int starty, int targx, int targy) {
     if (board[startx][starty].type == queen) {
-            QueenMoveTest(board, size, startx, starty, targx, targy);
+            MoveTest(board, size, startx, starty, targx, targy);
     }
 
     bool captured=false;
@@ -88,7 +88,6 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
         return true;
     }
     
-    putain
  */
     return 0;
 }
@@ -104,7 +103,7 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @param targx The targetted column of move
  * @param targy The targetted row of move
  * @return true  if the move is allowed
- * @return false if the move is not allowed
+ * @return false if the move is not allowed 
  */
 bool BishopMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
     bool okMove=false;
@@ -167,7 +166,6 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false if the move is not allowed
  */
 bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-
     int movex = targx-startx;
     int movey = targy-starty;
 
@@ -198,9 +196,16 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
  * @return false if the move is not possible
  */
 bool KingMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool okMove=false;
+    int movex = targx-startx;
+    int movey = targy-starty;
 
-    return okMove;
+    if (abs(movex) > 1 || abs(movey) > 1) {
+        return false;
+    } else if (CheckTest(board, size, targx, targy) == false) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -215,16 +220,19 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false no Check
  */
 bool CheckTest(square** board, int size, int kingposx, int kingposy) {
-    for (int x=0; x<size; x++) {
-        for (int y=0; y<size; y++) {
-            if (board[x][y].type != true) {
-
+    bool check = false;
+    int x=0;
+    int y=0;
+    while (x < size && check == false) {
+        while (y < size && check == false) {
+            if (board[x][y].type != empty && board[x][y].type != king) {
+                check = MoveTest(board, size, x, y, kingposx, kingposy);
             }
+            y++;
         }
+    x++;
     }
-
-
-    return false;
+    return check;
 }
 
 
@@ -239,9 +247,13 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy) {
  * @return false no Checkmate position
  */
 bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
-    bool checkMate=false;
-
-    return checkMate;
+    bool checkmate = false;
+    for (int x = kingposx-1; x <= kingposx+1; x++) {
+        for (int y = kingposy-1; y <= kingposy+1; y++) {
+            checkmate = CheckTest(board, size, kingposx+x, kingposy+y);
+        }
+    }
+    return checkmate;
 }
 
 /**
