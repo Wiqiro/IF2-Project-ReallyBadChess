@@ -14,9 +14,6 @@
  * @return false if no piece were captured
  */
 bool Move(square** board, int size, int startx, int starty, int targx, int targy) {
-    if (board[startx][starty].type == queen) {
-            MoveTest(board, size, startx, starty, targx, targy);
-    }
 
     bool captured=false;
     return captured;
