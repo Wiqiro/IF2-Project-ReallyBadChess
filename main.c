@@ -12,10 +12,10 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     square** board = CreateBoard(size);
-    InitializeBoardRandom(board, size);
+    InitializeBoardClassic(board);
     SimplePrint(board, size);
 
-    printf("\n%d",KnightMoveTest(board,size,3,3,5,4));
+   //* printf("\n%d",KnightMoveTest(board,size,3,3,5,4));
 
     return EXIT_SUCCESS;
 }

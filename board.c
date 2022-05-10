@@ -13,6 +13,7 @@ square** CreateBoard(int size) {
         for (int i=0; i<size; i++) {
             if (board != NULL) {
                 board[i] = (square*)malloc(sizeof(square)*size);
+                //board[i][j].type
             }
             else {
                 fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n"); 
@@ -61,10 +62,21 @@ void InitializeBoardClassic(square** board){
     
     InitializeBoardColor(board, 8);
 
-    //placing the empty squares
-
+      //placing the empty squares
+    for(int i = 0; i <= 7; i++)
+    {
+       for(int j = 2; j <= 5; j++)
+       {
+        board[i][j].type = empty;
+       }
+    }
+  
     //placing the pawns
-
+    for(int i = 0; i <= 7; i++)
+    {
+       board[i][1].type = pawn;
+       board[i][6].type = pawn; 
+    }
     //placing the rooks
     board[0][0].type = rook;
     board[7][0].type = rook;
@@ -80,10 +92,12 @@ void InitializeBoardClassic(square** board){
     board[5][0].type = bishop;
     board[2][7].type = bishop;
     board[5][7].type = bishop;
-    
     //placing the queens
-
+    board[3][0].type =  queen;
+    board[3][7].type =  queen;
     //placing the kings
+    board[4][0].type =  king;
+    board[4][7].type =  king;
 
 
 }
@@ -94,7 +108,7 @@ void InitializeBoardColor(square** board, int size) {
         for (int y=0; y<2;y++) {
             board[x][y].color = black;
         }
-        for (int y=size-2; y<size;y++) {
+        for (int y=2; y<size;y++) {
             board[x][y].color = white;
         }
 
