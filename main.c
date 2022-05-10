@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     InitializeBoardClassic(board);
     SimplePrint(board, size);
 
-   //* printf("\n%d",KnightMoveTest(board,size,3,3,5,4));
+    printf("\n%d",QueenMoveTest(board,size,3,3,7,7));
 
     return EXIT_SUCCESS;
 }

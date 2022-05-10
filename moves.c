@@ -106,9 +106,20 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false if the move is not allowed 
  */
 bool BishopMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool okMove=false;
+    int movex = targx-startx;
+    int movey = targy-starty;
 
-    return okMove;
+    int i=0;
+    if (abs(movex) == abs(movey)) {
+        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
+        i++;
+        }
+    }
+    if (i == fmax(movex,movey)-1) {
+        return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
+    } else {
+        return false;
+    }
 }
 
 
@@ -171,7 +182,7 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
 
     int i=0;
     if (abs(movex) == abs(movey) || movex == 0 || movey == 0) {
-        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*i][starty+(movey/abs(movey))*i].type == empty) {
         i++;
         }
     }
