@@ -17,5 +17,8 @@ int main(int argc, char* argv[]) {
 
     printf("\n%d",KnightMoveTest(board,size,3,3,5,4));
 
+
+    
+
     return EXIT_SUCCESS;
 }
