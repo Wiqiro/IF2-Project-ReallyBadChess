@@ -108,7 +108,7 @@ bool BishopMoveTest(square** board, int size, int startx, int starty, int targx,
 
     int i=0;
     if (abs(movex) == abs(movey)) {
-        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
         i++;
         }
     }
@@ -162,10 +162,8 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
 
     int i=0;
     if (movex == 0 || movey == 0) {
-        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
-
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
         i++;
-        //printf("%d",i);
         }
     }
     if (i == fmax(movex,movey)-1) {
@@ -194,10 +192,8 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
 
     int i=0;
     if (abs(movex) == abs(movey) || movex == 0 || movey == 0) {
-        while (i+1 < fmax(movex,movey) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
-
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
         i++;
-        //printf("%d",i);
         }
     }
     if (i == fmax(movex,movey)-1) {

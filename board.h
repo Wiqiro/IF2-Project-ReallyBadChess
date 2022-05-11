@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
+#include <ctype.h>
 
 
 
