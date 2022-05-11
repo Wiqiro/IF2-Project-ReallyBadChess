@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     InitializeBoardClassic(board);
     SimplePrint(board, size);
 
-    //printf("\n%d",RookMoveTest(board,size,3,3,3,5));
+    printf("\n%d",RookMoveTest(board,size,3,3,3,5));
 
 
 
