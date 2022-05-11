@@ -42,6 +42,13 @@ void InitializeBoardRandom(square** board, int size){
     board[rand()%size][size-1].type = king;
     board[rand()%size][0].type = king;
 
+
+    for (int i = 0; i < size; i++) {
+       for(int j = 2; j < size-2; j++) {
+        board[i][j].type = empty;
+       }
+    }
+
     for(int i=0; i<size; i++) {
         for (int j=0; j<size; j++) {
             if ((j<2 || j>size-3) && board[i][j].type!=king) {
@@ -63,17 +70,14 @@ void InitializeBoardClassic(square** board){
     InitializeBoardColor(board, 8);
 
       //placing the empty squares
-    for(int i = 0; i <= 7; i++)
-    {
-       for(int j = 2; j <= 5; j++)
-       {
+    for (int i = 0; i < 8; i++) {
+       for(int j = 2; j < 6; j++) {
         board[i][j].type = empty;
        }
     }
-  
+
     //placing the pawns
-    for(int i = 0; i <= 7; i++)
-    {
+    for (int i = 0; i < 8; i++) {
        board[i][1].type = pawn;
        board[i][6].type = pawn; 
     }
