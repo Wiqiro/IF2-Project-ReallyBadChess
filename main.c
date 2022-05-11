@@ -9,43 +9,27 @@
 
 int main(int argc, char* argv[]) {
 
-    //on va implémenter des fonctions qui dépendent du système d'exploitation plus tard
     srand(time(NULL));
 
+    Clean();
 
-    char gamemode;
-    printf("Bienvenue dans notre jeu d'échec !");
-    do {
-        printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)\n");
-        scanf("%c",&gamemode);
-        gamemode = toupper(gamemode);
-    } while (gamemode != 'B' && gamemode != 'C');
-
+    bool gamemode;
+    printf("Bienvenue dans notre jeu d'echec !");
+    gamemode = GamemodeInput();
 
     square** board;
     int size=0;
-    if (gamemode == 'C') {
+    if (gamemode == 0) {
         size = 8;
         board = CreateBoard(size);
         InitializeBoardClassic(board);
 
     } else {
-        char input[100];
-        do {
-            printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)\n");
-            fflush(stdin);
-            scanf("%s",input);
-            size = strtol(input, NULL, 10);
-            
-        } while (size > 12 || size < 6);
+        size = ChessBoardSizeInput();
         board = CreateBoard(size);
         InitializeBoardRandom(board, size);
     }
 
-
-    
-    
-    
     SimplePrint(board, size);
 
 

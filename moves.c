@@ -72,21 +72,23 @@ bool MoveTest(square** board, int size, int startx, int starty, int targx, int t
  * @return false if the move is not allowed
  */
 bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-/* 
-    if ((board[startx][starty].color == white && targy-starty >= 0) || (board[startx][starty].color == black && targy-starty <= 0)) {
-        printf("Can't move on this direction !\n");
-        return false;
-    } else if (targx < 0 || targy < 0 || targx > size-1 || targy > size-1) {
-        printf("Cannot travel out of the board !\n");
-        return false;
-    } else if (abs(targy-starty) == 2 && targx-startx == 0 && board[targx][targy].type == empty) {
-        return true;
-    } else if (abs(targy-starty) == 1 && targx-startx == 0 && board[targx][targy].type == empty) {
+
+    int movex = targx-startx;
+    int movey = targy-starty;
+
+
+    if ((board[targx][targy].color == black && movey == 1) || (board[targx][targy].color == white && movey == -1)) {
+        if (movex == 0 && board[targx][targy].type == empty) {
+            return true;
+        } else if (abs(movex) == 1) {
+            return true;
+        }
+
+    } else if (movex == 0 && ((board[targx][targy].color == black && targy == 3) || (board[targx][targy].color == white && targy == size-3))) {
         return true;
     }
-    
- */
-    return 0;
+
+    return false;
 }
 
 
