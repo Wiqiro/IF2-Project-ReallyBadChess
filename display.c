@@ -56,18 +56,16 @@ int ChessBoardSizeInput() {
     return size;
 }
 
-//facteurs aggravants
+
 int* MoveInput(int size) {
     int* move = (int*) malloc(sizeof(int) * 2);
     char input[1024];
 
-    do {
-        //printf("Enter the move");
-        fflush(stdin);
-        scanf("%s",input);
-        move[0] = toupper(input[0]) - 'A';
-        move[1] = input[1] - '0' - 1;
-    } while (move[0] < 0 || move[0] > size || move[1] < 0 || move[1] > size);
+    fflush(stdin);
+    scanf("%s",input);
+    move[0] = toupper(input[0]) - 'A';
+    move[1] = input[1] - '0' - 1;
+
     
     return move;
 }

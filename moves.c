@@ -292,6 +292,7 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
  */
 bool MoveExecute(square** board, int size, int startx, int starty, int targx, int targy) {
     bool captured=false;
-
+    board[targx][targy] = board[startx][starty];
+    board[startx][starty].type = empty;
     return captured;
 }

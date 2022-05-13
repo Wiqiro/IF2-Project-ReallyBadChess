@@ -40,19 +40,20 @@ int main(int argc, char* argv[]) {
 
 
     while (a_supprimer == true) {
-        printf("Enter the coordinates of the piece you want to move: ");
+        Clean();
 
+        SimplePrint(board, size);
+
+        do {
+        printf("Entrez les coordonnées de la pièce que vous souhaitez bouger: ");
         startcoords = MoveInput(size);
-        printf("\nEnter the coordinates where you want to move the piece: ");
+
+        printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
         targcoords = MoveInput(size);
 
-        if (board[startcoords[0]][startcoords[1]].color == turn) {
-            if (MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]) == true) {
-
-            }
-        } else {
-            printf("d");
-        }
+        } while (board[startcoords[0]][startcoords[1]].color != turn || MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]) != true );
+        
+        MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
 
         turn = (turn + 1) % 2;
 
