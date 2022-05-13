@@ -10,6 +10,8 @@ bool GamemodeInput();
 
 int ChessBoardSizeInput();
 
+int* MoveInput(int size);
+
 
 
 //ALT+219 to get a full character (ASCII 256)

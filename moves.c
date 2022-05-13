@@ -76,7 +76,6 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
     int movex = targx-startx;
     int movey = targy-starty;
 
-
     if ((board[targx][targy].color == black && movey == 1) || (board[targx][targy].color == white && movey == -1)) {
         if (movex == 0 && board[targx][targy].type == empty) {
             return true;
