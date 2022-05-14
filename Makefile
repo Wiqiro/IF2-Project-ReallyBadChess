@@ -51,4 +51,4 @@ $(LIBTARGET): $(LIBSOURCEOFILE)
 
 clean:
 	@echo "\n Cleaning temporary files"
-	$(CLEANCOMMAND) *.o *~ *.so *.dll *.exe
+	$(CLEANCOMMAND) *.o *~ *.so *.dll *.exe *save

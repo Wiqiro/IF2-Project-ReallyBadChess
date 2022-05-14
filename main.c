@@ -7,10 +7,13 @@
 #include <save.h>
 
 
+
+
 int main(int argc, char* argv[]) {
 
 
     srand(time(NULL));
+
 
     Clean();
 
@@ -48,7 +51,7 @@ int main(int argc, char* argv[]) {
     }
     kingposwhite[1] = size-1;
     kingposblack[1] = 0;
-
+    
     
 
     color turn = white;
@@ -63,6 +66,8 @@ int main(int argc, char* argv[]) {
 
     while (checkmate == false) {
         Clean();
+
+        ExportBoard(board, size);
 
         SimplePrint(board, size);
 

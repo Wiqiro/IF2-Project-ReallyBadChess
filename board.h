@@ -1,3 +1,4 @@
+
 #ifndef _BOARD_HEADER_
 #define _BOARD_HEADER_
 
@@ -7,7 +8,6 @@
 #include <time.h>
 #include <math.h>
 #include <ctype.h>
-
 
 
 typedef enum {

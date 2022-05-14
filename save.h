@@ -4,8 +4,7 @@
 #include <board.h>
 
 
-
-void ExportBoard(square** board, int size, char* filename);
+void ExportBoard(square** board, int size);
 
 void ImportBoard(square** board, int size, char* filename);
 

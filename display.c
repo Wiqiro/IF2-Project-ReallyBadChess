@@ -67,6 +67,7 @@ int* MoveInput(int size) {
 
     if (toupper(input[0]) == 'S' && input[1] == '\0') {
         printf("Exportation !\n");
+        
     } else if (toupper(input[0]) == 'X' && input[1] == '\0') {
         printf("Vous abandonnez !\n");
     } else {
