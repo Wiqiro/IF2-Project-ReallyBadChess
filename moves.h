@@ -3,20 +3,6 @@
 
 #include <board.h>
 
-/**
- * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece --> execute the move if possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if a piece was captured
- * @return false if no piece were captured
- */
-bool Move(square** board, int size, int startx, int starty, int targx, int targy);
-
 
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece

@@ -1,24 +1,5 @@
 #include <moves.h>
 
-
-/**
- * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece --> execute the move if possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if a piece was captured
- * @return false if no piece were captured
- */
-bool Move(square** board, int size, int startx, int starty, int targx, int targy) {
-
-    bool captured=false;
-    return captured;
-}
-
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
  * 
@@ -34,22 +15,22 @@ bool Move(square** board, int size, int startx, int starty, int targx, int targy
 bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
     switch (board[startx][starty].type)
     {
-    case 1:
+    case pawn:
         return PawnMoveTest(board, size, startx, starty, targx, targy);
         break;
-    case 2:
+    case bishop:
         return BishopMoveTest(board, size, startx, starty, targx, targy);
         break;
-    case 3:
+    case knight:
         return KnightMoveTest(board, size, startx, starty, targx, targy);
         break;
-    case 4:
+    case rook:
         return RookMoveTest(board, size, startx, starty, targx, targy);
         break;
-    case 5:
+    case queen:
         return QueenMoveTest(board, size, startx, starty, targx, targy);
         break;
-    case 6:
+    case king:
         return KingMoveTest(board, size, startx, starty, targx, targy);
         break;
     
@@ -76,14 +57,14 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
     int movex = targx-startx;
     int movey = targy-starty;
 
-    if ((board[targx][targy].color == black && movey == 1) || (board[targx][targy].color == white && movey == -1)) {
+    if ((board[startx][starty].color == black && movey == 1) || (board[startx][starty].color == white && movey == -1)) {
         if (movex == 0 && board[targx][targy].type == empty) {
             return true;
         } else if (abs(movex) == 1) {
             return true;
         }
 
-    } else if (movex == 0 && ((board[targx][targy].color == black && targy == 3) || (board[targx][targy].color == white && targy == size-3))) {
+    } else if (movex == 0 && ((board[startx][starty].color == black && targy == 3) || (board[startx][starty].color == white && targy == size-4))) {
         return true;
     }
 
@@ -113,8 +94,8 @@ bool BishopMoveTest(square** board, int size, int startx, int starty, int targx,
         i++;
         }
     }
-    if (i == fmax(movex,movey)-1) {
-        return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
+    if (i == fmax(abs(movex),abs(movey))-1) {
+        return true; //returns true if the way is free (if there is only empty squares in the path of the bishop)
     } else {
         return false;
     }
@@ -167,8 +148,8 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
         i++;
         }
     }
-    if (i == fmax(movex,movey)-1) {
-        return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
+    if (i == fmax(abs(movex),abs(movey))-1) {
+        return true; //returns true if the way is free (if there is only empty squares in the path of the rook)
     } else {
         return false;
     }
@@ -197,7 +178,7 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
         i++;
         }
     }
-    if (i == fmax(movex,movey)-1) {
+    if (i == fmax(abs(movex),abs(movey))-1) {
         return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
     } else {
         return false;
@@ -247,7 +228,7 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy) {
     int y=0;
     while (x < size && check == false) {
         while (y < size && check == false) {
-            if (board[x][y].type != empty && board[x][y].type != king) {
+            if (board[x][y].type != empty && board[x][y].type != king && board[x][y].color != board[kingposx][kingposy].color) {
                 check = MoveTest(board, size, x, y, kingposx, kingposy);
             }
             y++;

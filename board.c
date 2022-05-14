@@ -2,6 +2,19 @@
 
 
 /**
+ * @brief Create a 2x1 array
+ * 
+ * @return int* array generated
+ */
+int* CoordsArray() {
+    int* array = (int*) malloc(sizeof(int) * 2);
+    array[0] = 0;
+    array[1] = 0;
+    return array;
+}
+
+
+/**
  * @brief Create Board object (square matrix)
  * 
  * @param size size of the board (nxn)
