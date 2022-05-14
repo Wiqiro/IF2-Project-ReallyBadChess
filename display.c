@@ -5,7 +5,7 @@
 #ifdef _WIN32
     bool OS = 0;
 #else
-    bool OS = 1;  //assuming that the non-windows systems will handle special characters
+    bool OS = 1;  //assuming that the non-windows systems are linux-based
 #endif
 
 void Clean() {
@@ -61,11 +61,23 @@ int* MoveInput(int size) {
     int* move = (int*) malloc(sizeof(int) * 2);
     char input[1024];
 
+
     fflush(stdin);
     scanf("%s",input);
-    move[0] = toupper(input[0]) - 'A';
-    move[1] = input[1] - '0' - 1;
 
-    
+    if (toupper(input[0]) == 'S' && input[1] == '\0') {
+        printf("Exportation !\n");
+    } else if (toupper(input[0]) == 'X' && input[1] == '\0') {
+        printf("Vous abandonnez !\n");
+    } else {
+        move[0] = toupper(input[0]) - 'A';
+        if (input[2] == '\0') {
+            move[1] = input[1] - '0' - 1;
+        } else if (input[3] == '\0' && input[1] == '1') {
+            move[1] = 10 + (input[2] - '0' - 1);
+        }
+
+    }
+
     return move;
 }

@@ -1,13 +1,13 @@
-#ifndef _DISPLAY_HEADER_
-#define _DISPLAY_HEADER_
+#ifndef _SAVE_HEADER_
+#define _SAVE_HEADER_
 
 #include <board.h>
 
 
 
-void export(square** board, int size);
+void ExportBoard(square** board, int size, char* filename);
 
-void import(square** board, int size);
+void ImportBoard(square** board, int size, char* filename);
 
 
 #endif

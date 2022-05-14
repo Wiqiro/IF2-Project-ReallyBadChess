@@ -157,5 +157,14 @@ void SimplePrint(square** board, int size) {
  * @param size Size of the board
  */
 void FreeBoard(square*** board, int size){
-
+    if (*board != NULL) {
+        for (int x=0; x<size; x++) {
+            if ((*board)[x] != NULL) {
+                free ((*board)[x]);
+                (*board)[x] = NULL;
+            }
+        }
+    }
+    free(*board);
+    *board = NULL;
 }

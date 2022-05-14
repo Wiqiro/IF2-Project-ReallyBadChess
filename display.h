@@ -2,6 +2,7 @@
 #define _DISPLAY_HEADER_
 
 #include <board.h>
+#include <save.h>
 
 void Clean();
 
