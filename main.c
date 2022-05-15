@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
     while (checkmate == false) {
         Clean();
 
-        ExportBoard(board, size);
+        ExportBoard(board, size, "save");
 
         SimplePrint(board, size);
 

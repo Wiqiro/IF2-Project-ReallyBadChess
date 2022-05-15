@@ -3,8 +3,17 @@
 
 #include <board.h>
 
+typedef struct saveinfo {
+    char name[32];
+    int size;
+    time_t time;
+} saveinfo;
 
-void ExportBoard(square** board, int size);
+void InitializeSavesIndex();
+
+saveinfo* SaveParser(char* rawsave);
+
+void ExportBoard(square** board, int size, char* savename);
 
 void ImportBoard(square** board, int size, char* filename);
 
