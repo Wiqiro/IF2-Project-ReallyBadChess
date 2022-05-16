@@ -56,7 +56,7 @@ int ChessBoardSizeInput() {
     return size;
 }
 
-
+//to be replaced by adress passing
 int* MoveInput(int size) {
     int* move = (int*) malloc(sizeof(int) * 2);
     char input[1024];

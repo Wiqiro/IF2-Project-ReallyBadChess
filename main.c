@@ -15,18 +15,6 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     InitializeSavesIndex();
     Clean();
-
-
-/*     
-    saveinfo* save = SaveParser("\njaaj\t10\t1565414\nsdjkfv\t12\t6587677");
-
-    printf("%s, %d, %ld\n",save[0].name, save[0].size, save[0].time);
-
-    printf("%s, %d, %ld\n",save[1].name, save[1].size, save[1].time);
-     */
-
-
-
     
 
     bool gamemode;
@@ -78,7 +66,8 @@ int main(int argc, char* argv[]) {
     while (checkmate == false) {
         Clean();
 
-        ExportBoard(board, size, "savje");
+        //ExportBoard(board, size, "savje");
+        //ImportBoard(board, size, "savje");
 
         SimplePrint(board, size);
 
@@ -108,8 +97,6 @@ int main(int argc, char* argv[]) {
         MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
 
 
-        
-        
         if (turn == white && board[targcoords[0]][targcoords[1]].type == king) {
             kingposwhite[0] = targcoords[0];
             kingposwhite[1] = targcoords[1];
@@ -129,10 +116,7 @@ int main(int argc, char* argv[]) {
             checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
         }
 
-
-
         turn = (turn + 1) % 2;
-
 
 
     }

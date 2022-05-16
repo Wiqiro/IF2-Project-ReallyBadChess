@@ -6,16 +6,18 @@
 typedef struct saveinfo {
     char name[32];
     int size;
-    long int time;
+    long long int time;
 } saveinfo;
 
 void InitializeSavesIndex();
 
 saveinfo* SaveParser(char* rawsave);
 
+saveinfo SaveFinder(char* savename);
+
 void ExportBoard(square** board, int size, char* savename);
 
-void ImportBoard(square** board, int size, char* filename);
+void ImportBoard(square** board, int size, char* savename);
 
 
 #endif
