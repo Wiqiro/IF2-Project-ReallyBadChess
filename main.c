@@ -13,10 +13,21 @@ int main(int argc, char* argv[]) {
 
 
     srand(time(NULL));
-
-
+    InitializeSavesIndex();
     Clean();
 
+
+/*     
+    saveinfo* save = SaveParser("\njaaj\t10\t1565414\nsdjkfv\t12\t6587677");
+
+    printf("%s, %d, %ld\n",save[0].name, save[0].size, save[0].time);
+
+    printf("%s, %d, %ld\n",save[1].name, save[1].size, save[1].time);
+     */
+
+
+
+    
 
     bool gamemode;
     printf("Bienvenue dans notre jeu d'echec !");
@@ -67,7 +78,7 @@ int main(int argc, char* argv[]) {
     while (checkmate == false) {
         Clean();
 
-        ExportBoard(board, size, "save");
+        ExportBoard(board, size, "savje");
 
         SimplePrint(board, size);
 
@@ -121,6 +132,7 @@ int main(int argc, char* argv[]) {
 
 
         turn = (turn + 1) % 2;
+
 
 
     }

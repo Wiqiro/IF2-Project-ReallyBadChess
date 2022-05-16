@@ -6,7 +6,7 @@
 typedef struct saveinfo {
     char name[32];
     int size;
-    time_t time;
+    long int time;
 } saveinfo;
 
 void InitializeSavesIndex();
