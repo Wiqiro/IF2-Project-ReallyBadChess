@@ -4,31 +4,8 @@ void InitializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
-
-
-//useless
-saveinfo* SaveParser(char* rawstring) {
-    int size = 0;
-    for (int i=0; i<strlen(rawstring);i++) {
-        if (rawstring[i] == '\n') {
-            size++;
-        }
-    }
-    rawstring = strchr(rawstring,'\n');
-    rawstring++;
-
-    saveinfo* savelist = (saveinfo*) malloc(sizeof(saveinfo) * size);
-
-    if (savelist != NULL) {
-        for (int i=0; i<size; i++) {
-        sscanf(rawstring,"%[^\t]\t%d\t%lld",savelist[i].name,&(savelist[i]).size,&(savelist[i]).time);
-        rawstring = strchr(rawstring,'\n');
-        rawstring++;
-        }   
-    }
-    return savelist;
-}
  
+
 saveinfo SaveFinder(char* savename) {
     saveinfo save;
     FILE* index = fopen("saves.txt","r");
@@ -75,12 +52,13 @@ void ExportBoard(square** board, int size, char* savename) {
             }
         }
         fclose(save);
-
     }
     fclose(index);
 }
 
+
 void ImportBoard(square** board, int size, char* savename) {
+
     char filename[1024];
     strcpy(filename, savename);
     strcat(filename,".save");
@@ -94,4 +72,34 @@ void ImportBoard(square** board, int size, char* savename) {
         fscanf(save, "\n");
         }
     }
+}
+
+
+void RipSave(char* savename) {
+
+    char filename[1024];
+    strcpy(filename, savename);
+    strcat(filename,".save");
+    remove(filename);
+
+    FILE* index = fopen("saves.txt","r");
+    char newstring[10000];
+    if (index != NULL) {
+        char buffer[1024];
+        while (fscanf(index, "%s",buffer) != EOF) {
+            if (strcmp(buffer,savename) == 0) {
+                fscanf(index, "%[^\n]\n", buffer); 
+            } else {
+                strcat(newstring, buffer);
+                fgets(buffer, 1024, index);
+                strcat(newstring, buffer);
+            }
+        }
+    }
+    fclose(index);
+    index = fopen("saves.txt","w");
+    if (index != NULL) {
+        fprintf(index, "%s", newstring);
+    }
+    fclose(index);
 }

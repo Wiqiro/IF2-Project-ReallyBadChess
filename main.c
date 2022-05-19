@@ -15,7 +15,9 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     InitializeSavesIndex();
     Clean();
-    
+
+
+
 
     bool gamemode;
     printf("Bienvenue dans notre jeu d'echec !");

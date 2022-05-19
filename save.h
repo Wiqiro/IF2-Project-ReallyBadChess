@@ -11,13 +11,13 @@ typedef struct saveinfo {
 
 void InitializeSavesIndex();
 
-saveinfo* SaveParser(char* rawsave);
-
 saveinfo SaveFinder(char* savename);
 
 void ExportBoard(square** board, int size, char* savename);
 
 void ImportBoard(square** board, int size, char* savename);
+
+void RipSave(char* savename);
 
 
 #endif
