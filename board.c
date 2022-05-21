@@ -2,20 +2,6 @@
 
 
 
-
-/**
- * @brief Create a 2x1 array
- * 
- * @return int* array generated
- */
-int* CoordsArray() {
-    int* array = (int*) malloc(sizeof(int) * 2);
-    array[0] = 0;
-    array[1] = 0;
-    return array;
-}
-
-
 /**
  * @brief Create Board object (square matrix)
  * 
@@ -143,12 +129,13 @@ void InitializeBoardColor(square** board, int size) {
  */
 void SimplePrint(square** board, int size) {
     for (int y=0; y<size; y++) {
+        printf("%d   ", size-y);
         for (int x=0; x<size; x++) {
             printf("%d%d  ",board[x][y].color,board[x][y].type);
         }
         printf("\n");
     }
-    printf("\n");
+    printf("\n    A   B   C   D   E   F   G   H   I   J   K   L\n\n");
 }
 
 

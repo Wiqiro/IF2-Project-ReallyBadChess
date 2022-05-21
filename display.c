@@ -17,6 +17,11 @@ void Clean() {
     }
 }
 
+void StdinClear() {
+    char buffer;
+    while ((buffer = getchar()) != '\n');
+}
+
 bool GamemodeInput() {
     char gamemode;
 
@@ -57,28 +62,50 @@ int ChessBoardSizeInput() {
 }
 
 //to be replaced by adress passing
-int* MoveInput(int size) {
-    int* move = (int*) malloc(sizeof(int) * 2);
+void MoveInput(int* coordsarray, int size) {
     char input[1024];
-
-
-    fflush(stdin);
+    StdinClear();
     scanf("%s",input);
 
-    if (toupper(input[0]) == 'S' && input[1] == '\0') {
-        printf("Exportation !\n");
-        
-    } else if (toupper(input[0]) == 'X' && input[1] == '\0') {
-        printf("Vous abandonnez !\n");
+    if (toupper(input[0])-'A' >= 0 && toupper(input[0])-'A' < size) {
+        coordsarray[0] = toupper(input[0]) - 'A';
     } else {
-        move[0] = toupper(input[0]) - 'A';
-        if (input[2] == '\0') {
-            move[1] = input[1] - '0' - 1;
-        } else if (input[3] == '\0' && input[1] == '1') {
-            move[1] = 10 + (input[2] - '0' - 1);
-        }
-
+        coordsarray[0] = -1;
     }
 
-    return move;
+    if (input[2] == '\0') {
+        coordsarray[1] = size - input[1] + '0';
+    } else if (input[3] == '\0') {
+        coordsarray[1] = size - input[2] + '0' - 10;
+    } else {
+        coordsarray[1] = -1;
+    }
+
+    if (coordsarray[1] < 0 || coordsarray[1] >= size) {
+        printf("%d  %d\n", coordsarray[0], coordsarray[1]);
+        coordsarray[1] = -1;
+    }
+}
+
+char ActionInput() {
+
+    char buffer;
+    do {
+        StdinClear();
+        printf("Que voulez-vous faire ? (J: jouer  S: sauvegarder  X: abandonner)  ");
+        buffer = toupper(getchar());
+
+
+    } while (buffer != 'J' && buffer != 'S' && buffer != 'X');
+    return buffer;
+}
+
+void SaveNameInput(char* string) {
+
+    char buffer[20];
+
+    StdinClear();
+    printf("Sous quel nom voulez-vous sauvegarder votre partie ?  ");
+    fgets(buffer, 20, stdin);
+    strncpy(string, buffer, strlen(buffer)-1);
 }

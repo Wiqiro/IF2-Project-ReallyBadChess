@@ -13,7 +13,7 @@ void InitializeSavesIndex();
 
 saveinfo SaveFinder(char* savename);
 
-void ExportBoard(square** board, int size, char* savename);
+bool ExportBoard(square** board, int size, char* savename);
 
 void ImportBoard(square** board, int size, char* savename);
 

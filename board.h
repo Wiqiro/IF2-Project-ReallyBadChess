@@ -33,12 +33,6 @@ typedef struct square {
 } square;
 
 
-/**
- * @brief Create a 2x1 array
- * 
- * @return int* array generated
- */
-int* CoordsArray();
 
 /**
  * @brief Create a And Initialize Board object (square matrix)

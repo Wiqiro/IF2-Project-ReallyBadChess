@@ -4,7 +4,7 @@ void InitializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
- 
+
 
 saveinfo SaveFinder(char* savename) {
     saveinfo save;
@@ -23,23 +23,22 @@ saveinfo SaveFinder(char* savename) {
 }
 
 
-
-void ExportBoard(square** board, int size, char* savename) {
+bool ExportBoard(square** board, int size, char* savename) {
     
     FILE* index = fopen("saves.txt","r+");
     if (index != NULL) {
-        char buffer[1024];
-        while (fscanf(index, "%s",buffer) != EOF) {
+        char buffer[25];
+        while (fscanf(index, "%25s",buffer) != EOF) {
             if (strcmp(buffer, savename) == 0) {
                 printf("A save already has this name !\n");
                 fclose(index);
-                return;
+                return false;
             }
         }
         long long int rawtime = time(NULL);
         fprintf(index,"\n%s\t%d\t%lld",savename, size, rawtime);
 
-        char filename[1024];
+        char filename[25];
         strcpy(filename, savename);
         strcat(filename,".save");
         FILE* save = fopen(filename, "w");
@@ -50,10 +49,15 @@ void ExportBoard(square** board, int size, char* savename) {
                 }
                 fprintf(save,"\n");
             }
+        } else {
+            return false;
         }
         fclose(save);
+    } else {
+        return false;
     }
     fclose(index);
+    return true;
 }
 
 
