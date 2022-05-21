@@ -20,6 +20,10 @@ char ActionInput();
 
 void SaveNameInput(char* string);
 
+bool QuitConfirmation();
+
+void EndDialogue();
+
 
 
 //ALT+219 to get a full character (ASCII 256)

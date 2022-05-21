@@ -123,6 +123,15 @@ int main(int argc, char* argv[]) {
             char savename[20];
             SaveNameInput(savename);
             ExportBoard(board, size, savename);
+            break;
+
+        case 'X': ;
+            if(QuitConfirmation() == true) {
+                EndDialogue();
+                FreeBoard(&board, size);
+                return EXIT_SUCCESS;
+            }
+            break;
 
 
         default:
