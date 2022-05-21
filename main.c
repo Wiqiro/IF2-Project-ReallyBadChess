@@ -9,46 +9,11 @@
 
 int main(int argc, char* argv[]) {
 
+    
 
     srand(time(NULL));
     InitializeSavesIndex();
     Clean();
-
-    bool gamemode;
-    printf("Bienvenue dans notre jeu d'echec !");
-    gamemode = GamemodeInput();
-
-    square** board;
-    int kingposwhite[2];
-    int kingposblack[2];
-    
-
-    int size=0;
-    if (gamemode == 0) {
-        size = 8;
-        board = CreateBoard(size);
-        InitializeBoardClassic(board);
-
-        kingposwhite[0] = 4;
-        kingposblack[0] = 4;
-
-    } else {
-        size = ChessBoardSizeInput();
-        board = CreateBoard(size);
-        InitializeBoardRandom(board, size);
-
-        for (int x=0; x<size; x++) {
-            if (board[x][0].type == king) {
-                kingposblack[0] = x;
-            } else if (board[x][size].type == king) {
-                kingposwhite[0] = x;
-            }
-        }
-    }
-    kingposwhite[1] = size-1;
-    kingposblack[1] = 0;
-    
-    
 
     color turn = white;
     bool whitecheck = false;
@@ -59,88 +24,129 @@ int main(int argc, char* argv[]) {
     int targcoords[2];
     bool okmove = false;
 
+    square** board;
+    int kingposwhite[2];
+    int kingposblack[2];
+    
+    bool gamemode;
+    int size=0;
 
-    while (checkmate == false) {
-        Clean();
 
-        //ExportBoard(board, size, "savje");
-        //ImportBoard(board, size, "savje");
+    printf("Bienvenue dans notre jeu d'echec !\n\nAppuiez sur entrer pour commencer");
+    
+    char menuchoice = MenuInput();
 
-        SimplePrint(board, size);
+    if (menuchoice == 'N') {
+        gamemode = GamemodeInput();
+        if (gamemode == 0) {
+            size = 8;
+            board = CreateBoard(size);
+            InitializeBoardClassic(board);
 
-        okmove = false;
+            kingposwhite[0] = 4;
+            kingposblack[0] = 4;
 
-        switch (ActionInput()) {
-        case 'J':
-            do {
+        } else {
+            size = ChessBoardSizeInput();
+            board = CreateBoard(size);
+            InitializeBoardRandom(board, size);
+
+            for (int x=0; x<size; x++) {
+                if (board[x][0].type == king) {
+                    kingposblack[0] = x;
+                } else if (board[x][size].type == king) {
+                    kingposwhite[0] = x;
+                }
+            }
+        }
+        kingposwhite[1] = size-1;
+        kingposblack[1] = 0;
+    } else if (menuchoice == 'I') {
+        printf("Save importation !");
+    } else if (menuchoice == 'Q') {
+        if (QuitConfirmation() == true) {
+            EndDialogue();
+            return EXIT_SUCCESS;
+        }
+    }
+    
+        while (checkmate == false && menuchoice != 'I') {
+            Clean();
+
+            SimplePrint(board, size);
+
+            okmove = false;
+
+            switch (ActionInput()) {
+            case 'J':
                 do {
-                    printf("Entrez les coordonnées de la pièce que vous souhaitez bouger: ");
-                    MoveInput(startcoords, size);
-                    if (board[startcoords[0]][startcoords[1]].color != turn) {
-                        printf("\nCe n'est pas votre tour");
-                    } else if (((turn == white && whitecheck == true) || (turn == black && blackcheck == true)) && board[startcoords[0]][startcoords[1]].type != king) {
-                        printf("\nVous devez bouger votre roi !");
-                    } else {
-                        okmove = true;
+                    do {
+                        printf("Entrez les coordonnées de la pièce que vous souhaitez bouger: ");
+                        MoveInput(startcoords, size);
+                        if (board[startcoords[0]][startcoords[1]].color != turn) {
+                            printf("\nCe n'est pas votre tour");
+                        } else if (((turn == white && whitecheck == true) || (turn == black && blackcheck == true)) && board[startcoords[0]][startcoords[1]].type != king) {
+                            printf("\nVous devez bouger votre roi !");
+                        } else {
+                            okmove = true;
+                        }
+                    } while (okmove == false);
+
+                    printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
+                    MoveInput(targcoords, size);
+
+                    if ((okmove = MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1])) == false) {
+                        printf("\nCe mouvement est interdit !");
                     }
                 } while (okmove == false);
+                        MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
 
-                printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
-                MoveInput(targcoords, size);
 
-                if ((okmove = MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1])) == false) {
-                    printf("\nCe mouvement est interdit !");
+                if (turn == white && board[targcoords[0]][targcoords[1]].type == king) {
+                    kingposwhite[0] = targcoords[0];
+                    kingposwhite[1] = targcoords[1];
+                    
+                } else if (turn == black && board[targcoords[0]][targcoords[1]].type == king) {
+                    kingposblack[0] = targcoords[0];
+                    kingposblack[1] = targcoords[1];
+                    }
+
+                blackcheck = CheckTest(board, size, kingposblack[0], kingposblack[1]);
+                if (blackcheck == true) {
+                    checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
                 }
-            } while (okmove == false);
-                    MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
-
-
-            if (turn == white && board[targcoords[0]][targcoords[1]].type == king) {
-                kingposwhite[0] = targcoords[0];
-                kingposwhite[1] = targcoords[1];
-                
-            } else if (turn == black && board[targcoords[0]][targcoords[1]].type == king) {
-                kingposblack[0] = targcoords[0];
-                kingposblack[1] = targcoords[1];
+                whitecheck = CheckTest(board, size, kingposwhite[0], kingposwhite[1]);
+                if (whitecheck == true) {
+                    checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
                 }
-                
 
-            blackcheck = CheckTest(board, size, kingposblack[0], kingposblack[1]);
-            if (blackcheck == true) {
-                checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
+                turn = (turn + 1) % 2;
+
+                break;
+            
+            case 'S': ;
+
+                char savename[20];
+                SaveNameInput(savename);
+                ExportBoard(board, size, savename);
+                break;
+
+            case 'X': ;
+                if(QuitConfirmation() == true) {
+                    EndDialogue();
+                    FreeBoard(&board, size);
+                    return EXIT_SUCCESS;
+                }
+                break;
+
+            default:
+                break;
             }
-            whitecheck = CheckTest(board, size, kingposwhite[0], kingposwhite[1]);
-            if (whitecheck == true) {
-                checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
-            }
-
-            turn = (turn + 1) % 2;
-
-            break;
-        
-        case 'S': ;
-
-            char savename[20];
-            SaveNameInput(savename);
-            ExportBoard(board, size, savename);
-            break;
-
-        case 'X': ;
-            if(QuitConfirmation() == true) {
-                EndDialogue();
-                FreeBoard(&board, size);
-                return EXIT_SUCCESS;
-            }
-            break;
-
-
-        default:
-            break;
         }
+        FreeBoard(&board, size);
 
 
-    }
-    FreeBoard(&board, size);
+
 
     return EXIT_SUCCESS;
 }

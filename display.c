@@ -22,9 +22,20 @@ void StdinClear() {
     while ((buffer = getchar()) != '\n');
 }
 
+char MenuInput() {
+
+    char buffer;
+    do {
+        StdinClear();
+        printf("\nChoisissez une option ! (N: nouvelle partie  I: importer une sauvegarde  Q: quitter)  ");
+        buffer = toupper(getchar());
+    } while (buffer != 'N' && buffer != 'I' && buffer != 'Q');
+    return buffer;
+}
+
 bool GamemodeInput() {
     char gamemode;
-
+    StdinClear();
     do {
     printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)\n");
     scanf("%c",&gamemode);
@@ -123,6 +134,8 @@ bool QuitConfirmation() {
         return false;
     }
 }
+
+
 
 
 //rip small consoles

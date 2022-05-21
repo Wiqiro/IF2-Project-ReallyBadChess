@@ -10,6 +10,8 @@ void Clean();
 
 void StdinClear();
 
+char MenuInput();
+
 bool GamemodeInput();
 
 int ChessBoardSizeInput();
