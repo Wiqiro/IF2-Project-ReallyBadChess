@@ -167,3 +167,4 @@ void EndDialogue() {
     getchar();
 
 }
+

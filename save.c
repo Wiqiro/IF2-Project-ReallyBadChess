@@ -1,4 +1,4 @@
-#include <save.h>
+#include <board.h>
 
 void InitializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");

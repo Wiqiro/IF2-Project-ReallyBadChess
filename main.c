@@ -3,8 +3,8 @@
 
 #include <board.h>
 #include <display.h>
-#include <moves.h>
-#include <save.h>
+//#include <moves.h>
+//#include <save.h>
 
 
 int main(int argc, char* argv[]) {
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     int targcoords[2];
     bool okmove = false;
 
-    square** board;
+    square** board = NULL;
     int kingposwhite[2];
     int kingposblack[2];
     
@@ -32,11 +32,13 @@ int main(int argc, char* argv[]) {
     int size=0;
 
 
-    printf("Bienvenue dans notre jeu d'echec !\n\nAppuiez sur entrer pour commencer");
+    printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
     
     char menuchoice = MenuInput();
 
-    if (menuchoice == 'N') {
+
+    switch (menuchoice) {
+    case 'N':
         gamemode = GamemodeInput();
         if (gamemode == 0) {
             size = 8;
@@ -61,21 +63,15 @@ int main(int argc, char* argv[]) {
         }
         kingposwhite[1] = size-1;
         kingposblack[1] = 0;
-    } else if (menuchoice == 'I') {
-        printf("Save importation !");
-    } else if (menuchoice == 'Q') {
-        if (QuitConfirmation() == true) {
-            EndDialogue();
-            return EXIT_SUCCESS;
-        }
-    }
-    
-        while (checkmate == false && menuchoice != 'I') {
+
+        while (checkmate == false) {
             Clean();
 
             SimplePrint(board, size);
 
             okmove = false;
+
+
 
             switch (ActionInput()) {
             case 'J':
@@ -144,6 +140,23 @@ int main(int argc, char* argv[]) {
             }
         }
         FreeBoard(&board, size);
+        break;
+    
+    case 'I':
+        printf("Save importation !");
+        break;
+    
+    case 'Q':
+        if (QuitConfirmation() == true) {
+            EndDialogue();
+            return EXIT_SUCCESS;
+        }
+
+    default:
+        break;
+    }
+ 
+        
 
 
 

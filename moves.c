@@ -1,4 +1,4 @@
-#include <moves.h>
+#include <board.h>
 
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
