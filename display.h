@@ -20,9 +20,21 @@ void MoveInput(int* coordsarray, int size);
 
 char ActionInput();
 
+/**
+ * @brief Generic print of the chessboard
+ * 
+ * @param board Board to print
+ * @param size Size of the board
+ */
+void SimplePrint(square** board, int size);
+
+void BoardPrint(square** board, int size);
+
 void SaveNameInput(char* string);
 
 bool QuitConfirmation();
+
+int PrintSaves();
 
 void EndDialogue();
 

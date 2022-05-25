@@ -122,24 +122,6 @@ void InitializeBoardColor(square** board, int size) {
 
 
 /**
- * @brief Generic print of the chessboard (first number = color of the piece and second number = type of the piece)
- * 
- * @param board Board to print
- * @param size Size of the board
- */
-void SimplePrint(square** board, int size) {
-    for (int y=0; y<size; y++) {
-        printf("%d   ", size-y);
-        for (int x=0; x<size; x++) {
-            printf("%d%d  ",board[x][y].color,board[x][y].type);
-        }
-        printf("\n");
-    }
-    printf("\n    A   B   C   D   E   F   G   H   I   J   K   L\n\n");
-}
-
-
-/**
  * @brief Free the specified board
  * 
  * @param board Board to free

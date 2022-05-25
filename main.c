@@ -3,8 +3,6 @@
 
 #include <board.h>
 #include <display.h>
-//#include <moves.h>
-//#include <save.h>
 
 
 int main(int argc, char* argv[]) {
@@ -31,11 +29,9 @@ int main(int argc, char* argv[]) {
     bool gamemode;
     int size=0;
 
-
     printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
     
     char menuchoice = MenuInput();
-
 
     switch (menuchoice) {
     case 'N':
@@ -143,7 +139,9 @@ int main(int argc, char* argv[]) {
         break;
     
     case 'I':
-        printf("Save importation !");
+
+        printf("%d",PrintSaves());
+
         break;
     
     case 'Q':
@@ -156,10 +154,5 @@ int main(int argc, char* argv[]) {
         break;
     }
  
-        
-
-
-
-
     return EXIT_SUCCESS;
 }

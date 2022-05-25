@@ -74,13 +74,7 @@ void InitializeBoardClassic(square** board);
 void InitializeBoardColor(square** board, int size);
 
 
-/**
- * @brief Generic print of the chessboard
- * 
- * @param board Board to print
- * @param size Size of the board
- */
-void SimplePrint(square** board, int size);
+
 
 
 /**
@@ -238,7 +232,7 @@ bool MoveExecute(square** board, int size, int startx, int starty, int targx, in
 
 void InitializeSavesIndex();
 
-saveinfo SaveFinder(char* savename);
+void IndexToString(char* rawstring);
 
 bool ExportBoard(square** board, int size, char* savename);
 

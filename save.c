@@ -6,23 +6,6 @@ void InitializeSavesIndex() {
 }
 
 
-saveinfo SaveFinder(char* savename) {
-    saveinfo save;
-    FILE* index = fopen("saves.txt","r");
-    if (index != NULL) {
-        while (fscanf(index,"%s\t%d\t%lld",save.name,&save.size,&save.time) != EOF) {
-            if (savename == save.name) {
-                fclose(index);
-                return save;
-            }
-        }
-    }
-    fclose(index);
-    save.size = 0;
-    return save;
-}
-
-
 bool ExportBoard(square** board, int size, char* savename) {
     
     FILE* index = fopen("saves.txt","r+");
@@ -48,7 +31,7 @@ bool ExportBoard(square** board, int size, char* savename) {
                     fprintf(save,"%d%d ",board[x][y].color,board[x][y].type);
                 }
                 fprintf(save,"\n");
-            }
+            } 
         } else {
             return false;
         }
@@ -87,7 +70,7 @@ void RipSave(char* savename) {
     remove(filename);
 
     FILE* index = fopen("saves.txt","r");
-    char newstring[10000];
+    char newstring[5000];
     if (index != NULL) {
         char buffer[1024];
         while (fscanf(index, "%s",buffer) != EOF) {
