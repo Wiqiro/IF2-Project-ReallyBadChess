@@ -4,6 +4,7 @@
 
 #ifdef _WIN32
     bool OS = 0;
+    #include <windows.h>
 #else
     bool OS = 1;  //assuming that the non-windows systems are linux-based
 #endif
@@ -109,6 +110,9 @@ char ActionInput() {
     return buffer;
 }
 
+
+
+
 /**
  * @brief Generic print of the chessboard (first number = color of the piece and second number = type of the piece)
  * 
@@ -126,18 +130,91 @@ void SimplePrint(square** board, int size) {
     printf("\n    A   B   C   D   E   F   G   H   I   J   K   L\n\n");
 }
 
-
+void PrintPiece(square piece) {
+    if (piece.color == black) {
+        switch (piece.type) {
+        case pawn:
+            printf("♙");
+            break;
+        case bishop:
+            printf("♗");
+            break;
+        case knight:
+            printf("♘");
+            break;
+        case rook:
+            printf("♖");
+            break;
+        case queen:
+            printf("♕");
+            break;
+        case king:
+            printf("♔");
+            break;
+        default:
+            printf(" ");
+            break;
+        }
+    } else {
+        switch (piece.type) {
+        case pawn:
+            printf("♟");
+            break;
+        case bishop:
+            printf("♝");
+            break;
+        case knight:
+            printf("♞");
+            break;
+        case rook:
+            printf("♜");
+            break;
+        case queen:
+            printf("♛");
+            break;
+        case king:
+            printf("♚");
+            break;
+                
+        default:
+            printf(" ");
+            break;
+        }
+    }
+}
 
 
 void BoardPrint(square** board, int size) {
-    for (int y=0; y<size; y++) {
-        printf("%d   ", size-y);
+
+    //setlocale(LC_ALL, "en_US.UTF-8");
+    #ifdef _WIN32
+        SetConsoleOutputCP(65001);
+    #endif
+    printf("\n ╭───┬────┬────┬────┬────┬────┬────┬────┬────╮\n");
+
+    for (int y=0; y<size-1; y++) {
+        printf(" │ %d", size-y);
         for (int x=0; x<size; x++) {
-            printf("%d%d  ",board[x][y].color,board[x][y].type);
+            printf(" │ ");
+            PrintPiece(board[x][y]);
+            printf(" ");
         }
-        printf("\n");
+        
+        printf(" │ \n ├───┼────┼────┼────┼────┼────┼────┼────┼────┤\n");
     }
-    printf("\n    A   B   C   D   E   F   G   H   I   J   K   L\n\n");
+    printf(" │ 1");
+    for (int x=0; x<size; x++) {
+        printf(" │ ");
+        PrintPiece(board[x][size-1]);
+        printf(" ");
+    }
+    printf(" │ \n ╰───┼────┼────┼────┼────┼────┼────┼────┼────┤\n     │");
+
+    for (int x=0; x<size; x++) {
+            printf(" %c  │",x+'A');
+        }
+    printf("  \n     ╰────┴────┴────┴────┴────┴────┴────┴────╯\n");
+
 }
 
 void SaveNameInput(char* string) {
@@ -199,7 +276,7 @@ int PrintSaves() {
     }
 }
 
-void EndDialogue() {
+void EasterEgg() {
     Clean();
     printf("                                      ......................................     \n");
     printf("                                      ......................................      \n");
@@ -312,5 +389,4 @@ void EndDialogue() {
     printf("\nPressez entrer pour quitter");
     StdinClear();
     getchar();
-
 }         

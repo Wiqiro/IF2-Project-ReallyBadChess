@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
         while (checkmate == false) {
             Clean();
 
-            SimplePrint(board, size);
+            BoardPrint(board, size);
 
             okmove = false;
 
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 
             case 'X': ;
                 if(QuitConfirmation() == true) {
-                    EndDialogue();
+                    EasterEgg();
                     FreeBoard(&board, size);
                     return EXIT_SUCCESS;
                 }
@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
     
     case 'Q':
         if (QuitConfirmation() == true) {
-            EndDialogue();
+            EasterEgg();
             return EXIT_SUCCESS;
         }
 

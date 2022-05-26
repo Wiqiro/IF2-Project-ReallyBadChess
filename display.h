@@ -2,7 +2,8 @@
 #define _DISPLAY_HEADER_
 
 #include <board.h>
-//#include <save.h>
+//#include <wchar.h>
+//#include <locale.h>
 
 
 
@@ -28,6 +29,8 @@ char ActionInput();
  */
 void SimplePrint(square** board, int size);
 
+wchar_t ConvertPiece(square piece);
+
 void BoardPrint(square** board, int size);
 
 void SaveNameInput(char* string);
@@ -36,7 +39,7 @@ bool QuitConfirmation();
 
 int PrintSaves();
 
-void EndDialogue();
+void EasterEgg();
 
 
 

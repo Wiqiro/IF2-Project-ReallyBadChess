@@ -11,6 +11,7 @@
 #include <string.h>
 
 
+
 typedef enum {
     empty = 0,
     pawn = 1,
