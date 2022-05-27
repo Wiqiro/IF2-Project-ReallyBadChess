@@ -29,7 +29,7 @@ char ActionInput();
  */
 void SimplePrint(square** board, int size);
 
-wchar_t ConvertPiece(square piece);
+void PrintPiece(square piece);
 
 void BoardPrint(square** board, int size);
 

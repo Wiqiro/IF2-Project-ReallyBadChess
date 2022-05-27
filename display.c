@@ -183,37 +183,59 @@ void PrintPiece(square piece) {
     }
 }
 
-
 void BoardPrint(square** board, int size) {
 
-    //setlocale(LC_ALL, "en_US.UTF-8");
     #ifdef _WIN32
         SetConsoleOutputCP(65001);
     #endif
-    printf("\n ╭───┬────┬────┬────┬────┬────┬────┬────┬────╮\n");
+    printf("\n ╭");
+
+    for (int x=0; x<size; x++) {
+        printf("────┬");
+    }
+    printf("────╮\n │");
 
     for (int y=0; y<size-1; y++) {
-        printf(" │ %d", size-y);
+        printf(" ");
+        if (size < 10 || y > 2) {
+                printf("0");
+        }
+        printf("%d", size-y);
         for (int x=0; x<size; x++) {
             printf(" │ ");
             PrintPiece(board[x][y]);
             printf(" ");
         }
         
-        printf(" │ \n ├───┼────┼────┼────┼────┼────┼────┼────┼────┤\n");
+        printf(" │ \n ├");
+        for (int x=0; x<size; x++) {
+        printf("────┼");
+        }
+        printf("────┤\n │");
+
     }
-    printf(" │ 1");
+    printf(" 01");
     for (int x=0; x<size; x++) {
         printf(" │ ");
         PrintPiece(board[x][size-1]);
         printf(" ");
     }
-    printf(" │ \n ╰───┼────┼────┼────┼────┼────┼────┼────┼────┤\n     │");
+
+    printf(" │\n ╰");
+    for (int x=0; x<size; x++) {
+        printf("────┼");
+    }
+    printf("────┤\n      │");
 
     for (int x=0; x<size; x++) {
-            printf(" %c  │",x+'A');
-        }
-    printf("  \n     ╰────┴────┴────┴────┴────┴────┴────┴────╯\n");
+        printf(" %c  │",x+'A');
+    }
+    printf("  \n      ╰");
+    for (int x=0; x<size-1; x++) {
+        printf("────┴");
+    }
+    printf("────╯\n");
+
 
 }
 
@@ -314,11 +336,6 @@ void EasterEgg() {
      printf("                                      ......................................    \n");
      printf("                                      ......................................      \n\n\n\n");
 
-
-
-
-
-
     printf("                                 ............                          .............      \n");
     printf("                              ..................                   .....................    \n");
     printf("                           ........................              .........................   \n");
@@ -345,9 +362,6 @@ void EasterEgg() {
     printf("                                                        ...         \n");
     printf("                                                         .  \n\n\n\n");
 
-
-
-
     printf("             ......................................               ......................................................  \n");
     printf("             ......................................               ......................................................  \n");
     printf("             ......................................               ......................................................  \n");
@@ -383,8 +397,6 @@ void EasterEgg() {
     printf("              ......................................             ..................................\n");
     printf("              ......................................             ..................................\n");
     printf("              ......................................             ..................................\n");
-
-
 
     printf("\nPressez entrer pour quitter");
     StdinClear();
