@@ -1,10 +1,7 @@
 #ifndef _DISPLAY_HEADER_
 #define _DISPLAY_HEADER_
 
-#include <board.h>
-//#include <wchar.h>
-//#include <locale.h>
-
+#include <game.h>
 
 
 void Clean();

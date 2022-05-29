@@ -15,11 +15,14 @@ LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 
 #Library-related macros
-LIBCORENAME = board
-LIBTARGET :=lib$(LIBCORENAME)$(DLLEXT)
-LIBSOURCE = display moves save board
-LIBSOURCECFILE = $(LIBSOURCE:=.c)
-LIBSOURCEOFILE = $(LIBSOURCE:=.o)
+GAMELIBCORENAME = game
+INTERFACELIBCORENAME = interface
+GAMELIBTARGET :=lib$(GAMELIBCORENAME)$(DLLEXT)
+INTERFACELIBTARGET :=lib$(INTERFACELIBCORENAME)$(DLLEXT)
+GAMELIBSOURCE = moves save board interface
+INTERFACELIBSOURCE = moves save board interface
+GAMELIBSOURCEOFILE = $(GAMELIBSOURCE:=.o)
+INTERFACELIBSOURCEOFILE = $(INTERFACELIBSOURCE:=.o)
 
 #Application-related macros
 EXESOURCE = main
@@ -35,14 +38,18 @@ run: $(TARGET)
 all: $(TARGET) 
 
 #Generating the executable
-$(TARGET): $(EXESOURCEOFILE) $(LIBTARGET)
+$(TARGET): $(EXESOURCEOFILE) $(GAMELIBTARGET) $(INTERFACELIBTARGET)
 	@echo "\nGenerating the executable " $@ "from " $<
-	$(CXX) $(EXESOURCEOFILE) -l$(LIBCORENAME) $(LIBSDIR) -o $(TARGET) -lm
+	$(CXX) $(EXESOURCEOFILE) -l$(GAMELIBCORENAME) -l$(INTERFACELIBCORENAME) $(LIBSDIR) -o $(TARGET) -lm
 
 #Generating the library binary code
-$(LIBTARGET): $(LIBSOURCEOFILE)
-	@echo "\nGenerating the library binary code .so from object files (.o) " $@
-	$(CXX) $(CFLAGS) -shared $(LIBSOURCEOFILE) -o $(LIBTARGET)
+$(GAMELIBTARGET): $(GAMELIBSOURCEOFILE)
+	@echo "\nGenerating the library binary code (.so or .dll) from object files (.o) " $@
+	$(CXX) $(CFLAGS) -shared $(GAMELIBSOURCEOFILE) -o $(GAMELIBTARGET)
+
+$(INTERFACELIBTARGET): $(INTERFACELIBSOURCEOFILE)
+	@echo "\nGenerating the library binary code (.so or .dll) from object files (.o) " $@
+	$(CXX) $(CFLAGS) -shared $(INTERFACELIBSOURCEOFILE) -o $(INTERFACELIBTARGET)
 
 #Generating an object file from a C file having the same name
 .c.o:

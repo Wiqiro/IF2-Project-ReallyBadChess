@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <board.h>
-#include <display.h>
+#include <game.h>
+#include <interface.h>
 
 
 int main(int argc, char* argv[]) {
