@@ -75,7 +75,7 @@ int ChessBoardSizeInput() {
 void MoveInput(int* coordsarray, int size) {
     char input[1024];
     StdinClear();
-    scanf("%s",input);
+    fgets(input, 3, stdin);
 
     if (toupper(input[0])-'A' >= 0 && toupper(input[0])-'A' < size) {
         coordsarray[0] = toupper(input[0]) - 'A';
@@ -92,9 +92,9 @@ void MoveInput(int* coordsarray, int size) {
     }
 
     if (coordsarray[1] < 0 || coordsarray[1] >= size) {
-        printf("%d  %d\n", coordsarray[0], coordsarray[1]);
         coordsarray[1] = -1;
     }
+
 }
 
 char ActionInput() {
@@ -110,25 +110,6 @@ char ActionInput() {
     return buffer;
 }
 
-
-
-
-/**
- * @brief Generic print of the chessboard (first number = color of the piece and second number = type of the piece)
- * 
- * @param board Board to print
- * @param size Size of the board
- */
-void SimplePrint(square** board, int size) {
-    for (int y=0; y<size; y++) {
-        printf("%d   ", size-y);
-        for (int x=0; x<size; x++) {
-            printf("%d%d  ",board[x][y].color,board[x][y].type);
-        }
-        printf("\n");
-    }
-    printf("\n    A   B   C   D   E   F   G   H   I   J   K   L\n\n");
-}
 
 void PrintPiece(square piece) {
     if (piece.color == black) {
@@ -212,8 +193,8 @@ void BoardPrint(square** board, int size) {
         printf("────┼");
         }
         printf("────┤\n │");
-
     }
+
     printf(" 01");
     for (int x=0; x<size; x++) {
         printf(" │ ");
@@ -276,25 +257,27 @@ int PrintSaves() {
         while (fscanf(index, "%50s\t%50s\t%50s\n", buffer[0], buffer[1], buffer[2]) != EOF) {
             time = strtoll(buffer[2], NULL, 10);
 
-            printf("%d: %s\t\t(%sx%s)  \t%lld", i, buffer[0], buffer[1], buffer[1], time);
+            printf("%d: %s\t\t(%sx%s)  \t%lld\n", i, buffer[0], buffer[1], buffer[1], time);
             i++;
         }
     }
     fclose(index);
+
     if (i == 1) {
         printf("Aucune sauvegarde n'a été trouvée !\n"); 
         return -1;
     } else {
         char input[10];
-        int index;
+        int savenumber;
         do {
             StdinClear();
 
             printf("\nEntrez le numéro de la sauvegarde que vous souhaitez importer  ");
-            fgets(input, 10, stdin);
-            index = strtol(input, NULL, 10);
-        } while (index < 1 || index >= i);
-        return index;
+            fgets(input, 3, stdin);
+            savenumber = strtol(input, NULL, 10);
+        } while (savenumber < 1 || savenumber>= i);
+        printf("%d", savenumber);  
+        return savenumber;
     }
 }
 

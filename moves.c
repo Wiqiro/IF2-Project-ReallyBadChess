@@ -60,7 +60,7 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
     if ((board[startx][starty].color == black && movey == 1) || (board[startx][starty].color == white && movey == -1)) {
         if (movex == 0 && board[targx][targy].type == empty) {
             return true;
-        } else if (abs(movex) == 1) {
+        } else if (abs(movex) == 1 && board[startx][starty].color != board[targx][targy].color && board[targx][targy].type != empty) {
             return true;
         }
 
@@ -268,12 +268,8 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
  * @param starty 
  * @param targx 
  * @param targy 
- * @return true a piece was captured
- * @return false no piece were captured
  */
-bool MoveExecute(square** board, int size, int startx, int starty, int targx, int targy) {
-    bool captured=false;
+void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy) {
     board[targx][targy] = board[startx][starty];
     board[startx][starty].type = empty;
-    return captured;
 }

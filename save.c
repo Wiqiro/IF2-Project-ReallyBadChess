@@ -43,6 +43,20 @@ bool ExportBoard(square** board, int size, char* savename) {
     return true;
 }
 
+saveinfo GetSaveInfo(int linenumber) {
+    saveinfo save;
+
+    FILE* index = fopen("saves.txt","r");
+    char buffer[50];
+    if (index != NULL) {
+        for (int i = 1; i < linenumber; i++) {
+            fscanf(index, "\n%50[^\n]", buffer);
+        }
+        fscanf(index, "%s\t%d\t%lld", save.name, &save.size, &save.time);
+    }
+    fclose(index);
+    return save;
+}
 
 void ImportBoard(square** board, int size, char* savename) {
 

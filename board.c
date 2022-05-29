@@ -120,6 +120,21 @@ void InitializeBoardColor(square** board, int size) {
     }
 }
 
+void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, int whitekingposy, int blackkingposy) {
+    for (int y=0; y<size; y++) {
+        for (int x=0; x<size; x++) {
+            if (board[x][y].type == king) {
+                if (board[x][y].color == 0) {
+                    whitekingposx = x;
+                    whitekingposy = y;
+                } else {
+                    blackkingposx = x;
+                    blackkingposy = y;
+                }
+            }
+        }
+    }
+}
 
 /**
  * @brief Free the specified board

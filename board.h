@@ -74,7 +74,7 @@ void InitializeBoardClassic(square** board);
  */
 void InitializeBoardColor(square** board, int size);
 
-
+void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, int whitekingposy, int blackkingposy);
 
 
 
@@ -224,11 +224,9 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy);
  * @param startx 
  * @param starty 
  * @param targx 
- * @param targy 
- * @return true a piece was captured
- * @return false no piece were captured
+ * @param targy
  */
-bool MoveExecute(square** board, int size, int startx, int starty, int targx, int targy);
+void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy);
 
 
 void InitializeSavesIndex();
@@ -236,6 +234,8 @@ void InitializeSavesIndex();
 void IndexToString(char* rawstring);
 
 bool ExportBoard(square** board, int size, char* savename);
+
+saveinfo GetSaveInfo(int index);
 
 void ImportBoard(square** board, int size, char* savename);
 
