@@ -27,7 +27,9 @@ int main(int argc, char* argv[]) {
     int kingposblack[2];
     
     bool gamemode;
-    int size=0;
+    int size = 0;
+    //bool gameend = false;
+    bool fancyprint = false;
 
     printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
     char menuchoice;
@@ -69,7 +71,7 @@ int main(int argc, char* argv[]) {
             while (checkmate == false) {
                 Clean();
 
-                BoardPrint(board, size);
+                BoardPrint(board, size, fancyprint);
 
                 switch (ActionInput()) {
                 case 'J':
@@ -96,13 +98,13 @@ int main(int argc, char* argv[]) {
                     blackcheck = CheckTest(board, size, kingposblack[0], kingposblack[1]);
 
                     if (blackcheck == true) {
-                        //checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
+                        checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
                         printf("\n Le roi noir est en échec !");
                     }
 
                     whitecheck = CheckTest(board, size, kingposwhite[0], kingposwhite[1]);
                     if (whitecheck == true) {
-                        //checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
+                        checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
                         printf("\n Le roi blanc est en échec !");
                     }
                     StdinClear();
@@ -141,7 +143,7 @@ int main(int argc, char* argv[]) {
             size = save.size;
             board = CreateBoard(size);
             ImportBoard(board, size, save.name);
-            GetKingPos(board, size, kingposwhite[0], kingposblack[0], kingposwhite[1], kingposblack[1]);
+            GetKingPos(board, size, kingposwhite, kingposblack);
             initialized = true;
 
             break;
@@ -150,6 +152,15 @@ int main(int argc, char* argv[]) {
             if (QuitConfirmation() == true) {
                 EasterEgg();
             }
+
+        case 'O':
+        StdinClear();
+        printf("\nQuel mode d'affichage choisissze-vous ? (F: fancy  L: lettres) ");
+        if (toupper(getchar()) == 'F') {
+            fancyprint = true;
+        } else {
+            fancyprint = false;
+        }
 
         default:
             break;

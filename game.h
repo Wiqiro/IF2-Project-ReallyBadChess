@@ -74,7 +74,7 @@ void InitializeBoardClassic(square** board);
  */
 void InitializeBoardColor(square** board, int size);
 
-void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, int whitekingposy, int blackkingposy);
+void GetKingPos(square** board, int size, int* kingposwhite, int* kingposblack);
 
 
 

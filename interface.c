@@ -18,9 +18,9 @@ void Clean() {
 }
 
 void InitializeOutputOptions() {
-    if (OS == 0) {
+    #ifdef _WIN32
         SetConsoleOutputCP(65001);
-    }
+    #endif
 }
 
 void StdinClear() {
@@ -33,9 +33,9 @@ char MenuInput() {
     char buffer;
     do {
         StdinClear();
-        printf("\nChoisissez une option ! (N: nouvelle partie  I: importer une sauvegarde  Q: quitter)  ");
+        printf("\nChoisissez une option ! (N: nouvelle partie  I: importer une sauvegarde  O: options  Q: quitter)  ");
         buffer = toupper(getchar());
-    } while (buffer != 'N' && buffer != 'I' && buffer != 'Q');
+    } while (buffer != 'N' && buffer != 'I' && buffer != 'Q' && buffer != 'O');
     return buffer;
 }
 
@@ -75,13 +75,13 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
 
     bool okmove = false;
 
-    char input[1024];
+    char input[3];
 
     do {
         do {
             printf("\nEntrez les coordonnées de la pièce que vous souhaitez bouger: ");
             StdinClear();
-            scanf("%1000s", input);
+            scanf("%3s", input);
 
             startcoords[0] = toupper(input[0]) - 'A';
             if (input[2] == '\0') {
@@ -89,7 +89,7 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
             } else {
                 startcoords[1] = size - input[2] + '0' - 10;
             }
-            if (startcoords[0] == -1 || startcoords[1] == -1) {
+            if (startcoords[0] < 0 || startcoords[1] >= size || targcoords[0] < 0 || targcoords[1] >= size) {
                 printf("\nCette pièce ne fait pas partie de l'échiquier !");                            
             } else if (board[startcoords[0]][startcoords[1]].color != turn) {
                 printf("\nCe n'est pas votre tour");
@@ -101,7 +101,7 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
         okmove = false;
         StdinClear();
         printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
-        scanf("%1000s", input);
+        scanf("%3s", input);
         
         targcoords[0] = toupper(input[0]) - 'A';
         if (input[2] == '\0') {
@@ -138,60 +138,96 @@ char ActionInput() {
 }
 
 
-void PrintPiece(square piece) {
-    if (piece.color == black) {
-        switch (piece.type) {
-        case pawn:
-            printf("♙");
-            break;
-        case bishop:
-            printf("♗");
-            break;
-        case knight:
-            printf("♘");
-            break;
-        case rook:
-            printf("♖");
-            break;
-        case queen:
-            printf("♕");
-            break;
-        case king:
-            printf("♔");
-            break;
-        default:
-            printf(" ");
-            break;
+void PrintPiece(square piece, bool fancyprint) {
+
+    if (fancyprint) {
+        if (piece.color == black) {
+            switch (piece.type) {
+            case pawn:
+                printf("♙");
+                break;
+            case bishop:
+                printf("♗");
+                break;
+            case knight:
+                printf("♘");
+                break;
+            case rook:
+                printf("♖");
+                break;
+            case queen:
+                printf("♕");
+                break;
+            case king:
+                printf("♔");
+                break;
+            default:
+                printf(" ");
+                break;
+            }
+        } else {
+            switch (piece.type) {
+            case pawn:
+                printf("♟");
+                break;
+            case bishop:
+                printf("♝");
+                break;
+            case knight:
+                printf("♞");
+                break;
+            case rook:
+                printf("♜");
+                break;
+            case queen:
+                printf("♛");
+                break;
+            case king:
+                printf("♚");
+                break;
+                    
+            default:
+                printf("    ");
+                break;
+            }
         }
+        printf(" ");
     } else {
-        switch (piece.type) {
-        case pawn:
-            printf("♟");
-            break;
-        case bishop:
-            printf("♝");
-            break;
-        case knight:
-            printf("♞");
-            break;
-        case rook:
-            printf("♜");
-            break;
-        case queen:
-            printf("♛");
-            break;
-        case king:
-            printf("♚");
-            break;
-                
-        default:
-            printf(" ");
-            break;
+        if (piece.type != empty) {
+            switch (piece.type) {
+            case pawn:
+                printf("P");
+                break;
+            case bishop:
+                printf("F");
+                break;
+            case knight:
+                printf("C");
+                break;
+            case rook:
+                printf("T");
+                break;
+            case queen:
+                printf("Q");
+                break;
+            case king:
+                printf("R");
+                break;
+            default:
+                break;
+            }
+            if (piece.color == white) {
+                printf("B");
+            } else {
+                printf("N");
+            }
+        } else {
+            printf("  ");
         }
     }
 }
 
-void BoardPrint(square** board, int size) {
+void BoardPrint(square** board, int size, bool fancyprint) {
 
     
     printf("\n ╭");
@@ -209,8 +245,7 @@ void BoardPrint(square** board, int size) {
         printf("%d", size-y);
         for (int x=0; x<size; x++) {
             printf(" │ ");
-            PrintPiece(board[x][y]);
-            printf(" ");
+            PrintPiece(board[x][y], fancyprint);
         }
         
         printf(" │ \n ├");
@@ -223,8 +258,8 @@ void BoardPrint(square** board, int size) {
     printf(" 01");
     for (int x=0; x<size; x++) {
         printf(" │ ");
-        PrintPiece(board[x][size-1]);
-        printf(" ");
+        PrintPiece(board[x][size-1], fancyprint);
+ 
     }
 
     printf(" │\n ╰");
@@ -409,4 +444,4 @@ void EasterEgg() {
     printf("\nPressez entrer pour quitter");
     StdinClear();
     getchar();
-}         
+}

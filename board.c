@@ -115,7 +115,6 @@ void InitializeBoardColor(square** board, int size) {
         for (int y=2; y<size;y++) {
             board[x][y].color = white;
         }
-
     }
 }
 
@@ -129,16 +128,16 @@ void InitializeBoardColor(square** board, int size) {
  * @param whitekingposy 
  * @param blackkingposy 
  */
-void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, int whitekingposy, int blackkingposy) {
+void GetKingPos(square** board, int size, int* kingposwhite, int* kingposblack) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {
             if (board[x][y].type == king) {
-                if (board[x][y].color == 0) {
-                    whitekingposx = x;
-                    whitekingposy = y;
+                if (board[x][y].color == white) {
+                    kingposwhite[0] = x;
+                    kingposwhite[1] = y;
                 } else {
-                    blackkingposx = x;
-                    blackkingposy = y;
+                    kingposblack[0] = x;
+                    kingposblack[1] = y;
                 }
             }
         }

@@ -20,9 +20,9 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
 
 char ActionInput();
 
-void PrintPiece(square piece);
+void PrintPiece(square piece, bool fancyprint);
 
-void BoardPrint(square** board, int size);
+void BoardPrint(square** board, int size, bool fancyprint);
 
 void SaveNameInput(char* string);
 

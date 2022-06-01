@@ -239,7 +239,6 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy) {
             }
             x++;
         }
-        printf("\n");
     y++;
     }
     return check;
