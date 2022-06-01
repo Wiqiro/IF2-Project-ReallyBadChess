@@ -4,10 +4,9 @@
 #include <game.h>
 #include <interface.h>
 
-
 int main(int argc, char* argv[]) {
 
-    
+    InitializeOutputOptions();
 
     srand(time(NULL));
     InitializeSavesIndex();
@@ -22,7 +21,6 @@ int main(int argc, char* argv[]) {
 
     int startcoords[2];
     int targcoords[2];
-    bool okmove = false;
 
     square** board = NULL;
     int kingposwhite[2];
@@ -73,37 +71,18 @@ int main(int argc, char* argv[]) {
 
                 BoardPrint(board, size);
 
-                okmove = false;
-
                 switch (ActionInput()) {
                 case 'J':
-                    do {
-                        do {
-                            
-                            printf("\nEntrez les coordonnées de la pièce que vous souhaitez bouger: ");
-                            MoveInput(startcoords, size);
-                            if (startcoords[0] == -1 || startcoords[1] == -1) {
-                                printf("\n Cette pièce ne fait pas partie de l'échiquier !");                            
-                            } else if (board[startcoords[0]][startcoords[1]].color != turn) {
-                                printf("\nCe n'est pas votre tour");
-                            } else if (((turn == white && whitecheck == true) || (turn == black && blackcheck == true)) && board[startcoords[0]][startcoords[1]].type != king) {
-                                printf("\nVous devez bouger votre roi !");
-                            } else {
-                                okmove = true;
-                            }
-                        } while (okmove == false);
-
-                        printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
-                        MoveInput(targcoords, size);
-
-
-                        if ((okmove = MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1])) == false) {
-                            printf("\nCe mouvement est interdit !");
-                        }
-                    } while (okmove == false);
+                    
+                    if (turn == black) {
+                        printf("\nC'est au tour des noirs de jouer !   %d %d", kingposblack[0], kingposblack[1]);
+                        MoveInput(board, startcoords, targcoords, size, turn, kingposblack[0], kingposblack[1]);
+                    } else {
+                        printf("\nC'est au tour des blancs de jouer !   %d %d", kingposwhite[0], kingposwhite[1]);
+                        MoveInput(board, startcoords, targcoords, size, turn, kingposwhite[0], kingposwhite[1]);
+                    }
 
                     MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
-
 
                     if (turn == white && board[targcoords[0]][targcoords[1]].type == king) {
                         kingposwhite[0] = targcoords[0];
@@ -114,21 +93,20 @@ int main(int argc, char* argv[]) {
                         kingposblack[1] = targcoords[1];
                     }
 
-
                     blackcheck = CheckTest(board, size, kingposblack[0], kingposblack[1]);
 
-
                     if (blackcheck == true) {
-                        checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
+                        //checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
                         printf("\n Le roi noir est en échec !");
                     }
 
                     whitecheck = CheckTest(board, size, kingposwhite[0], kingposwhite[1]);
                     if (whitecheck == true) {
-                        checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
+                        //checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
                         printf("\n Le roi blanc est en échec !");
                     }
-                    
+                    StdinClear();
+                    printf("\nAppuiez sur entrer pour passer au tour suivant !");
 
                     turn = (turn + 1) % 2;
 

@@ -14,10 +14,9 @@ square** CreateBoard(int size) {
         for (int i=0; i<size; i++) {
             if (board != NULL) {
                 board[i] = (square*)malloc(sizeof(square)*size);
-                //board[i][j].type
             }
             else {
-                fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n"); 
+                fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n");
             }
         }
     } else {
@@ -120,6 +119,16 @@ void InitializeBoardColor(square** board, int size) {
     }
 }
 
+/**
+ * @brief Get the King Pos object (by adress passing)
+ * 
+ * @param board board where the function has to find the king
+ * @param size size of board
+ * @param whitekingposx 
+ * @param blackkingposx 
+ * @param whitekingposy 
+ * @param blackkingposy 
+ */
 void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, int whitekingposy, int blackkingposy) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {

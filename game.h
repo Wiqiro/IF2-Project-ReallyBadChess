@@ -87,6 +87,8 @@ void GetKingPos(square** board, int size, int whitekingposx, int blackkingposx, 
 void FreeBoard(square*** board, int size);
 
 
+bool CollisionTest(square** board, int size, int startx, int starty, int targx, int targy);
+
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
  * 

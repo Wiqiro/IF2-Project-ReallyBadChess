@@ -10,11 +10,16 @@
 #endif
 
 void Clean() {
-
     if(OS == 0) {
         system("cls");
     } else {
         system("clear");
+    }
+}
+
+void InitializeOutputOptions() {
+    if (OS == 0) {
+        SetConsoleOutputCP(65001);
     }
 }
 
@@ -36,11 +41,11 @@ char MenuInput() {
 
 bool GamemodeInput() {
     char gamemode;
-    StdinClear();
     do {
-    printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)\n");
-    scanf("%c",&gamemode);
-    gamemode = toupper(gamemode);
+        StdinClear();
+        printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)\n");
+        scanf("%c",&gamemode);
+        gamemode = toupper(gamemode);
 
     } while (gamemode != 'B' && gamemode != 'C');
 
@@ -56,15 +61,9 @@ int ChessBoardSizeInput() {
     char input[100];
     int size=0;
     do {
+        printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)\n");
 
-        if (OS == 0) {
-            printf("\nChoisissez %c pr%csent la taille de l'%cchiquer (de 6x6 %c 12x12)\n",133,130,130,133);
-        } else {
-            printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)\n");
-        }
-
-
-        fflush(stdin);
+        StdinClear();
         scanf("%s",input);
         size = strtol(input, NULL, 10);
         
@@ -72,28 +71,56 @@ int ChessBoardSizeInput() {
     return size;
 }
 
-void MoveInput(int* coordsarray, int size) {
+void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool turn, int kingposx, int kingposy) {
+
+    bool okmove = false;
+
     char input[1024];
-    StdinClear();
-    fgets(input, 3, stdin);
 
-    if (toupper(input[0])-'A' >= 0 && toupper(input[0])-'A' < size) {
-        coordsarray[0] = toupper(input[0]) - 'A';
-    } else {
-        coordsarray[0] = -1;
-    }
+    do {
+        do {
+            printf("\nEntrez les coordonnées de la pièce que vous souhaitez bouger: ");
+            StdinClear();
+            scanf("%1000s", input);
 
-    if (input[2] == '\0') {
-        coordsarray[1] = size - input[1] + '0';
-    } else if (input[3] == '\0') {
-        coordsarray[1] = size - input[2] + '0' - 10;
-    } else {
-        coordsarray[1] = -1;
-    }
+            startcoords[0] = toupper(input[0]) - 'A';
+            if (input[2] == '\0') {
+                startcoords[1] = size - input[1] + '0';
+            } else {
+                startcoords[1] = size - input[2] + '0' - 10;
+            }
+            if (startcoords[0] == -1 || startcoords[1] == -1) {
+                printf("\nCette pièce ne fait pas partie de l'échiquier !");                            
+            } else if (board[startcoords[0]][startcoords[1]].color != turn) {
+                printf("\nCe n'est pas votre tour");
+            } else {
+                okmove = true;
+            }
 
-    if (coordsarray[1] < 0 || coordsarray[1] >= size) {
-        coordsarray[1] = -1;
-    }
+        } while (!okmove);
+        okmove = false;
+        StdinClear();
+        printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
+        scanf("%1000s", input);
+        
+        targcoords[0] = toupper(input[0]) - 'A';
+        if (input[2] == '\0') {
+            targcoords[1] = size - input[1] + '0';
+        } else {
+            targcoords[1] = size - input[2] + '0' - 10;
+        }
+        
+        if ((okmove = MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1])) == false) {
+            printf("\nCe mouvement est interdit !");
+        } else if (board[startcoords[0]][startcoords[1]].type == king && (okmove = !CheckTest(board, size, targcoords[0], targcoords[1])) == false) {
+            printf("\nVous ne pouvez pas mettre votre roi en échec !");
+        } else if (board[startcoords[0]][startcoords[1]].type != king && (okmove = !CheckTest(board, size, kingposx, kingposy)) == false) {
+            printf("\nVous ne pouvez pas mettre votre roi en échec !");
+        }
+
+    } while (!okmove);
+
+
 
 }
 
@@ -166,9 +193,7 @@ void PrintPiece(square piece) {
 
 void BoardPrint(square** board, int size) {
 
-    #ifdef _WIN32
-        SetConsoleOutputCP(65001);
-    #endif
+    
     printf("\n ╭");
 
     for (int x=0; x<size; x++) {
@@ -178,7 +203,7 @@ void BoardPrint(square** board, int size) {
 
     for (int y=0; y<size-1; y++) {
         printf(" ");
-        if (size < 10 || y > 2) {
+        if (size < 10 || y > (size-10)) {
                 printf("0");
         }
         printf("%d", size-y);

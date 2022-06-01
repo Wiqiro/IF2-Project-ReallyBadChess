@@ -1,5 +1,34 @@
 #include <game.h>
 
+
+bool CollisionTest(square** board, int size, int startx, int starty, int targx, int targy) {
+    int movex = targx-startx;
+    int movey = targy-starty;
+    int dx, dy;
+
+    if (movex == 0) {
+        dx = 0;
+    } else {
+        dx = movex/abs(movex);
+    }
+    if (movey == 0) {
+        dy = 0;
+    } else {
+        dy = movey/abs(movey);
+    }
+
+    int i=0;
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+dx*(i+1)][starty+dy*(i+1)].type == empty) {
+        i++;
+    }
+    if (i == fmax(abs(movex),abs(movey))-1) {
+        return true; //returns true if the way is free (if there is only empty squares in the path of the bishop)
+    } else {
+        return false;
+    }
+}
+
+
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
  * 
@@ -13,8 +42,8 @@
  * @return false if the move is not possible
  */
 bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    switch (board[startx][starty].type)
-    {
+    
+    switch (board[startx][starty].type) {
     case pawn:
         return PawnMoveTest(board, size, startx, starty, targx, targy);
         break;
@@ -60,7 +89,7 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
     if ((board[startx][starty].color == black && movey == 1) || (board[startx][starty].color == white && movey == -1)) {
         if (movex == 0 && board[targx][targy].type == empty) {
             return true;
-        } else if (abs(movex) == 1 && board[startx][starty].color != board[targx][targy].color && board[targx][targy].type != empty) {
+        } else if (abs(movex) == 1 && board[targx][targy].type != empty) {
             return true;
         }
 
@@ -85,17 +114,9 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false if the move is not allowed 
  */
 bool BishopMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    int movex = targx-startx;
-    int movey = targy-starty;
 
-    int i=0;
-    if (abs(movex) == abs(movey)) {
-        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
-        i++;
-        }
-    }
-    if (i == fmax(abs(movex),abs(movey))-1) {
-        return true; //returns true if the way is free (if there is only empty squares in the path of the bishop)
+    if (abs(targx-startx) == abs(targy-starty)) {
+        return CollisionTest(board, size, startx, starty, targx, targy);
     } else {
         return false;
     }
@@ -139,17 +160,9 @@ bool KnightMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return false if the move is not allowed
  */
 bool RookMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    int movex = targx-startx;
-    int movey = targy-starty;
 
-    int i=0;
-    if (movex == 0 || movey == 0) {
-        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
-        i++;
-        }
-    }
-    if (i == fmax(abs(movex),abs(movey))-1) {
-        return true; //returns true if the way is free (if there is only empty squares in the path of the rook)
+    if (targx-startx == 0 || targy-starty == 0) {
+        return CollisionTest(board, size, startx, starty, targx, targy);
     } else {
         return false;
     }
@@ -169,17 +182,9 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return false if the move is not allowed
  */
 bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    int movex = targx-startx;
-    int movey = targy-starty;
 
-    int i=0;
-    if (abs(movex) == abs(movey) || movex == 0 || movey == 0) {
-        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+(movex/abs(movex))*(i+1)][starty+(movey/abs(movey))*(i+1)].type == empty) {
-        i++;
-        }
-    }
-    if (i == fmax(abs(movex),abs(movey))-1) {
-        return true; //returns true if the way is free (if there is only empty squares in the path of the queen)
+    if (abs(targx-startx) == abs(targy-starty) || targx-startx == 0 || targy-starty == 0) {
+        return CollisionTest(board, size, startx, starty, targx, targy);
     } else {
         return false;
     }
@@ -204,10 +209,8 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
 
     if (abs(movex) > 1 || abs(movey) > 1) {
         return false;
-    } else if (CheckTest(board, size, targx, targy) == false) {
-        return true;
     } else {
-        return false;
+        return true;
     }
 }
 
@@ -224,19 +227,48 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  */
 bool CheckTest(square** board, int size, int kingposx, int kingposy) {
     bool check = false;
-    int x=0;
-    int y=0;
-    while (x < size && check == false) {
-        while (y < size && check == false) {
-            if (board[x][y].type != empty && board[x][y].type != king && board[x][y].color != board[kingposx][kingposy].color) {
+    printf("%d", size);
+    int x = 0;
+    int y = 0;
+    while (y < size && check == false) {
+        x = 0;
+        while (x < size && check == false) {
+            if (board[x][y].type != empty && (board[x][y].color != board[kingposx][kingposy].color )) {
                 check = MoveTest(board, size, x, y, kingposx, kingposy);
+            } else {
             }
-            y++;
+            x++;
         }
-    x++;
+        printf("\n");
+    y++;
     }
     return check;
 }
+
+bool RescueTest(square** board, int size, int startx, int starty, int kingposx, int kingposy) {
+    int movex = kingposx-startx;
+    int movey = kingposy-starty;
+    int dx, dy;
+
+    if (movex == 0) {
+        dx = 0;
+    } else {
+        dx = movex/abs(movex);
+    }
+    if (movey == 0) {
+        dy = 0;
+    } else {
+        dy = movey/abs(movey);
+    }
+
+    int i=0;
+    bool rescue = false;
+    while (i+1 < fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, startx+dx*(i+1), starty+dy*(i+1))) == false) {
+        i++;
+    }
+    return rescue;
+}
+
 
 
 /**
@@ -250,10 +282,30 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy) {
  * @return false no Checkmate position
  */
 bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
-    bool checkmate = false;
-    for (int x = kingposx-1; x <= kingposx+1; x++) {
-        for (int y = kingposy-1; y <= kingposy+1; y++) {
-            checkmate = CheckTest(board, size, kingposx+x, kingposy+y);
+    bool checkmate = true;
+    int x = kingposx-1;
+    int y = kingposy-1;
+    while (x <= kingposx+1 || checkmate == true) {
+        while (y <= kingposy+1 || checkmate == true) {
+            if (board[x][y].color != board[kingposx][kingposy].color) {
+                checkmate = CheckTest(board, size, kingposx+x, kingposy+y);
+            }
+            y++;
+        }
+        x++;
+    }
+    if (checkmate == true) {
+        for (y = 0; y < size; y++) {
+            for (x = 0; x < size; x++) {
+                if (board[x][y].type != empty && board[x][y].color != board[kingposx][kingposy].color && MoveTest(board, size, x, y, kingposx, kingposy)) {
+
+                    if (board[x][y].type == (bishop || rook || queen)) {
+                        checkmate = !RescueTest(board, size, x, y, kingposx, kingposy);
+                    } else {
+                        checkmate = CheckTest(board, size, x, y);
+                    }
+                }
+            }
         }
     }
     return checkmate;

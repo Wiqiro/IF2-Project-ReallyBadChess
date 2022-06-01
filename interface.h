@@ -6,6 +6,8 @@
 
 void Clean();
 
+void InitializeOutputOptions();
+
 void StdinClear();
 
 char MenuInput();
@@ -14,7 +16,7 @@ bool GamemodeInput();
 
 int ChessBoardSizeInput();
 
-void MoveInput(int* coordsarray, int size);
+void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool turn, int kingposx, int kingposy);
 
 char ActionInput();
 
