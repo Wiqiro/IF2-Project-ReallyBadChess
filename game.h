@@ -203,7 +203,7 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true Check 
  * @return false no Check
  */
-bool CheckTest(square** board, int size, int kingposx, int kingposy);
+bool CheckTest(square** board, int size, int kingposx, int kingposy, color piececolor);
 
 
 /**

@@ -89,7 +89,7 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
             } else {
                 startcoords[1] = size - input[2] + '0' - 10;
             }
-            if (startcoords[0] < 0 || startcoords[1] >= size || targcoords[0] < 0 || targcoords[1] >= size) {
+            if (startcoords[0] < 0 || startcoords[0] >= size || startcoords[1] < 0 || startcoords[1] >= size) {
                 printf("\nCette pièce ne fait pas partie de l'échiquier !");                            
             } else if (board[startcoords[0]][startcoords[1]].color != turn) {
                 printf("\nCe n'est pas votre tour");
@@ -98,7 +98,7 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
             }
 
         } while (!okmove);
-        okmove = false;
+        okmove = true;
         StdinClear();
         printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
         scanf("%3s", input);
@@ -110,17 +110,23 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
             targcoords[1] = size - input[2] + '0' - 10;
         }
         
-        if ((okmove = MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1])) == false) {
+        if (MoveTest(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]) == false) {
             printf("\nCe mouvement est interdit !");
-        } else if (board[startcoords[0]][startcoords[1]].type == king && (okmove = !CheckTest(board, size, targcoords[0], targcoords[1])) == false) {
+            okmove = false;
+        } else if (board[targcoords[0]][targcoords[1]].color == turn && board[targcoords[0]][targcoords[1]].type != empty) {
+            printf("\nVous ne pouvez pas prendre vos propres pièces !");
+            okmove = false;
+        } else if (board[startcoords[0]][startcoords[1]].type == king && CheckTest(board, size, targcoords[0], targcoords[1], board[kingposx][kingposy].color) == true) {
             printf("\nVous ne pouvez pas mettre votre roi en échec !");
-        } else if (board[startcoords[0]][startcoords[1]].type != king && (okmove = !CheckTest(board, size, kingposx, kingposy)) == false) {
-            printf("\nVous ne pouvez pas mettre votre roi en échec !");
-        }
-
+            okmove = false;
+        } /* else {
+            printf("kqjsksdg");
+            if (CheckTest(board, size, kingposx, kingposy) == true) {
+                printf("\nVous ne pouvez pas mettre votre roi en échec !");
+                okmove = false;
+            }
+        } */
     } while (!okmove);
-
-
 
 }
 
@@ -187,7 +193,7 @@ void PrintPiece(square piece, bool fancyprint) {
                 break;
                     
             default:
-                printf("    ");
+                printf(" ");
                 break;
             }
         }

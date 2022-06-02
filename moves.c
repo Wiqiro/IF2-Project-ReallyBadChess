@@ -2,6 +2,7 @@
 
 
 bool CollisionTest(square** board, int size, int startx, int starty, int targx, int targy) {
+    //printf("dgfkqsdgf");
     int movex = targx-startx;
     int movey = targy-starty;
     int dx, dy;
@@ -16,10 +17,14 @@ bool CollisionTest(square** board, int size, int startx, int starty, int targx, 
     } else {
         dy = movey/abs(movey);
     }
+    //printf("%d  %d\n\n\n", dx, dy);
 
     int i=0;
         while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+dx*(i+1)][starty+dy*(i+1)].type == empty) {
         i++;
+        //printf("%d  %d\n",startx+dx*(i+1), starty+dy*(i+1));
+        //getchar();
+
     }
     if (i == fmax(abs(movex),abs(movey))-1) {
         return true; //returns true if the way is free (if there is only empty squares in the path of the bishop)
@@ -225,18 +230,20 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true Check 
  * @return false no Check
  */
-bool CheckTest(square** board, int size, int kingposx, int kingposy) {
+bool CheckTest(square** board, int size, int pieceposx, int pieceposy, color piececolor) {
     bool check = false;
-    printf("%d", size);
     int x = 0;
     int y = 0;
     while (y < size && check == false) {
         x = 0;
         while (x < size && check == false) {
-            if (board[x][y].type != empty && (board[x][y].color != board[kingposx][kingposy].color )) {
-                check = MoveTest(board, size, x, y, kingposx, kingposy);
+            if (board[x][y].type != empty && board[x][y].type != king && (board[x][y].color != piececolor)) {
+                check = MoveTest(board, size, x, y, pieceposx, pieceposy);
+                //printf("\nTesté  %d  %d", x, y);
             } else {
+               //printf("\nNon testé  %d  %d", x, y);
             }
+            //printf("       %d %d  Résultat: %d   ", board[x][y].color, piececolor, check);
             x++;
         }
     y++;
@@ -245,9 +252,11 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy) {
 }
 
 bool RescueTest(square** board, int size, int startx, int starty, int kingposx, int kingposy) {
+
     int movex = kingposx-startx;
     int movey = kingposy-starty;
     int dx, dy;
+    color kingcolor = board[kingposx][kingposy].color;
 
     if (movex == 0) {
         dx = 0;
@@ -262,7 +271,7 @@ bool RescueTest(square** board, int size, int startx, int starty, int kingposx, 
 
     int i=0;
     bool rescue = false;
-    while (i+1 < fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, startx+dx*(i+1), starty+dy*(i+1))) == false) {
+    while (i < (int)fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, startx+(dx*i), starty+(dy*i), !kingcolor)) == false) {
         i++;
     }
     return rescue;
@@ -271,7 +280,7 @@ bool RescueTest(square** board, int size, int startx, int starty, int kingposx, 
 
 
 /**
- * @brief Test if the king is in a Checkmate position --> has to call the CheckTest function for every possible king move
+ * @brief Test if the king is in a Checkmate position
  * 
  * @param board 
  * @param size 
@@ -284,24 +293,34 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
     bool checkmate = true;
     int x = kingposx-1;
     int y = kingposy-1;
-    while (x <= kingposx+1 || checkmate == true) {
-        while (y <= kingposy+1 || checkmate == true) {
-            if (board[x][y].color != board[kingposx][kingposy].color) {
-                checkmate = CheckTest(board, size, kingposx+x, kingposy+y);
+    color kingcolor = board[kingposx][kingposy].color;
+
+    while (x <= kingposx+1 && checkmate == true) {
+        y = kingposy-1;
+        while (y <= kingposy+1 && checkmate == true) {
+            if (x >= 0 && x < size && y >= 0 && y < size) {
+                
+                if (board[x][y].color != kingcolor || board[x][y].type == empty) {
+                    checkmate = CheckTest(board, size, x, y, kingcolor);
+                    //printf("Test de l'échec en %d  %d (couleur %d): %d\n", x, y, kingcolor, checkmate);
+                }
             }
             y++;
         }
         x++;
     }
+    //printf("\n\nPremiere phase de test de l'echec et mat passée: %d\n\n", checkmate);
     if (checkmate == true) {
         for (y = 0; y < size; y++) {
             for (x = 0; x < size; x++) {
-                if (board[x][y].type != empty && board[x][y].color != board[kingposx][kingposy].color && MoveTest(board, size, x, y, kingposx, kingposy)) {
+                if (board[x][y].type != empty && board[x][y].color != kingcolor && MoveTest(board, size, x, y, kingposx, kingposy) == true) {
 
-                    if (board[x][y].type == (bishop || rook || queen)) {
+                    if (board[x][y].type == bishop || board[x][y].type == rook || board[x][y].type == queen) {
                         checkmate = !RescueTest(board, size, x, y, kingposx, kingposy);
+                        //printf("Test mise en échec par grosse pièce en %d  %d:  %d\n",x, y, checkmate);
                     } else {
-                        checkmate = CheckTest(board, size, x, y);
+                        checkmate = CheckTest(board, size, x, y, !kingcolor);
+                        //printf("Test mise en échec par une pièce de merde; %d\n", checkmate);
                     }
                 }
             }
