@@ -10,7 +10,7 @@ else
 endif
 
 CXX = gcc
-CFLAGS = -Wall -Werror -pedantic -fpic -g
+CFLAGS = -Wall -Werror -pedantic -fpic
 LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 

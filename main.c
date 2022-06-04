@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
     bool fancyprint = true;
 
     printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
+
     char menuchoice;
     do {
         if (!initialized) {
@@ -127,14 +128,18 @@ int main(int argc, char* argv[]) {
             break;
         
         case 'I': ;
-            saveinfo save = GetSaveInfo(PrintSaves());
-            printf("%s  %d   %lld\n", save.name, save.size, save.time);
-            size = save.size;
-            board = CreateBoard(size);
-            ImportBoard(board, size, save.name);
-            GetKingPos(board, size, kingposwhite, kingposblack);
-            initialized = true;
+            int linenumber = PrintSaves();
 
+            if (linenumber >= 0) {
+                saveinfo save = GetSaveInfo(linenumber);
+                printf("%s  %d   %lld\n", save.name, save.size, save.time);
+                size = save.size;
+                board = CreateBoard(size);
+                ImportBoard(board, size, save.name);
+                GetKingPos(board, size, kingposwhite, kingposblack);
+                initialized = true;
+                turn = black;
+            }
             break;
         
         case 'Q':

@@ -9,15 +9,15 @@ bool CollisionTest(square** board, int size, int startx, int starty, int targx, 
 
     if (movex == 0) {
         dx = 0;
-    } else {
+    } else { 
         dx = movex/abs(movex);
     }
+
     if (movey == 0) {
         dy = 0;
     } else {
         dy = movey/abs(movey);
     }
-    //printf("%d  %d\n\n\n", dx, dy);
 
     int i=0;
         while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+dx*(i+1)][starty+dy*(i+1)].type == empty) {
@@ -241,7 +241,7 @@ bool CheckTest(square** board, int size, int pieceposx, int pieceposy, color pie
                 check = MoveTest(board, size, x, y, pieceposx, pieceposy);
                 //printf("\nTesté  %d  %d", x, y);
             } else {
-               //printf("\nNon testé  %d  %d", x, y);
+                //printf("\nNon testé  %d  %d", x, y);
             }
             //printf("       %d %d  Résultat: %d   ", board[x][y].color, piececolor, check);
             x++;
@@ -253,10 +253,10 @@ bool CheckTest(square** board, int size, int pieceposx, int pieceposy, color pie
 
 bool RescueTest(square** board, int size, int startx, int starty, int kingposx, int kingposy) {
 
+    color kingcolor = board[kingposx][kingposy].color;
     int movex = kingposx-startx;
     int movey = kingposy-starty;
     int dx, dy;
-    color kingcolor = board[kingposx][kingposy].color;
 
     if (movex == 0) {
         dx = 0;
@@ -271,9 +271,11 @@ bool RescueTest(square** board, int size, int startx, int starty, int kingposx, 
 
     int i=0;
     bool rescue = false;
+    
     while (i < (int)fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, startx+(dx*i), starty+(dy*i), !kingcolor)) == false) {
         i++;
     }
+
     return rescue;
 }
 
@@ -302,7 +304,7 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
                 
                 if (board[x][y].color != kingcolor || board[x][y].type == empty) {
                     checkmate = CheckTest(board, size, x, y, kingcolor);
-                    //printf("Test de l'échec en %d  %d (couleur %d): %d\n", x, y, kingcolor, checkmate);
+                    printf("Test de l'échec en %d  %d (couleur %d): %d\n", x, y, kingcolor, checkmate);
                 }
             }
             y++;
@@ -319,8 +321,8 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
                         checkmate = !RescueTest(board, size, x, y, kingposx, kingposy);
                         //printf("Test mise en échec par grosse pièce en %d  %d:  %d\n",x, y, checkmate);
                     } else {
-                        checkmate = CheckTest(board, size, x, y, !kingcolor);
-                        //printf("Test mise en échec par une pièce de merde; %d\n", checkmate);
+                        checkmate = !CheckTest(board, size, x, y, !kingcolor);
+                        //printf("Test mise en échec par petite pièce en %d  %d:  %d\n",x, y, checkmate);
                     }
                 }
             }

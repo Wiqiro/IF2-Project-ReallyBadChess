@@ -265,7 +265,6 @@ void BoardPrint(square** board, int size, bool fancyprint) {
     for (int x=0; x<size; x++) {
         printf(" │ ");
         PrintPiece(board[x][size-1], fancyprint);
- 
     }
 
     printf(" │\n ╰");
@@ -313,8 +312,7 @@ bool QuitConfirmation() {
 int PrintSaves() {
 
     Clean();
-    printf("Gestion des sauvegardes\n");
-
+    
     char buffer[3][50];
     int i = 1;
     long long int time;
@@ -330,9 +328,12 @@ int PrintSaves() {
     fclose(index);
 
     if (i == 1) {
-        printf("Aucune sauvegarde n'a été trouvée !\n"); 
+        printf("Aucune sauvegarde n'a été trouvée ...\n\nAppuiez sur entrée pour retourner au menu ");
+        StdinClear();
+        getchar();
         return -1;
     } else {
+        printf("Gestion des sauvegardes\n");
         char input[10];
         int savenumber;
         do {
