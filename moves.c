@@ -1,10 +1,10 @@
 #include <game.h>
 
 
-bool CollisionTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool CollisionTest(square** board, int size, coords startpos, coords targpos) {
     //printf("dgfkqsdgf");
-    int movex = targx-startx;
-    int movey = targy-starty;
+    int movex = targpos.x-startpos.x;
+    int movey = targpos.y-startpos.y;
     int dx, dy;
 
     if (movex == 0) {
@@ -20,9 +20,9 @@ bool CollisionTest(square** board, int size, int startx, int starty, int targx, 
     }
 
     int i=0;
-        while (i+1 < fmax(abs(movex),abs(movey)) && board[startx+dx*(i+1)][starty+dy*(i+1)].type == empty) {
+        while (i+1 < fmax(abs(movex),abs(movey)) && board[startpos.x+dx*(i+1)][startpos.y+dy*(i+1)].type == empty) {
         i++;
-        //printf("%d  %d\n",startx+dx*(i+1), starty+dy*(i+1));
+        //printf("%d  %d\n",startpos.x+dx*(i+1), startpos.y+dy*(i+1));
         //getchar();
 
     }
@@ -39,33 +39,33 @@ bool CollisionTest(square** board, int size, int startx, int starty, int targx, 
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is possible
  * @return false if the move is not possible
  */
-bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool MoveTest(square** board, int size, coords startpos, coords targpos) {
     
-    switch (board[startx][starty].type) {
+    switch (board[startpos.x][startpos.y].type) {
     case pawn:
-        return PawnMoveTest(board, size, startx, starty, targx, targy);
+        return PawnMoveTest(board, size, startpos, targpos);
         break;
     case bishop:
-        return BishopMoveTest(board, size, startx, starty, targx, targy);
+        return BishopMoveTest(board, size, startpos, targpos);
         break;
     case knight:
-        return KnightMoveTest(board, size, startx, starty, targx, targy);
+        return KnightMoveTest(board, size, startpos, targpos);
         break;
     case rook:
-        return RookMoveTest(board, size, startx, starty, targx, targy);
+        return RookMoveTest(board, size, startpos, targpos);
         break;
     case queen:
-        return QueenMoveTest(board, size, startx, starty, targx, targy);
+        return QueenMoveTest(board, size, startpos, targpos);
         break;
     case king:
-        return KingMoveTest(board, size, startx, starty, targx, targy);
+        return KingMoveTest(board, size, startpos, targpos);
         break;
     
     default:
@@ -79,26 +79,26 @@ bool MoveTest(square** board, int size, int startx, int starty, int targx, int t
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool PawnMoveTest(square** board, int size, coords startpos, coords targpos) {
 
-    int movex = targx-startx;
-    int movey = targy-starty;
+    int movex = targpos.x-startpos.x;
+    int movey = targpos.y-startpos.y;
 
-    if ((board[startx][starty].color == black && movey == 1) || (board[startx][starty].color == white && movey == -1)) {
-        if (movex == 0 && board[targx][targy].type == empty) {
+    if ((board[startpos.x][startpos.y].color == black && movey == 1) || (board[startpos.x][startpos.y].color == white && movey == -1)) {
+        if (movex == 0 && board[targpos.x][targpos.y].type == empty) {
             return true;
-        } else if (abs(movex) == 1 && board[targx][targy].type != empty) {
+        } else if (abs(movex) == 1 && board[targpos.x][targpos.y].type != empty) {
             return true;
         }
 
-    } else if (movex == 0 && ((board[startx][starty].color == black && targy == 3) || (board[startx][starty].color == white && targy == size-4))) {
+    } else if (movex == 0 && ((board[startpos.x][startpos.y].color == black && targpos.y == 3) || (board[startpos.x][startpos.y].color == white && targpos.y == size-4))) {
         return true;
     }
 
@@ -111,17 +111,17 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is allowed
  * @return false if the move is not allowed 
  */
-bool BishopMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool BishopMoveTest(square** board, int size, coords startpos, coords targpos) {
 
-    if (abs(targx-startx) == abs(targy-starty)) {
-        return CollisionTest(board, size, startx, starty, targx, targy);
+    if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y)) {
+        return CollisionTest(board, size, startpos, targpos);
     } else {
         return false;
     }
@@ -133,16 +133,16 @@ bool BishopMoveTest(square** board, int size, int startx, int starty, int targx,
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool KnightMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    int movex = targx-startx;
-    int movey = targy-starty;
+bool KnightMoveTest(square** board, int size, coords startpos, coords targpos) {
+    int movex = targpos.x-startpos.x;
+    int movey = targpos.y-startpos.y;
 
     if ((abs(movex) == 2 && abs(movey) == 1) || (abs(movex) == 1 && abs(movey) == 2)) {
         return true;
@@ -157,17 +157,17 @@ bool KnightMoveTest(square** board, int size, int startx, int starty, int targx,
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool RookMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool RookMoveTest(square** board, int size, coords startpos, coords targpos) {
 
-    if (targx-startx == 0 || targy-starty == 0) {
-        return CollisionTest(board, size, startx, starty, targx, targy);
+    if (targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
+        return CollisionTest(board, size, startpos, targpos);
     } else {
         return false;
     }
@@ -179,17 +179,17 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
+bool QueenMoveTest(square** board, int size, coords startpos, coords targpos) {
 
-    if (abs(targx-startx) == abs(targy-starty) || targx-startx == 0 || targy-starty == 0) {
-        return CollisionTest(board, size, startx, starty, targx, targy);
+    if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y) || targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
+        return CollisionTest(board, size, startpos, targpos);
     } else {
         return false;
     }
@@ -201,16 +201,16 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
  * 
  * @param board Board where the move has to be tested
  * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
+ * @param startpos.x The starting column of the piece
+ * @param startpos.y The starting row of the piece
+ * @param targpos.x The targetted column of move
+ * @param targpos.y The targetted row of move
  * @return true if the move is possible
  * @return false if the move is not possible
  */
-bool KingMoveTest(square** board, int size, int startx, int starty, int targx, int targy) {
-    int movex = targx-startx;
-    int movey = targy-starty;
+bool KingMoveTest(square** board, int size, coords startpos, coords targpos) {
+    int movex = targpos.x-startpos.x;
+    int movey = targpos.y-startpos.y;
 
     if (abs(movex) > 1 || abs(movey) > 1) {
         return false;
@@ -230,32 +230,32 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true Check 
  * @return false no Check
  */
-bool CheckTest(square** board, int size, int pieceposx, int pieceposy, color piececolor) {
+bool CheckTest(square** board, int size, coords piecepos, color piececolor) {
     bool check = false;
-    int x = 0;
-    int y = 0;
-    while (y < size && check == false) {
-        x = 0;
-        while (x < size && check == false) {
-            if (board[x][y].type != empty && board[x][y].type != king && (board[x][y].color != piececolor)) {
-                check = MoveTest(board, size, x, y, pieceposx, pieceposy);
-                printf("\nTesté  %d  %d", x, y);
+    coords testpos;
+    testpos.y = 0;
+    while (testpos.y < size && check == false) {
+        testpos.x = 0;
+        while (testpos.x < size && check == false) {
+            if (board[testpos.x][testpos.y].type != empty && board[testpos.x][testpos.y].type != king && (board[testpos.x][testpos.y].color != piececolor)) {
+                check = MoveTest(board, size, testpos, piecepos);
+                //printf("\nTesté  %d  %d", testpos.x, testpos.y);
             } else {
-                printf("\nNon testé  %d  %d", x, y);
+                //printf("\nNon testé  %d  %d", testpos.x, testpos.y);
             }
-            printf("       %d %d  Résultat: %d   ", board[x][y].color, piececolor, check);
-            x++;
+            //printf("       %d %d  Résultat: %d   ", board[testpos.x][testpos.y].color, piececolor, check);
+            testpos.x++;
         }
-    y++;
+    testpos.y++;
     }
     return check;
 }
 
-bool RescueTest(square** board, int size, int startx, int starty, int kingposx, int kingposy) {
+bool RescueTest(square** board, int size, coords startpos,  coords kingpos) {
 
-    color kingcolor = board[kingposx][kingposy].color;
-    int movex = kingposx-startx;
-    int movey = kingposy-starty;
+    color kingcolor = board[kingpos.x][kingpos.y].color;
+    int movex = kingpos.x-startpos.x;
+    int movey = kingpos.y-startpos.y;
     int dx, dy;
 
     if (movex == 0) {
@@ -271,8 +271,11 @@ bool RescueTest(square** board, int size, int startx, int starty, int kingposx, 
 
     int i=0;
     bool rescue = false;
+    coords testcoords = startpos;
     
-    while (i < (int)fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, startx+(dx*i), starty+(dy*i), !kingcolor)) == false) {
+    while (i < (int)fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, testcoords, !kingcolor)) == false) {
+        testcoords.x += dx;
+        testcoords.y += dy;
         i++;
     }
 
@@ -291,38 +294,39 @@ bool RescueTest(square** board, int size, int startx, int starty, int kingposx, 
  * @return true Checkmate position
  * @return false no Checkmate position
  */
-bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
+bool CheckMateTest(square** board, int size, coords kingpos) {
     bool checkmate = true;
-    int x = kingposx-1;
-    int y = kingposy-1;
-    color kingcolor = board[kingposx][kingposy].color;
+    coords testcoords;
+    testcoords.x = kingpos.x-1;
 
-    while (x <= kingposx+1 && checkmate == true) {
-        y = kingposy-1;
-        while (y <= kingposy+1 && checkmate == true) {
-            if (x >= 0 && x < size && y >= 0 && y < size) {
+    color kingcolor = board[kingpos.x][kingpos.y].color;
+
+    while (testcoords.x <= kingpos.x+1 && checkmate == true) {
+        testcoords.y = kingpos.y-1;
+        while (testcoords.y <= kingpos.y+1 && checkmate == true) {
+            if (testcoords.x >= 0 && testcoords.x < size && testcoords.y >= 0 && testcoords.y < size) {
                 
-                if (board[x][y].color != kingcolor || board[x][y].type == empty) {
-                    checkmate = CheckTest(board, size, x, y, kingcolor);
-                    printf("Test de l'échec en %d  %d (couleur %d): %d\n", x, y, kingcolor, checkmate);
+                if (board[testcoords.x][testcoords.y].color != kingcolor || board[testcoords.x][testcoords.y].type == empty) {
+                    checkmate = CheckTest(board, size, testcoords, kingcolor);
+                    //printf("Test de l'échec en %d  %d (couleur %d): %d\n", testcoords.x, testcoords.y, kingcolor, checkmate);
                 }
             }
-            y++;
+            testcoords.y++;
         }
-        x++;
+        testcoords.x++;
     }
     //printf("\n\nPremiere phase de test de l'echec et mat passée: %d\n\n", checkmate);
     if (checkmate == true) {
-        for (y = 0; y < size; y++) {
-            for (x = 0; x < size; x++) {
-                if (board[x][y].type != empty && board[x][y].color != kingcolor && MoveTest(board, size, x, y, kingposx, kingposy) == true) {
+        for (testcoords.y = 0; testcoords.y < size; testcoords.y++) {
+            for (testcoords.x = 0; testcoords.x < size; testcoords.x++) {
+                if (board[testcoords.x][testcoords.y].type != empty && board[testcoords.x][testcoords.y].color != kingcolor && MoveTest(board, size, testcoords, kingpos) == true) {
 
-                    if (board[x][y].type == bishop || board[x][y].type == rook || board[x][y].type == queen) {
-                        checkmate = !RescueTest(board, size, x, y, kingposx, kingposy);
-                        //printf("Test mise en échec par grosse pièce en %d  %d:  %d\n",x, y, checkmate);
+                    if (board[testcoords.x][testcoords.y].type == bishop || board[testcoords.x][testcoords.y].type == rook || board[testcoords.x][testcoords.y].type == queen) {
+                        checkmate = !RescueTest(board, size, testcoords, kingpos);
+                        //printf("Test mise en échec par grosse pièce en %d  %d:  %d\n",testcoords.x, testcoords.y, checkmate);
                     } else {
-                        checkmate = !CheckTest(board, size, x, y, !kingcolor);
-                        //printf("Test mise en échec par petite pièce en %d  %d:  %d\n",x, y, checkmate);
+                        checkmate = !CheckTest(board, size, testcoords, !kingcolor);
+                        //printf("Test mise en échec par petite pièce en %d  %d:  %d\n",testcoords.x, testcoords.y, checkmate);
                     }
                 }
             }
@@ -336,26 +340,25 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
  * 
  * @param board 
  * @param size 
- * @param startx 
- * @param starty 
- * @param targx 
- * @param targy 
+ * @param startpos.x 
+ * @param startpos.y 
+ * @param targpos.x 
+ * @param targpos.y 
  */
-void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy) {
-    board[targx][targy] = board[startx][starty];
-    board[startx][starty].type = empty;
+void MoveExecute(square** board, int size, coords startpos, coords targpos) {
+    board[targpos.x][targpos.y] = board[startpos.x][startpos.y];
+    board[startpos.x][startpos.y].type = empty;
 }
 
-bool CheckTestAfterMove(square** board, int size, int startx, int starty, int targx, int targy, int kingposx, int kingposy, int kingcolor) {
-    square startpiece = board[startx][starty];
-    square targpiece = board[targx][targy];
+bool CheckTestAfterMove(square** board, int size, coords startpos, coords targpos, coords kingpos, color kingcolor) {
 
-    printf("\n\nCheckTestAfterMove\n\n");
-    printf("Pos de départ: %d %d   Pos d'arrivée: %d %d   Pos du roi: %d %d  %d\n", startx, starty, targx, targy, kingposx, kingposy, kingcolor);
+    square startpiece = board[startpos.x][startpos.y];
+    square targpiece = board[targpos.x][targpos.y];
+    MoveExecute(board, size, startpos, targpos);
+    bool check = CheckTest(board, size, kingpos, kingcolor);
 
-    MoveExecute(board, size, startx, starty, targx, targy);
-    bool check = CheckTest(board, size, kingposx, kingposy, kingcolor);
-    board[startx][starty] = startpiece;
-    board[targx][targy] = targpiece;
+    board[startpos.x][startpos.y] = startpiece;
+    board[targpos.x][targpos.y] = targpiece;
+
     return check;
 }

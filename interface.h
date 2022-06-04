@@ -16,7 +16,7 @@ bool GamemodeInput();
 
 int ChessBoardSizeInput();
 
-void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool turn, int kingposx, int kingposy);
+void MoveInput(square** board, int size, bool turn, coords* startcoords, coords* targcoords, coords* kingpos);
 
 char ActionInput();
 

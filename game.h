@@ -33,11 +33,17 @@ typedef struct square {
     color color;
 } square;
 
+typedef struct coords {
+    int x;
+    int y;
+} coords;
+
 typedef struct saveinfo {
     char name[32];
     int size;
     long long int time;
 } saveinfo;
+
 
 
 /**
@@ -47,7 +53,6 @@ typedef struct saveinfo {
  * @return square** the board created
  */
 square** CreateBoard(int size);
-
 
 /**
  * @brief Place the chess pieces randomly (only one king, following the classic rules)
@@ -74,7 +79,7 @@ void InitializeBoardClassic(square** board);
  */
 void InitializeBoardColor(square** board, int size);
 
-void GetKingPos(square** board, int size, int* kingposwhite, int* kingposblack);
+void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack);
 
 
 
@@ -87,7 +92,7 @@ void GetKingPos(square** board, int size, int* kingposwhite, int* kingposblack);
 void FreeBoard(square*** board, int size);
 
 
-bool CollisionTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool CollisionTest(square** board, int size, coords startpos, coords targpos);
 
 /**
  * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
@@ -101,7 +106,7 @@ bool CollisionTest(square** board, int size, int startx, int starty, int targx, 
  * @return true  if the move is possible
  * @return false if the move is not possible
  */
-bool MoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool MoveTest(square** board, int size, coords startpos, coords targpos);
 
 /**
  * @brief Test if the move of a specified pawn is possible
@@ -115,7 +120,7 @@ bool MoveTest(square** board, int size, int startx, int starty, int targx, int t
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool PawnMoveTest(square** board, int size, coords startpos, coords targpos);
 
 
 /**
@@ -130,7 +135,7 @@ bool PawnMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool BishopMoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool BishopMoveTest(square** board, int size, coords startpos, coords targpos);
 
 
 /**
@@ -145,7 +150,7 @@ bool BishopMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool KnightMoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool KnightMoveTest(square** board, int size, coords startpos, coords targpos);
 
 
 /**
@@ -160,7 +165,7 @@ bool KnightMoveTest(square** board, int size, int startx, int starty, int targx,
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool RookMoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool RookMoveTest(square** board, int size, coords startpos, coords targpos);
 
 
 /**
@@ -175,7 +180,7 @@ bool RookMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true  if the move is allowed
  * @return false if the move is not allowed
  */
-bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, int targy);
+bool QueenMoveTest(square** board, int size, coords startpos, coords targpos);
 
 
 /**
@@ -190,7 +195,7 @@ bool QueenMoveTest(square** board, int size, int startx, int starty, int targx, 
  * @return true if the move is possible
  * @return false if the move is not possible
  */
-bool KingMoveTest(square** board, int size, int startx, int starty, int targx, int targy); 
+bool KingMoveTest(square** board, int size, coords startpos, coords targpos); 
 
 
 /**
@@ -203,7 +208,7 @@ bool KingMoveTest(square** board, int size, int startx, int starty, int targx, i
  * @return true Check 
  * @return false no Check
  */
-bool CheckTest(square** board, int size, int kingposx, int kingposy, color piececolor);
+bool CheckTest(square** board, int size, coords kingpos, color piececolor);
 
 
 /**
@@ -216,7 +221,7 @@ bool CheckTest(square** board, int size, int kingposx, int kingposy, color piece
  * @return true Checkmate position
  * @return false no Checkmate position
  */
-bool CheckMateTest(square** board, int size, int kingposx, int kingposy);
+bool CheckMateTest(square** board, int size, coords kingpos);
 
 /**
  * @brief Execute a move (no legit move verification : has to be checked before)
@@ -228,9 +233,9 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy);
  * @param targx 
  * @param targy
  */
-void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy);
+void MoveExecute(square** board, int size,coords startpos,coords targpos);
 
-bool CheckTestAfterMove(square** board, int size, int startx, int starty, int targx, int targy, int kingposx, int kingposy, int kingcolor);
+bool CheckTestAfterMove(square** board, int size, coords startpos, coords targpos, coords kingpos, color kingcolor);
 
 void InitializeSavesIndex();
 

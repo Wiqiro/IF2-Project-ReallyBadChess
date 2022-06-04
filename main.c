@@ -19,22 +19,24 @@ int main(int argc, char* argv[]) {
 
     bool initialized = false;
 
-    int startcoords[2];
-    int targcoords[2];
+    coords startcoords;
+    coords targcoords;
 
     square** board = NULL;
-    int kingposwhite[2];
-    int kingposblack[2];
+    coords kingposwhite;
+    coords kingposblack;
     
     bool gamemode;
     int size = 0;
     //bool gameend = false;
     bool fancyprint = true;
+    bool quit = false;
 
     printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
 
     char menuchoice;
     do {
+        Clean();
         if (!initialized) {
             menuchoice = MenuInput();
         } else {
@@ -56,13 +58,15 @@ int main(int argc, char* argv[]) {
 
                     for (int x=0; x<size; x++) {
                         if (board[x][0].type == king) {
-                            kingposblack[0] = x;
+                            kingposblack.x = x;
                         } else if (board[x][size-1].type == king) {
-                            kingposwhite[0] = x;
+                            kingposwhite.x = x;
                         }
                     }
+                    kingposblack.y = 0;
+                    kingposwhite.y = size-1;
                 }
-                GetKingPos(board, size, kingposwhite, kingposblack);
+                GetKingPos(board, size, &kingposwhite, &kingposblack);
             }
             while (checkmate == false) {
                 Clean();
@@ -72,24 +76,25 @@ int main(int argc, char* argv[]) {
 
                 switch (ActionInput()) {
                 case 'J':
-                                        
+                    
                     if (turn == black) {
                         printf("\nC'est au tour des noirs de jouer !");
-                        MoveInput(board, startcoords, targcoords, size, turn, kingposblack[0], kingposblack[1]);
+                        MoveInput(board, size, turn, &startcoords, &targcoords, &kingposblack);
                     } else {
                         printf("\nC'est au tour des blancs de jouer !");
-                        MoveInput(board, startcoords, targcoords, size, turn, kingposwhite[0], kingposwhite[1]);
+                        MoveInput(board, size, turn, &startcoords, &targcoords, &kingposwhite);
+
                     }
+                    
+                    MoveExecute(board, size, startcoords, targcoords);
+                    GetKingPos(board, size, &kingposwhite, &kingposblack);
 
-                    MoveExecute(board, size, startcoords[0], startcoords[1], targcoords[0], targcoords[1]);
-                    GetKingPos(board, size, kingposwhite, kingposblack);
+                    blackcheck = CheckTest(board, size, kingposblack, black);
 
-                    blackcheck = CheckTest(board, size, kingposblack[0], kingposblack[1], black);
+                    if (blackcheck == true) checkmate = CheckMateTest(board, size, kingposblack);
 
-                    if (blackcheck == true) checkmate = CheckMateTest(board, size, kingposblack[0], kingposblack[1]);
-
-                    whitecheck = CheckTest(board, size, kingposwhite[0], kingposwhite[1], white);
-                    if (whitecheck == true) checkmate = CheckMateTest(board, size, kingposwhite[0], kingposwhite[1]);
+                    whitecheck = CheckTest(board, size, kingposwhite, white);
+                    if (whitecheck == true) checkmate = CheckMateTest(board, size, kingposwhite);
                     if (checkmate) {
                         printf("CHECKMATE");
                     } 
@@ -136,7 +141,7 @@ int main(int argc, char* argv[]) {
                 size = save.size;
                 board = CreateBoard(size);
                 ImportBoard(board, size, save.name);
-                GetKingPos(board, size, kingposwhite, kingposblack);
+                GetKingPos(board, size, &kingposwhite, &kingposblack);
                 initialized = true;
                 turn = black;
             }
@@ -145,7 +150,9 @@ int main(int argc, char* argv[]) {
         case 'Q':
             if (QuitConfirmation() == true) {
                 EasterEgg();
+                quit = true;
             }
+            break;
 
         case 'O':
         StdinClear();
@@ -158,7 +165,7 @@ int main(int argc, char* argv[]) {
         default:
             break;
         }
-    } while (menuchoice != 'Q');
+    } while (quit == false);
  
     return EXIT_SUCCESS;
 }

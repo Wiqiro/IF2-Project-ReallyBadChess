@@ -128,16 +128,16 @@ void InitializeBoardColor(square** board, int size) {
  * @param whitekingposy 
  * @param blackkingposy 
  */
-void GetKingPos(square** board, int size, int* kingposwhite, int* kingposblack) {
+void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {
             if (board[x][y].type == king) {
                 if (board[x][y].color == white) {
-                    kingposwhite[0] = x;
-                    kingposwhite[1] = y;
+                    kingposwhite->x = x;
+                    kingposwhite->y = y;
                 } else {
-                    kingposblack[0] = x;
-                    kingposblack[1] = y;
+                    kingposblack->x = x;
+                    kingposblack->y = y;
                 }
             }
         }
