@@ -230,6 +230,7 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy);
  */
 void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy);
 
+bool CheckTestAfterMove(square** board, int size, int startx, int starty, int targx, int targy, int kingposx, int kingposy, int kingcolor);
 
 void InitializeSavesIndex();
 

@@ -119,13 +119,10 @@ void MoveInput(square** board, int* startcoords, int* targcoords, int size, bool
         } else if (board[startcoords[0]][startcoords[1]].type == king && CheckTest(board, size, targcoords[0], targcoords[1], board[kingposx][kingposy].color) == true) {
             printf("\nVous ne pouvez pas mettre votre roi en échec !");
             okmove = false;
-        } /* else {
-            printf("kqjsksdg");
-            if (CheckTest(board, size, kingposx, kingposy) == true) {
-                printf("\nVous ne pouvez pas mettre votre roi en échec !");
-                okmove = false;
-            }
-        } */
+        } else if (board[startcoords[0]][startcoords[1]].type != king && CheckTestAfterMove(board, size, startcoords[0], startcoords[1] ,targcoords[0], targcoords[1], kingposx, kingposy, board[kingposx][kingposy].color)) {
+            printf("\nVous ne pouvez pas mettre votre roi en échec");
+            okmove = false;
+        } 
     } while (!okmove);
 
 }

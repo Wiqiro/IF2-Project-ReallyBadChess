@@ -239,11 +239,11 @@ bool CheckTest(square** board, int size, int pieceposx, int pieceposy, color pie
         while (x < size && check == false) {
             if (board[x][y].type != empty && board[x][y].type != king && (board[x][y].color != piececolor)) {
                 check = MoveTest(board, size, x, y, pieceposx, pieceposy);
-                //printf("\nTesté  %d  %d", x, y);
+                printf("\nTesté  %d  %d", x, y);
             } else {
-                //printf("\nNon testé  %d  %d", x, y);
+                printf("\nNon testé  %d  %d", x, y);
             }
-            //printf("       %d %d  Résultat: %d   ", board[x][y].color, piececolor, check);
+            printf("       %d %d  Résultat: %d   ", board[x][y].color, piececolor, check);
             x++;
         }
     y++;
@@ -344,4 +344,18 @@ bool CheckMateTest(square** board, int size, int kingposx, int kingposy) {
 void MoveExecute(square** board, int size, int startx, int starty, int targx, int targy) {
     board[targx][targy] = board[startx][starty];
     board[startx][starty].type = empty;
+}
+
+bool CheckTestAfterMove(square** board, int size, int startx, int starty, int targx, int targy, int kingposx, int kingposy, int kingcolor) {
+    square startpiece = board[startx][starty];
+    square targpiece = board[targx][targy];
+
+    printf("\n\nCheckTestAfterMove\n\n");
+    printf("Pos de départ: %d %d   Pos d'arrivée: %d %d   Pos du roi: %d %d  %d\n", startx, starty, targx, targy, kingposx, kingposy, kingcolor);
+
+    MoveExecute(board, size, startx, starty, targx, targy);
+    bool check = CheckTest(board, size, kingposx, kingposy, kingcolor);
+    board[startx][starty] = startpiece;
+    board[targx][targy] = targpiece;
+    return check;
 }
