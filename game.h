@@ -81,6 +81,8 @@ void InitializeBoardColor(square** board, int size);
 
 void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack);
 
+void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhite, coords* kingposblack);
+
 
 
 /**

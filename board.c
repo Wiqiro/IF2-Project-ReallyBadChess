@@ -144,6 +144,16 @@ void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposb
     }
 }
 
+void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhite, coords* kingposblack) {
+    if (board[lastmove.x][lastmove.y].type == king) {
+        if (board[lastmove.x][lastmove.y].color == white) {
+            *kingposwhite = lastmove;
+        } else {
+            *kingposblack = lastmove;
+        }
+    }
+}
+
 /**
  * @brief Free the specified board
  * 

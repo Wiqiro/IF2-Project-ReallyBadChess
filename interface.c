@@ -43,7 +43,7 @@ bool GamemodeInput() {
     char gamemode;
     do {
         StdinClear();
-        printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)\n");
+        printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)  ");
         scanf("%c",&gamemode);
         gamemode = toupper(gamemode);
 
@@ -61,7 +61,7 @@ int ChessBoardSizeInput() {
     char input[100];
     int size=0;
     do {
-        printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)\n");
+        printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)  ");
 
         StdinClear();
         scanf("%s",input);
@@ -88,9 +88,11 @@ void MoveInput(square** board, int size, bool turn, coords* startcoords, coords*
                 startcoords->y = size - input[2] + '0' - 10;
             }
             if (startcoords->x < 0 || startcoords->x >= size || startcoords->y < 0 || startcoords->y >= size) {
-                printf("\nCette pièce ne fait pas partie de l'échiquier !");                            
+                printf("Cette pièce ne fait pas partie de l'échiquier !\n");                            
+            } else if (board[startcoords->x][startcoords->y].type == empty) {
+                printf("Cette case est vide\n");
             } else if (board[startcoords->x][startcoords->y].color != turn) {
-                printf("\nCe n'est pas votre tour");
+                printf("Ce n'est pas votre tour\n");
             } else {
                 okmove = true;
             }
@@ -99,7 +101,7 @@ void MoveInput(square** board, int size, bool turn, coords* startcoords, coords*
 
         okmove = true;
         StdinClear();
-        printf("\nEntrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
+        printf("Entrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
         scanf("%3s", input);
         
         targcoords->x = toupper(input[0]) - 'A';
@@ -111,16 +113,16 @@ void MoveInput(square** board, int size, bool turn, coords* startcoords, coords*
         //printf("%d %d   %d %d\n", kingpos->x, kingpos->y, targcoords->x, targcoords->y);
         
         if (MoveTest(board, size, *startcoords, *targcoords) == false) {
-            printf("\nCe mouvement est interdit !");
+            printf("Ce mouvement est interdit !\n");
             okmove = false;
         } else if (board[targcoords->x][targcoords->y].color == turn && board[targcoords->x][targcoords->y].type != empty) {
-            printf("\nVous ne pouvez pas prendre vos propres pièces !");
+            printf("Vous ne pouvez pas prendre vos propres pièces !\n");
             okmove = false;
         } else if (board[startcoords->x][startcoords->y].type == king && CheckTest(board, size, *targcoords, board[kingpos->x][kingpos->y].color) == true) {
-            printf("\nVous ne pouvez pas mettre votre roi en échec !");
+            printf("Vous ne pouvez pas mettre votre roi en échec !\n");
             okmove = false;
         } else if (board[startcoords->x][startcoords->y].type != king && CheckTestAfterMove(board, size, *startcoords, *targcoords, *kingpos, board[kingpos->x][kingpos->y].color)) {
-            printf("\nVous ne pouvez pas mettre votre roi en échec");
+            printf("Vous ne pouvez pas mettre votre roi en échec\n");
             okmove = false;
         }
     } while (!okmove);
@@ -131,7 +133,7 @@ char ActionInput() {
     char buffer;
     do {
         StdinClear();
-        printf("Que voulez-vous faire ? (J: jouer  S: sauvegarder  X: abandonner)  ");
+        printf("\nQue voulez-vous faire ? (J: jouer  S: sauvegarder  X: abandonner)  ");
         buffer = toupper(getchar());
 
 
@@ -210,7 +212,7 @@ void PrintPiece(square piece, bool fancyprint) {
                 printf("T");
                 break;
             case queen:
-                printf("Q");
+                printf("D");
                 break;
             case king:
                 printf("R");
@@ -231,8 +233,7 @@ void PrintPiece(square piece, bool fancyprint) {
 
 void BoardPrint(square** board, int size, bool fancyprint) {
 
-    
-    printf("\n ╭");
+    printf(" ╭");
 
     for (int x=0; x<size; x++) {
         printf("────┬");
@@ -283,18 +284,39 @@ void BoardPrint(square** board, int size, bool fancyprint) {
 
 void SaveNameInput(char* string) {
 
-    char buffer[20];
+    char buffer[21];
+    int buffersize;
+    bool oklenght = false;
 
-    StdinClear();
-    printf("Sous quel nom voulez-vous sauvegarder votre partie ?  ");
-    fgets(buffer, 20, stdin);
-    strncpy(string, buffer, strlen(buffer)-1);
+    do {
+        StdinClear();
+        printf("\nSous quel nom voulez-vous sauvegarder votre partie ?  ");
+        scanf("%21[^\n]", buffer);
+        buffersize = strlen(buffer);
+
+        if (buffersize > 20) {
+            printf("Entrez un nom de moins de 20 charactères \n");
+        } else {
+
+            int i = 0;
+            while (i < buffersize-1 && buffer[i] > ' ' && buffer[i] != '/' && buffer[i] != '\\' && buffer[i] != '*' && buffer[i] != ':' && buffer[i] != '|' && buffer[i] != '"' && buffer[i] != '<' && buffer[i] != '>' && buffer[i] != '?') {
+                i++;
+            }
+            if (i == buffersize-1) {
+                oklenght = true;
+            } else {
+                printf("Votre nom contient un caractère interdit (caractère %d)\n", i+1);
+            } 
+        }
+
+    } while (oklenght == false);
+    strncpy(string, buffer, 20);
 }
 
 bool QuitConfirmation() {
     char buffer;
     do {
-        printf("Voulez-vous vraiment quitter ? (O: oui N: non) \n");
+        printf("Voulez-vous vraiment quitter ? (O: oui N: non)  ");
         StdinClear();
         buffer = toupper(getchar());
     } while (buffer != 'O' && buffer != 'N');
@@ -343,109 +365,4 @@ int PrintSaves() {
         printf("%d", savenumber);  
         return savenumber;
     }
-}
-
-void EasterEgg() {
-    Clean();
-    printf("                                      ......................................     \n");
-    printf("                                      ......................................      \n");
-    printf("                                      ......................................      \n");
-    printf("                                      ......................................      \n");
-     printf("                                            .........................    \n");
-     printf("                                            .........................     \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................     \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                            .........................      \n");
-     printf("                                      ...................................... \n");
-     printf("                                      ......................................   \n");
-     printf("                                      ......................................    \n");
-     printf("                                      ......................................      \n\n\n\n");
-
-    printf("                                 ............                          .............      \n");
-    printf("                              ..................                   .....................    \n");
-    printf("                           ........................              .........................   \n");
-    printf("                         ...........................           ............................   \n");
-    printf("                        .............................         ..............................  \n");
-    printf("                       ...............................       ................................   \n");
-    printf("                       ................................     ..................................    \n");
-    printf("                       .................................   ...................................   \n");
-    printf("                       .......................................................................    \n");
-    printf("                        .....................................................................     \n");
-    printf("                         ...................................................................       \n");
-    printf("                          .................................................................       \n");
-    printf("                           ..............................................................      \n");
-    printf("                             ..........................................................        \n");
-    printf("                               ......................................................         \n");
-    printf("                                   ...............................................         \n");
-    printf("                                      ..........................................        \n");
-    printf("                                         ..................................         \n");
-    printf("                                             ..........................             \n");
-    printf("                                                ....................        \n");
-    printf("                                                  ...............       \n");
-    printf("                                                     .........          \n");
-    printf("                                                       .....            \n");
-    printf("                                                        ...         \n");
-    printf("                                                         .  \n\n\n\n");
-
-    printf("             ......................................               ......................................................  \n");
-    printf("             ......................................               ......................................................  \n");
-    printf("             ......................................               ......................................................  \n");
-    printf("             ......................................               ......................................................  \n");
-    printf("                    .........................                         ..................................................  \n");
-    printf("                    .........................                         ..................................................  \n");
-    printf("                    .........................                         .......................   \n");
-    printf("                    .........................                         .......................  \n");
-    printf("                    .........................                         .......................   \n");
-    printf("                    .........................                         .......................   \n");
-    printf("                    .........................                         .......................  \n");
-    printf("                    .........................                         ....................... \n");
-    printf("                    .........................                         ....................... \n");
-    printf("                    .........................                         .................................\n");
-    printf("                    .........................                         .................................\n");
-    printf("                    .........................                         .................................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("                    .........................                         .......................\n");
-    printf("              ......................................             ..................................\n");
-    printf("              ......................................             ..................................\n");
-    printf("              ......................................             ..................................\n");
-    printf("              ......................................             ..................................\n");
-
-    printf("\nPressez entrer pour quitter");
-    StdinClear();
-    getchar();
 }

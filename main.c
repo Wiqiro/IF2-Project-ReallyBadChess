@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <game.h>
 #include <interface.h>
 
@@ -13,8 +10,7 @@ int main(int argc, char* argv[]) {
     Clean();
 
     color turn = white;
-    bool whitecheck = false;
-    bool blackcheck = false;
+    bool check = false;
     bool checkmate = false;
 
     bool initialized = false;
@@ -28,7 +24,7 @@ int main(int argc, char* argv[]) {
     
     bool gamemode;
     int size = 0;
-    //bool gameend = false;
+
     bool fancyprint = true;
     bool quit = false;
 
@@ -36,7 +32,6 @@ int main(int argc, char* argv[]) {
 
     char menuchoice;
     do {
-        Clean();
         if (!initialized) {
             menuchoice = MenuInput();
         } else {
@@ -71,41 +66,39 @@ int main(int argc, char* argv[]) {
             while (checkmate == false) {
                 Clean();
                 BoardPrint(board, size, fancyprint);
-                if (blackcheck == true) printf("\nLe roi noir est en échec !");
-                if (whitecheck == true) printf("\nLe roi blanc est en échec !");
+                if (turn == black) {
+                    printf("C'est au tour des noirs de jouer !\n");
+                } else {
+                    printf("C'est au tour des blancs de jouer !\n");
+                }
+                if (check == true) {
+                    printf("Votre roi est en échec !\n");
+                }
 
                 switch (ActionInput()) {
                 case 'J':
                     
                     if (turn == black) {
-                        printf("\nC'est au tour des noirs de jouer !");
                         MoveInput(board, size, turn, &startcoords, &targcoords, &kingposblack);
                     } else {
-                        printf("\nC'est au tour des blancs de jouer !");
                         MoveInput(board, size, turn, &startcoords, &targcoords, &kingposwhite);
-
                     }
                     
                     MoveExecute(board, size, startcoords, targcoords);
-                    GetKingPos(board, size, &kingposwhite, &kingposblack);
+                    UpdateKingPos(board, size ,targcoords, &kingposwhite, &kingposblack);
 
-                    blackcheck = CheckTest(board, size, kingposblack, black);
-
-                    if (blackcheck == true) checkmate = CheckMateTest(board, size, kingposblack);
-
-                    whitecheck = CheckTest(board, size, kingposwhite, white);
-                    if (whitecheck == true) checkmate = CheckMateTest(board, size, kingposwhite);
+                    if (CheckTest(board, size, kingposblack, black) == true) {
+                        checkmate = CheckMateTest(board, size, kingposblack);
+                        check = true;
+                    } else if (CheckTest(board, size, kingposwhite, white) == true) {
+                        checkmate = CheckMateTest(board, size, kingposwhite);
+                        check = true;
+                    } else {
+                        check = false;
+                    }
                     if (checkmate) {
                         printf("CHECKMATE");
-                    } 
-                    else {
-                        StdinClear();
-                        printf("\nAppuiez sur entrer pour passer au tour suivant !");
-                        getchar();
                     }
-
-                    
-
                     turn = (turn + 1) % 2;
                     break;
                 
@@ -117,10 +110,9 @@ int main(int argc, char* argv[]) {
                     break;
 
                 case 'X': ;
-                    if(QuitConfirmation() == true) {
-                        EasterEgg();
+                    if (QuitConfirmation() == true) {
                         FreeBoard(&board, size);
-                        return EXIT_SUCCESS;
+                        checkmate = true;
                     }
                     break;
 
@@ -149,7 +141,6 @@ int main(int argc, char* argv[]) {
         
         case 'Q':
             if (QuitConfirmation() == true) {
-                EasterEgg();
                 quit = true;
             }
             break;
@@ -158,8 +149,12 @@ int main(int argc, char* argv[]) {
         StdinClear();
         printf("\nQuel mode d'affichage choisissze-vous ? (F: fancy  L: lettres) ");
 
-        if (toupper(getchar()) == 'F') fancyprint = true;
-        else fancyprint = false;
+        if (toupper(getchar()) == 'F') {
+            fancyprint = true;
+        }
+        else {
+            fancyprint = false;
+        }
         
 
         default:
