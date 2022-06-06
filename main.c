@@ -28,11 +28,11 @@ int main(int argc, char* argv[]) {
     bool fancyprint = true;
     bool quit = false;
 
-    printf("Bienvenue dans notre jeu d'echec !\nAppuiez sur entrer pour commencer ");
+    WelcomeScreen();
 
     char menuchoice;
     do {
-        if (!initialized) {
+        if (initialized == false) {
             menuchoice = MenuInput();
         } else {
             menuchoice = 'N';
@@ -62,7 +62,9 @@ int main(int argc, char* argv[]) {
                     kingposwhite.y = size-1;
                 }
                 GetKingPos(board, size, &kingposwhite, &kingposblack);
+                initialized = true;
             }
+            checkmate = false;
             while (checkmate == false) {
                 Clean();
                 BoardPrint(board, size, fancyprint);
@@ -99,23 +101,27 @@ int main(int argc, char* argv[]) {
                     if (checkmate) {
                         printf("CHECKMATE");
                     }
-                    turn = (turn + 1) % 2;
+                    turn = !turn;
                     break;
                 
                 case 'S': ;
-
                     char savename[20];
                     SaveNameInput(savename);
-                    ExportBoard(board, size, savename);
+                    ExportBoard(board, size, savename, turn);
                     break;
 
                 case 'X': ;
                     if (QuitConfirmation() == true) {
                         FreeBoard(&board, size);
+                        initialized = false;
                         checkmate = true;
                     }
                     break;
 
+                case 'O':
+                    fancyprint = FancyModeInput();
+                    break;
+            
                 default:
                     break;
                 }
@@ -129,33 +135,25 @@ int main(int argc, char* argv[]) {
 
             if (linenumber >= 0) {
                 saveinfo save = GetSaveInfo(linenumber);
-                printf("%s  %d   %lld\n", save.name, save.size, save.time);
                 size = save.size;
                 board = CreateBoard(size);
                 ImportBoard(board, size, save.name);
                 GetKingPos(board, size, &kingposwhite, &kingposblack);
                 initialized = true;
-                turn = black;
+                turn = save.turn;
             }
             break;
         
         case 'Q':
             if (QuitConfirmation() == true) {
+                QuitScreen();
                 quit = true;
             }
             break;
 
         case 'O':
-        StdinClear();
-        printf("\nQuel mode d'affichage choisissze-vous ? (F: fancy  L: lettres) ");
-
-        if (toupper(getchar()) == 'F') {
-            fancyprint = true;
-        }
-        else {
-            fancyprint = false;
-        }
-        
+            fancyprint = FancyModeInput();
+            break;
 
         default:
             break;

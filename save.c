@@ -18,7 +18,7 @@ void InitializeSavesIndex() {
  * @return true 
  * @return false 
  */
-bool ExportBoard(square** board, int size, char* savename) {
+bool ExportBoard(square** board, int size, char* savename, color turn) {
     
     FILE* index = fopen("saves.txt","r+");
     if (index != NULL) {
@@ -31,7 +31,7 @@ bool ExportBoard(square** board, int size, char* savename) {
             }
         }
         long long int rawtime = time(NULL);
-        fprintf(index,"\n%s\t%d\t%lld",savename, size, rawtime);
+        fprintf(index,"\n%s\t%d\t%lld\t%d",savename, size, rawtime, turn);
 
         char filename[25];
         strcpy(filename, savename);
@@ -64,7 +64,7 @@ saveinfo GetSaveInfo(int linenumber) {
         for (int i = 1; i < linenumber; i++) {
             fscanf(index, "\n%50[^\n]", buffer);
         }
-        fscanf(index, "%s\t%d\t%lld", save.name, &save.size, &save.time);
+        fscanf(index, "%s\t%d\t%lld\t%d", save.name, &save.size, &save.time, &save.turn);
     }
     fclose(index);
     return save;

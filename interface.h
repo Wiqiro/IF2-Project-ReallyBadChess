@@ -26,8 +26,14 @@ void BoardPrint(square** board, int size, bool fancyprint);
 
 void SaveNameInput(char* string);
 
+bool FancyModeInput();
+
 bool QuitConfirmation();
 
 int PrintSaves();
+
+void WelcomeScreen();
+
+void QuitScreen();
 
 #endif

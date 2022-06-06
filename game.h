@@ -42,6 +42,7 @@ typedef struct saveinfo {
     char name[32];
     int size;
     long long int time;
+    int turn;
 } saveinfo;
 
 
@@ -243,7 +244,7 @@ void InitializeSavesIndex();
 
 void IndexToString(char* rawstring);
 
-bool ExportBoard(square** board, int size, char* savename);
+bool ExportBoard(square** board, int size, char* savename, color turn);
 
 saveinfo GetSaveInfo(int index);
 
