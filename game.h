@@ -18,85 +18,85 @@ typedef enum {
     rook = 4,
     queen = 5,
     king = 6,
-} piece;
+} Piece;
 
 typedef enum {
     white = 0,
     black = 1,
-} color;
+} Color;
 
-//definition of the structure of a board square : type (0=empty, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
-typedef struct square {
-    piece type;
-    color color;
-} square;
+//definition of the structure of a board Square : type (0=empty, 1=pawn, 2=bishop, 3=knight, 4=rook, 5=queen, 6=king) and color (0=white, 1=black)
+typedef struct Square {
+    Piece type;
+    Color color;
+} Square;
 
-typedef struct coords {
+typedef struct Coords {
     int x;
     int y;
-} coords;
+} Coords;
 
-typedef struct saveinfo {
+typedef struct SaveInfo {
     char name[32];
     int size;
     long long int time;
     int turn;
-} saveinfo;
+} SaveInfo;
 
 
-square** CreateBoard(int size);
+Square** createBoard(int size);
 
-void InitializeBoardRandom(square** board, int size);
+void initializeBoardRandom(Square** board, int size);
 
-void InitializeBoardClassic(square** board);
+void initializeBoardClassic(Square** board);
 
-void InitializeBoardColor(square** board, int size);
+void initializeBoardColor(Square** board, int size);
 
-void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack);
+void getKingPos(Square** board, int size, Coords* king_pos_white, Coords* king_pos_black);
 
-void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhite, coords* kingposblack);
+void updateKingPos(Square** board, int size, Coords last_move, Coords* king_pos_white, Coords* king_pos_black);
 
-void FreeBoard(square*** board, int size);
-
-
-
-bool CollisionTest(square** board, int size, coords startpos, coords targpos);
-
-bool MoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool PawnMoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool BishopMoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool KnightMoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool RookMoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool QueenMoveTest(square** board, int size, coords startpos, coords targpos);
-
-bool KingMoveTest(square** board, int size, coords startpos, coords targpos); 
-
-bool CheckTest(square** board, int size, coords kingpos, color piececolor);
-
-bool CheckMateTest(square** board, int size, coords kingpos);
-
-void MoveExecute(square** board, int size,coords startpos,coords targpos);
-
-bool CheckTestAfterMove(square** board, int size, coords startpos, coords targpos, coords kingpos, color kingcolor);
+void freeBoard(Square*** board, int size);
 
 
 
-void InitializeSavesIndex();
+bool collisionTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 
-void IndexToString(char* rawstring);
+bool moveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 
-bool ExportBoard(square** board, int size, char* savename, color turn);
+bool pawnMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 
-saveinfo GetSaveInfo(int index);
+bool bishopMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 
-void ImportBoard(square** board, int size, char* savename);
+bool knightMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 
-void RipSave(char* savename);
+bool rookMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
+
+bool queenMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
+
+bool kingMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos); 
+
+bool checkTest(Square** board, int size, Coords kingpos, Color piece_color);
+
+bool checkMateTest(Square** board, int size, Coords kingpos);
+
+void moveExecute(Square** board, int size,Coords start_pos,Coords targ_pos);
+
+bool checkTestAfterMove(Square** board, int size, Coords start_pos, Coords targ_pos, Coords kingpos, Color kingcolor);
+
+
+
+void initializeSavesIndex();
+
+
+
+bool exportBoard(Square** board, int size, char* save_name, Color turn);
+
+SaveInfo getSaveInfo(int line_number);
+
+void importBoard(Square** board, int size, char* save_name);
+
+void ripSave(char* save_name);
 
 
 

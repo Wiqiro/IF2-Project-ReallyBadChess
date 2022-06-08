@@ -1,55 +1,55 @@
 #include <game.h>
 
 
-bool CollisionTest(square** board, int size, coords startpos, coords targpos) {
+bool collisionTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    int movex = targpos.x-startpos.x;
-    int movey = targpos.y-startpos.y;
+    int move_x = targ_pos.x-start_pos.x;
+    int move_y = targ_pos.y-start_pos.y;
     int dx, dy;
 
-    if (movex == 0) {
+    if (move_x == 0) {
         dx = 0;
     } else { 
-        dx = movex/abs(movex);
+        dx = move_x/abs(move_x);
     }
 
-    if (movey == 0) {
+    if (move_y == 0) {
         dy = 0;
     } else {
-        dy = movey/abs(movey);
+        dy = move_y/abs(move_y);
     }
 
     int i=0;
-        while (i+1 < fmax(abs(movex),abs(movey)) && board[startpos.x+dx*(i+1)][startpos.y+dy*(i+1)].type == empty) {
+        while (i+1 < fmax(abs(move_x),abs(move_y)) && board[start_pos.x+dx*(i+1)][start_pos.y+dy*(i+1)].type == empty) {
         i++;
     }
-    if (i == fmax(abs(movex),abs(movey))-1) {
+    if (i == fmax(abs(move_x),abs(move_y))-1) {
         return true; //returns true if the way is free (if there is only empty squares in the path of the bishop)
     } else {
         return false;
     }
 }
 
-bool MoveTest(square** board, int size, coords startpos, coords targpos) {
+bool moveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    switch (board[startpos.x][startpos.y].type) {
+    switch (board[start_pos.x][start_pos.y].type) {
     case pawn:
-        return PawnMoveTest(board, size, startpos, targpos);
+        return pawnMoveTest(board, size, start_pos, targ_pos);
         break;
     case bishop:
-        return BishopMoveTest(board, size, startpos, targpos);
+        return bishopMoveTest(board, size, start_pos, targ_pos);
         break;
     case knight:
-        return KnightMoveTest(board, size, startpos, targpos);
+        return knightMoveTest(board, size, start_pos, targ_pos);
         break;
     case rook:
-        return RookMoveTest(board, size, startpos, targpos);
+        return rookMoveTest(board, size, start_pos, targ_pos);
         break;
     case queen:
-        return QueenMoveTest(board, size, startpos, targpos);
+        return queenMoveTest(board, size, start_pos, targ_pos);
         break;
     case king:
-        return KingMoveTest(board, size, startpos, targpos);
+        return kingMoveTest(board, size, start_pos, targ_pos);
         break;
     
     default:
@@ -58,154 +58,154 @@ bool MoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-bool PawnMoveTest(square** board, int size, coords startpos, coords targpos) {
+bool pawnMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    int movex = targpos.x-startpos.x;
-    int movey = targpos.y-startpos.y;
+    int move_x = targ_pos.x-start_pos.x;
+    int move_y = targ_pos.y-start_pos.y;
 
-    if ((board[startpos.x][startpos.y].color == black && movey == 1) || (board[startpos.x][startpos.y].color == white && movey == -1)) {
-        if (movex == 0 && board[targpos.x][targpos.y].type == empty) {
+    if ((board[start_pos.x][start_pos.y].color == black && move_y == 1) || (board[start_pos.x][start_pos.y].color == white && move_y == -1)) {
+        if (move_x == 0 && board[targ_pos.x][targ_pos.y].type == empty) {
             return true;
-        } else if (abs(movex) == 1 && board[targpos.x][targpos.y].type != empty) {
+        } else if (abs(move_x) == 1 && board[targ_pos.x][targ_pos.y].type != empty) {
             return true;
         }
 
-    } else if (movex == 0 && ((board[startpos.x][startpos.y].color == black && targpos.y == 3) || (board[startpos.x][startpos.y].color == white && targpos.y == size-4))) {
+    } else if (move_x == 0 && ((board[start_pos.x][start_pos.y].color == black && targ_pos.y == 3) || (board[start_pos.x][start_pos.y].color == white && targ_pos.y == size-4))) {
         return true;
     }
 
     return false;
 }
 
-bool BishopMoveTest(square** board, int size, coords startpos, coords targpos) {
+bool bishopMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y)) {
-        return CollisionTest(board, size, startpos, targpos);
+    if (abs(targ_pos.x-start_pos.x) == abs(targ_pos.y-start_pos.y)) {
+        return collisionTest(board, size, start_pos, targ_pos);
     } else {
         return false;
     }
 }
 
-bool KnightMoveTest(square** board, int size, coords startpos, coords targpos) {
-    int movex = targpos.x-startpos.x;
-    int movey = targpos.y-startpos.y;
+bool knightMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
+    int move_x = targ_pos.x-start_pos.x;
+    int move_y = targ_pos.y-start_pos.y;
 
-    if ((abs(movex) == 2 && abs(movey) == 1) || (abs(movex) == 1 && abs(movey) == 2)) {
+    if ((abs(move_x) == 2 && abs(move_y) == 1) || (abs(move_x) == 1 && abs(move_y) == 2)) {
         return true;
     } else {
         return false;
     }
 }
 
-bool RookMoveTest(square** board, int size, coords startpos, coords targpos) {
+bool rookMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    if (targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
-        return CollisionTest(board, size, startpos, targpos);
+    if (targ_pos.x-start_pos.x == 0 || targ_pos.y-start_pos.y == 0) {
+        return collisionTest(board, size, start_pos, targ_pos);
     } else {
         return false;
     }
 }
 
-bool QueenMoveTest(square** board, int size, coords startpos, coords targpos) {
+bool queenMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
-    if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y) || targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
-        return CollisionTest(board, size, startpos, targpos);
+    if (abs(targ_pos.x-start_pos.x) == abs(targ_pos.y-start_pos.y) || targ_pos.x-start_pos.x == 0 || targ_pos.y-start_pos.y == 0) {
+        return collisionTest(board, size, start_pos, targ_pos);
     } else {
         return false;
     }
 }
 
-bool KingMoveTest(square** board, int size, coords startpos, coords targpos) {
-    int movex = targpos.x-startpos.x;
-    int movey = targpos.y-startpos.y;
+bool kingMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
+    int move_x = targ_pos.x-start_pos.x;
+    int move_y = targ_pos.y-start_pos.y;
 
-    if (abs(movex) > 1 || abs(movey) > 1) {
+    if (abs(move_x) > 1 || abs(move_y) > 1) {
         return false;
     } else {
         return true;
     }
 }
 
-bool CheckTest(square** board, int size, coords piecepos, color piececolor) {
+bool checkTest(Square** board, int size, Coords piece_pos, Color piece_color) {
     bool check = false;
-    coords testpos;
-    testpos.y = 0;
-    while (testpos.y < size && check == false) {
-        testpos.x = 0;
-        while (testpos.x < size && check == false) {
-            if (board[testpos.x][testpos.y].type != empty && board[testpos.x][testpos.y].type != king && (board[testpos.x][testpos.y].color != piececolor)) {
-                check = MoveTest(board, size, testpos, piecepos);
+    Coords test_pos;
+    test_pos.y = 0;
+    while (test_pos.y < size && check == false) {
+        test_pos.x = 0;
+        while (test_pos.x < size && check == false) {
+            if (board[test_pos.x][test_pos.y].type != empty && board[test_pos.x][test_pos.y].type != king && (board[test_pos.x][test_pos.y].color != piece_color)) {
+                check = moveTest(board, size, test_pos, piece_pos);
             }
-            testpos.x++;
+            test_pos.x++;
         }
-        testpos.y++;
+        test_pos.y++;
     }
     return check;
 }
 
-bool RescueTest(square** board, int size, coords startpos,  coords kingpos) {
+bool RescueTest(Square** board, int size, Coords start_pos,  Coords king_pos) {
 
-    color kingcolor = board[kingpos.x][kingpos.y].color;
-    int movex = kingpos.x-startpos.x;
-    int movey = kingpos.y-startpos.y;
+    Color kingcolor = board[king_pos.x][king_pos.y].color;
+    int move_x = king_pos.x-start_pos.x;
+    int move_y = king_pos.y-start_pos.y;
     int dx, dy;
 
-    if (movex == 0) {
+    if (move_x == 0) {
         dx = 0;
     } else {
-        dx = movex/abs(movex);
+        dx = move_x/abs(move_x);
     }
-    if (movey == 0) {
+    if (move_y == 0) {
         dy = 0;
     } else {
-        dy = movey/abs(movey);
+        dy = move_y/abs(move_y);
     }
 
     int i=0;
     bool rescue = false;
-    coords testcoords = startpos;
+    Coords test_coords = start_pos;
     
-    while (i < (int)fmax(abs(movex),abs(movey)) && (rescue = CheckTest(board, size, testcoords, !kingcolor)) == false) {
-        testcoords.x += dx;
-        testcoords.y += dy;
+    while (i < (int)fmax(abs(move_x),abs(move_y)) && (rescue = checkTest(board, size, test_coords, !kingcolor)) == false) {
+        test_coords.x += dx;
+        test_coords.y += dy;
         i++;
     }
 
     return rescue;
 }
 
-bool CheckMateTest(square** board, int size, coords kingpos) {
+bool checkMateTest(Square** board, int size, Coords king_pos) {
     bool checkmate = true;
-    coords testcoords;
-    testcoords.x = kingpos.x-1;
+    Coords test_coords;
+    test_coords.x = king_pos.x-1;
 
-    color kingcolor = board[kingpos.x][kingpos.y].color;
+    Color kingcolor = board[king_pos.x][king_pos.y].color;
 
-    while (testcoords.x <= kingpos.x+1 && checkmate == true) {
-        testcoords.y = kingpos.y-1;
-        while (testcoords.y <= kingpos.y+1 && checkmate == true) {
-            if (testcoords.x >= 0 && testcoords.x < size && testcoords.y >= 0 && testcoords.y < size) {
+    while (test_coords.x <= king_pos.x+1 && checkmate == true) {
+        test_coords.y = king_pos.y-1;
+        while (test_coords.y <= king_pos.y+1 && checkmate == true) {
+            if (test_coords.x >= 0 && test_coords.x < size && test_coords.y >= 0 && test_coords.y < size) {
                 
-                if (board[testcoords.x][testcoords.y].color != kingcolor || board[testcoords.x][testcoords.y].type == empty) {
-                    checkmate = CheckTest(board, size, testcoords, kingcolor);
+                if (board[test_coords.x][test_coords.y].color != kingcolor || board[test_coords.x][test_coords.y].type == empty) {
+                    checkmate = checkTest(board, size, test_coords, kingcolor);
                 }
             }
-            testcoords.y++;
+            test_coords.y++;
         }
-        testcoords.x++;
+        test_coords.x++;
     }
     if (checkmate == true) {
         bool already_tested = false;
-        for (testcoords.y = 0; testcoords.y < size; testcoords.y++) {
-            for (testcoords.x = 0; testcoords.x < size; testcoords.x++) {
-                if (board[testcoords.x][testcoords.y].type != empty && board[testcoords.x][testcoords.y].color != kingcolor && MoveTest(board, size, testcoords, kingpos) == true) {
+        for (test_coords.y = 0; test_coords.y < size; test_coords.y++) {
+            for (test_coords.x = 0; test_coords.x < size; test_coords.x++) {
+                if (board[test_coords.x][test_coords.y].type != empty && board[test_coords.x][test_coords.y].color != kingcolor && moveTest(board, size, test_coords, king_pos) == true) {
                     if (already_tested == true) {
                         checkmate = false;
-                    } else if (board[testcoords.x][testcoords.y].type == bishop || board[testcoords.x][testcoords.y].type == rook || board[testcoords.x][testcoords.y].type == queen) {
-                        checkmate = !RescueTest(board, size, testcoords, kingpos);
+                    } else if (board[test_coords.x][test_coords.y].type == bishop || board[test_coords.x][test_coords.y].type == rook || board[test_coords.x][test_coords.y].type == queen) {
+                        checkmate = !RescueTest(board, size, test_coords, king_pos);
                         already_tested = true;
                     } else {
-                        checkmate = !CheckTest(board, size, testcoords, !kingcolor);
+                        checkmate = !checkTest(board, size, test_coords, !kingcolor);
                         already_tested = true;
                     }
                 }
@@ -215,20 +215,20 @@ bool CheckMateTest(square** board, int size, coords kingpos) {
     return checkmate;
 }
 
-void MoveExecute(square** board, int size, coords startpos, coords targpos) {
-    board[targpos.x][targpos.y] = board[startpos.x][startpos.y];
-    board[startpos.x][startpos.y].type = empty;
+void moveExecute(Square** board, int size, Coords start_pos, Coords targ_pos) {
+    board[targ_pos.x][targ_pos.y] = board[start_pos.x][start_pos.y];
+    board[start_pos.x][start_pos.y].type = empty;
 }
 
-bool CheckTestAfterMove(square** board, int size, coords startpos, coords targpos, coords kingpos, color kingcolor) {
+bool checkTestAfterMove(Square** board, int size, Coords start_pos, Coords targ_pos, Coords king_pos, Color kingcolor) {
 
-    square startpiece = board[startpos.x][startpos.y];
-    square targpiece = board[targpos.x][targpos.y];
-    MoveExecute(board, size, startpos, targpos);
-    bool check = CheckTest(board, size, kingpos, kingcolor);
+    Square startpiece = board[start_pos.x][start_pos.y];
+    Square targpiece = board[targ_pos.x][targ_pos.y];
+    moveExecute(board, size, start_pos, targ_pos);
+    bool check = checkTest(board, size, king_pos, kingcolor);
 
-    board[startpos.x][startpos.y] = startpiece;
-    board[targpos.x][targpos.y] = targpiece;
+    board[start_pos.x][start_pos.y] = startpiece;
+    board[targ_pos.x][targ_pos.y] = targpiece;
 
     return check;
 }

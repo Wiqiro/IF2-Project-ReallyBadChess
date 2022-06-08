@@ -10,7 +10,7 @@
 #endif
 
 
-void Clean() {
+void clean() {
     if(OS == 0) {
         system("cls");
     } else {
@@ -18,23 +18,23 @@ void Clean() {
     }
 }
 
-void InitializeOutputOptions() {
+void initializeOutputOptions() {
     #ifdef _WIN32
         SetConsoleOutputCP(65001);
     #endif
 }
 
-void StdinClear() {
+void stdinClear() {
     char buffer;
     while ((buffer = getchar()) != '\n');
 }
 
-char MenuInput() {
+char menuInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            StdinClear();
+            stdinClear();
         }
         printf("\nChoisissez une option ! (N: nouvelle partie  I: importer une sauvegarde  O: options  Q: quitter)  ");
         buffer = toupper(getchar());
@@ -42,19 +42,19 @@ char MenuInput() {
     return buffer;
 }
 
-bool GamemodeInput() {
-    char gamemode;
+bool gamemodeInput() {
+    char game_mode;
     do {
-        if (gamemode != '\n') {
-            StdinClear();
+        if (game_mode != '\n') {
+            stdinClear();
         }
         printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)  ");
-        scanf("%c",&gamemode);
-        gamemode = toupper(gamemode);
+        scanf("%c",&game_mode);
+        game_mode = toupper(game_mode);
 
-    } while (gamemode != 'B' && gamemode != 'C');
+    } while (game_mode != 'B' && game_mode != 'C');
 
-    if (gamemode == 'B') {
+    if (game_mode == 'B') {
         return true;
     } else {
         return false;
@@ -62,13 +62,13 @@ bool GamemodeInput() {
 }
 
 
-int ChessBoardSizeInput() {
+int chessBoardSizeInput() {
     char input[2];
     int size=0;
     do {
         printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)  ");
 
-        StdinClear();
+        stdinClear();
         scanf("%2[^\n]",input);
         size = strtol(input, NULL, 10);
         
@@ -76,68 +76,68 @@ int ChessBoardSizeInput() {
     return size;
 }
 
-void MoveInput(square** board, int size, bool turn, coords* startcoords, coords* targcoords, coords* kingpos) {
+void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords* targ_coords, Coords* king_pos) {
 
-    bool okmove = false;
+    bool ok_move = false;
     char input[3];
     do {
         do {
             printf("\nEntrez les coordonnées de la pièce que vous souhaitez bouger: ");
-            StdinClear();
+            stdinClear();
             scanf("%3[^\n]", input);
 
-            startcoords->x = toupper(input[0]) - 'A';
+            start_coords->x = toupper(input[0]) - 'A';
             if (input[2] == '\0') {
-                startcoords->y = size - input[1] + '0';
+                start_coords->y = size - input[1] + '0';
             } else {
-                startcoords->y = size - input[2] + '0' - 10;
+                start_coords->y = size - input[2] + '0' - 10;
             }
-            if (startcoords->x < 0 || startcoords->x >= size || startcoords->y < 0 || startcoords->y >= size) {
+            if (start_coords->x < 0 || start_coords->x >= size || start_coords->y < 0 || start_coords->y >= size) {
                 printf("Cette pièce ne fait pas partie de l'échiquier !\n");                            
-            } else if (board[startcoords->x][startcoords->y].type == empty) {
+            } else if (board[start_coords->x][start_coords->y].type == empty) {
                 printf("Cette case est vide\n");
-            } else if (board[startcoords->x][startcoords->y].color != turn) {
+            } else if (board[start_coords->x][start_coords->y].color != turn) {
                 printf("Ce n'est pas votre tour\n");
             } else {
-                okmove = true;
+                ok_move = true;
             }
 
-        } while (!okmove);
+        } while (!ok_move);
 
-        okmove = true;
-        StdinClear();
+        ok_move = true;
+        stdinClear();
         printf("Entrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
         scanf("%3[^\n]", input);
         
-        targcoords->x = toupper(input[0]) - 'A';
+        targ_coords->x = toupper(input[0]) - 'A';
         if (input[2] == '\0') {
-            targcoords->y = size - input[1] + '0';
+            targ_coords->y = size - input[1] + '0';
         } else {
-            targcoords->y = size - input[2] + '0' - 10;
+            targ_coords->y = size - input[2] + '0' - 10;
         }
 
-        if (MoveTest(board, size, *startcoords, *targcoords) == false) {
+        if (moveTest(board, size, *start_coords, *targ_coords) == false) {
             printf("Ce mouvement est interdit !\n");
-            okmove = false;
-        } else if (board[targcoords->x][targcoords->y].color == turn && board[targcoords->x][targcoords->y].type != empty) {
+            ok_move = false;
+        } else if (board[targ_coords->x][targ_coords->y].color == turn && board[targ_coords->x][targ_coords->y].type != empty) {
             printf("Vous ne pouvez pas prendre vos propres pièces !\n");
-            okmove = false;
-        } else if (board[startcoords->x][startcoords->y].type == king && CheckTest(board, size, *targcoords, board[kingpos->x][kingpos->y].color) == true) {
+            ok_move = false;
+        } else if (board[start_coords->x][start_coords->y].type == king && checkTest(board, size, *targ_coords, board[king_pos->x][king_pos->y].color) == true) {
             printf("Vous ne pouvez pas mettre votre roi en échec !\n");
-            okmove = false;
-        } else if (board[startcoords->x][startcoords->y].type != king && CheckTestAfterMove(board, size, *startcoords, *targcoords, *kingpos, board[kingpos->x][kingpos->y].color)) {
+            ok_move = false;
+        } else if (board[start_coords->x][start_coords->y].type != king && checkTestAfterMove(board, size, *start_coords, *targ_coords, *king_pos, board[king_pos->x][king_pos->y].color)) {
             printf("Vous ne pouvez pas mettre votre roi en échec\n");
-            okmove = false;
+            ok_move = false;
         }
-    } while (!okmove);
+    } while (!ok_move);
 }
 
-char ActionInput() {
+char actionInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            StdinClear();
+            stdinClear();
         }
         printf("\nQue voulez-vous faire ? (J: jouer  S: sauvegarder  O: options  X: abandonner)  ");
         buffer = toupper(getchar());
@@ -147,11 +147,11 @@ char ActionInput() {
 }
 
 
-void PrintPiece(square piece, bool fancyprint) {
+void printPiece(Square Piece, bool fancy_print) {
 
-    if (fancyprint) {
-        if (piece.color == black) {
-            switch (piece.type) {
+    if (fancy_print) {
+        if (Piece.color == black) {
+            switch (Piece.type) {
             case pawn:
                 printf("♙");
                 break;
@@ -175,7 +175,7 @@ void PrintPiece(square piece, bool fancyprint) {
                 break;
             }
         } else {
-            switch (piece.type) {
+            switch (Piece.type) {
             case pawn:
                 printf("♟");
                 break;
@@ -202,8 +202,8 @@ void PrintPiece(square piece, bool fancyprint) {
         }
         printf(" ");
     } else {
-        if (piece.type != empty) {
-            switch (piece.type) {
+        if (Piece.type != empty) {
+            switch (Piece.type) {
             case pawn:
                 printf("P");
                 break;
@@ -225,7 +225,7 @@ void PrintPiece(square piece, bool fancyprint) {
             default:
                 break;
             }
-            if (piece.color == white) {
+            if (Piece.color == white) {
                 printf("B");
             } else {
                 printf("N");
@@ -236,7 +236,7 @@ void PrintPiece(square piece, bool fancyprint) {
     }
 }
 
-void BoardPrint(square** board, int size, bool fancyprint) {
+void boardPrint(Square** board, int size, bool fancy_print) {
 
     printf(" ╭");
 
@@ -253,7 +253,7 @@ void BoardPrint(square** board, int size, bool fancyprint) {
         printf("%d", size-y);
         for (int x=0; x<size; x++) {
             printf(" │ ");
-            PrintPiece(board[x][y], fancyprint);
+            printPiece(board[x][y], fancy_print);
         }
         
         printf(" │ \n ├");
@@ -266,7 +266,7 @@ void BoardPrint(square** board, int size, bool fancyprint) {
     printf(" 01");
     for (int x=0; x<size; x++) {
         printf(" │ ");
-        PrintPiece(board[x][size-1], fancyprint);
+        printPiece(board[x][size-1], fancy_print);
     }
 
     printf(" │\n ╰");
@@ -286,44 +286,44 @@ void BoardPrint(square** board, int size, bool fancyprint) {
     printf("────╯\n");
 }
 
-void SaveNameInput(char* string) {
+void saveNameInput(char* string) {
 
     char buffer[21];
-    int buffersize = 0;
-    bool oklenght = false;
+    int buffer_size = 0;
+    bool ok_lenght = false;
 
     do {
-        StdinClear();
+        stdinClear();
         printf("\nSous quel nom voulez-vous sauvegarder votre partie ?  ");
         scanf("%21[^\n]", buffer);
-        buffersize = strlen(buffer);
-        if (buffersize > 20) {
+        buffer_size = strlen(buffer);
+        if (buffer_size > 20) {
             printf("Entrez un nom de moins de 20 charactères \n");
-        } else if (buffersize < 2) {
+        } else if (buffer_size < 2) {
             printf("Entrez un nom plus long\n");
         } else {
 
             int i = 0;
-            while (i < buffersize-1 && buffer[i] > ' ' && buffer[i] != '/' && buffer[i] != '\\' && buffer[i] != '*' && buffer[i] != ':' && buffer[i] != '|' && buffer[i] != '"' && buffer[i] != '<' && buffer[i] != '>' && buffer[i] != '?') {
+            while (i < buffer_size-1 && buffer[i] > ' ' && buffer[i] != '/' && buffer[i] != '\\' && buffer[i] != '*' && buffer[i] != ':' && buffer[i] != '|' && buffer[i] != '"' && buffer[i] != '<' && buffer[i] != '>' && buffer[i] != '?') {
                 i++;
             }
-            if (i == buffersize-1) {
-                oklenght = true;
+            if (i == buffer_size-1) {
+                ok_lenght = true;
             } else {
                 printf("Votre nom contient un caractère interdit (caractère %d)\n", i+1);
             } 
         }
 
-    } while (oklenght == false);
+    } while (ok_lenght == false);
     strncpy(string, buffer, 20);
 }
 
-bool FancyModeInput() {
+bool fancyModeInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            StdinClear();
+            stdinClear();
         }
         printf("\nQuel mode d'affichage choisissze-vous ? (F: fancy  L: lettres) ");
         buffer = toupper(getchar());
@@ -336,17 +336,17 @@ bool FancyModeInput() {
     }
 }
 
-void CheckMateScreen(square** board, coords kingpos) {
-    Clean();
-    if (board[kingpos.x][kingpos.y].color == white);
+void CheckMateScreen(Square** board, Coords king_pos) {
+    clean();
+    if (board[king_pos.x][king_pos.y].color == white);
 }
 
-bool QuitConfirmation() {
+bool quitConfirmation() {
     char buffer;
     do {
         printf("\nVoulez-vous vraiment quitter ? (O: oui N: non)  ");
         if (buffer != '\n') {
-            StdinClear();
+            stdinClear();
         }
         buffer = toupper(getchar());
     } while (buffer != 'O' && buffer != 'N');
@@ -358,9 +358,9 @@ bool QuitConfirmation() {
 }
 
 
-int PrintSaves() {
+int printSaves() {
 
-    Clean();
+    clean();
     printf("Gestion des sauvegardes\n\n");
     char buffer[4][50];
     int i = 1;
@@ -377,32 +377,32 @@ int PrintSaves() {
     fclose(index);
 
     if (i == 1) {
-        Clean();
+        clean();
         printf("Aucune sauvegarde n'a été trouvée ...\n\nAppuiez sur entrée pour retourner au menu ");
-        StdinClear();
+        stdinClear();
         return -1;
     } else {
         char input[4];
-        int savenumber;
+        int save_number;
         do {
             if (input[0] != '\n' && input[1] != '\n') {
-                StdinClear();
+                stdinClear();
             }
             printf("\nEntrez le numéro de la sauvegarde que vous souhaitez importer  ");
             fgets(input, 3, stdin);
-            savenumber = strtol(input, NULL, 10);
+            save_number = strtol(input, NULL, 10);
 
-            if ((savenumber < 1 || savenumber >= i) && input[0] != '\n') {
+            if ((save_number < 1 || save_number >= i) && input[0] != '\n') {
                 printf("Cette sauvegarde n'existe pas !\n");
             }
 
-        } while (savenumber < 1 || savenumber >= i);
-        printf("%d", savenumber);  
-        return savenumber;
+        } while (save_number < 1 || save_number >= i);
+        printf("%d", save_number);  
+        return save_number;
     }
 }
 
-void WelcomeScreen() {
+void welcomeScreen() {
     printf(" /$$$$$$$  /$$$$$$$$  /$$$$$$  /$$       /$$       /$$     /$$       /$$$$$$$   /$$$$$$  /$$$$$$$         /$$$$$$  /$$   /$$ /$$$$$$$$  /$$$$$$   /$$$$$$ \n");
     printf("| $$__  $$| $$_____/ /$$__  $$| $$      | $$      |  $$   /$$/      | $$__  $$ /$$__  $$| $$__  $$       /$$__  $$| $$  | $$| $$_____/ /$$__  $$ /$$__  $$\n");
     printf("| $$  \\ $$| $$      | $$  \\ $$| $$      | $$       \\  $$ /$$/       | $$  \\ $$| $$  \\ $$| $$  \\ $$      | $$  \\__/| $$  | $$| $$      | $$  \\__/| $$  \\__/\n");
@@ -414,8 +414,8 @@ void WelcomeScreen() {
     printf("Appuiez sur entrée pour commencer  ");
 }
 
-void QuitScreen() {
-    Clean();
+void quitScreen() {
+    clean();
     printf(" /$$$$$$$$ /$$   /$$  /$$$$$$  /$$   /$$ /$$   /$$  /$$$$$$\n");
     printf("|__  $$__/| $$  | $$ /$$__  $$| $$$ | $$| $$  /$$/ /$$__  $$\n");
     printf("   | $$   | $$  | $$| $$  \\ $$| $$$$| $$| $$ /$$/ | $$  \\__/\n");
@@ -441,6 +441,6 @@ void QuitScreen() {
     printf("| $$      | $$$$$$$$| $$  | $$    | $$     /$$$$$$| $$ \\  $$|  $$$$$$/\n");
     printf("|__/      |________/|__/  |__/    |__/    |______/|__/  \\__/ \\______/\n\n");
     printf("Appuiez sur entrée pour quitter  ");
-    StdinClear();
+    stdinClear();
     getchar();
 }

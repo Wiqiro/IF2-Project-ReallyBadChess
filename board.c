@@ -1,12 +1,12 @@
 #include <game.h>
 
 
-square** CreateBoard(int size) {
-    square** board = (square**)malloc(sizeof(square*)*size);
+Square** createBoard(int size) {
+    Square** board = (Square**)malloc(sizeof(Square*)*size);
     if (board != NULL) {    //handling potential memory errors
         for (int i=0; i<size; i++) {
             if (board != NULL) {
-                board[i] = (square*)malloc(sizeof(square)*size);
+                board[i] = (Square*)malloc(sizeof(Square)*size);
             }
             else {
                 fprintf(stderr,"ERROR CREATING THE BOARD : not enough memory\n");
@@ -18,9 +18,9 @@ square** CreateBoard(int size) {
     return board;
 }
 
-void InitializeBoardRandom(square** board, int size){
+void initializeBoardRandom(Square** board, int size){
 
-    InitializeBoardColor(board, size);
+    initializeBoardColor(board, size);
 
 
     //Placing the two kings
@@ -37,16 +37,16 @@ void InitializeBoardRandom(square** board, int size){
     for(int i=0; i<size; i++) {
         for (int j=0; j<size; j++) {
             if ((j<2 || j>size-3) && board[i][j].type!=king) {
-                board[i][j].type = rand()%5+1; //Placing a random piece (no king)
+                board[i][j].type = rand()%5+1; //Placing a random Piece (no king)
             }
         }
     }
 
 }
 
-void InitializeBoardClassic(square** board){
+void initializeBoardClassic(Square** board){
     
-    InitializeBoardColor(board, 8);
+    initializeBoardColor(board, 8);
 
       //placing the empty squares
     for (int i = 0; i < 8; i++) {
@@ -85,7 +85,7 @@ void InitializeBoardClassic(square** board){
 
 }
 
-void InitializeBoardColor(square** board, int size) {
+void initializeBoardColor(Square** board, int size) {
     for (int x=0; x<size; x++) {
 
         for (int y=0; y<2;y++) {
@@ -97,33 +97,33 @@ void InitializeBoardColor(square** board, int size) {
     }
 }
 
-void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack) {
+void getKingPos(Square** board, int size, Coords* king_pos_white, Coords* king_pos_black) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {
             if (board[x][y].type == king) {
                 if (board[x][y].color == white) {
-                    kingposwhite->x = x;
-                    kingposwhite->y = y;
+                    king_pos_white->x = x;
+                    king_pos_white->y = y;
                 } else {
-                    kingposblack->x = x;
-                    kingposblack->y = y;
+                    king_pos_black->x = x;
+                    king_pos_black->y = y;
                 }
             }
         }
     }
 }
 
-void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhite, coords* kingposblack) {
-    if (board[lastmove.x][lastmove.y].type == king) {
-        if (board[lastmove.x][lastmove.y].color == white) {
-            *kingposwhite = lastmove;
+void updateKingPos(Square** board, int size, Coords last_move, Coords* king_pos_white, Coords* king_pos_black) {
+    if (board[last_move.x][last_move.y].type == king) {
+        if (board[last_move.x][last_move.y].color == white) {
+            *king_pos_white = last_move;
         } else {
-            *kingposblack = lastmove;
+            *king_pos_black = last_move;
         }
     }
 }
 
-void FreeBoard(square*** board, int size){
+void freeBoard(Square*** board, int size){
     if (*board != NULL) {
         for (int x=0; x<size; x++) {
             if ((*board)[x] != NULL) {

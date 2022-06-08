@@ -2,30 +2,30 @@
 
 
 
-void InitializeSavesIndex() {
+void initializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
 
-bool ExportBoard(square** board, int size, char* savename, color turn) {
+bool exportBoard(Square** board, int size, char* save_name, Color turn) {
     
     FILE* index = fopen("saves.txt","r+");
     if (index != NULL) {
         char buffer[25];
         while (fscanf(index, "%25s",buffer) != EOF) {
-            if (strcmp(buffer, savename) == 0) {
+            if (strcmp(buffer, save_name) == 0) {
                 printf("A save already has this name !\n");
                 fclose(index);
                 return false;
             }
         }
-        long long int rawtime = time(NULL);
-        fprintf(index,"\n%s\t%d\t%lld\t%d",savename, size, rawtime, turn);
+        long long int raw_time = time(NULL);
+        fprintf(index,"\n%s\t%d\t%lld\t%d",save_name, size, raw_time, turn);
 
-        char filename[25];
-        strcpy(filename, savename);
-        strcat(filename,".save");
-        FILE* save = fopen(filename, "w");
+        char file_name[25];
+        strcpy(file_name, save_name);
+        strcat(file_name,".save");
+        FILE* save = fopen(file_name, "w");
         if (save != NULL) {
             for (int y=0; y<size; y++) {
                 for (int x=0; x<size; x++) {
@@ -44,13 +44,13 @@ bool ExportBoard(square** board, int size, char* savename, color turn) {
     return true;
 }
 
-saveinfo GetSaveInfo(int linenumber) {
-    saveinfo save;
+SaveInfo getSaveInfo(int line_number) {
+    SaveInfo save;
 
     FILE* index = fopen("saves.txt","r");
     char buffer[50];
     if (index != NULL) {
-        for (int i = 1; i < linenumber; i++) {
+        for (int i = 1; i < line_number; i++) {
             fscanf(index, "\n%50[^\n]", buffer);
         }
         fscanf(index, "%s\t%d\t%lld\t%d", save.name, &save.size, &save.time, &save.turn);
@@ -59,13 +59,13 @@ saveinfo GetSaveInfo(int linenumber) {
     return save;
 }
 
-void ImportBoard(square** board, int size, char* savename) {
+void importBoard(Square** board, int size, char* save_name) {
 
-    char filename[1024];
-    strcpy(filename, savename);
-    strcat(filename,".save");
+    char file_name[1024];
+    strcpy(file_name, save_name);
+    strcat(file_name,".save");
 
-    FILE* save = fopen(filename,"r");
+    FILE* save = fopen(file_name,"r");
     if (save != NULL) {
         for (int y=0; y<size; y++) {
             for (int x=0; x<size; x++) {
@@ -77,31 +77,31 @@ void ImportBoard(square** board, int size, char* savename) {
 }
 
 
-void RipSave(char* savename) {
+void ripSave(char* save_name) {
 
-    char filename[1024];
-    strcpy(filename, savename);
-    strcat(filename,".save");
-    remove(filename);
+    char file_name[1024];
+    strcpy(file_name, save_name);
+    strcat(file_name,".save");
+    remove(file_name);
 
     FILE* index = fopen("saves.txt","r");
-    char newstring[5000];
+    char new_string[5000];
     if (index != NULL) {
         char buffer[1024];
         while (fscanf(index, "%s",buffer) != EOF) {
-            if (strcmp(buffer,savename) == 0) {
+            if (strcmp(buffer,save_name) == 0) {
                 fscanf(index, "%[^\n]\n", buffer); 
             } else {
-                strcat(newstring, buffer);
+                strcat(new_string, buffer);
                 fgets(buffer, 1024, index);
-                strcat(newstring, buffer);
+                strcat(new_string, buffer);
             }
         }
     }
     fclose(index);
     index = fopen("saves.txt","w");
     if (index != NULL) {
-        fprintf(index, "%s", newstring);
+        fprintf(index, "%s", new_string);
     }
     fclose(index);
 }

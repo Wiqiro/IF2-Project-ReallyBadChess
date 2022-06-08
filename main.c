@@ -3,71 +3,71 @@
 
 int main(int argc, char* argv[]) {
 
-    InitializeOutputOptions();
+    initializeOutputOptions();
 
     srand(time(NULL));
-    InitializeSavesIndex();
-    Clean();
+    initializeSavesIndex();
+    clean();
 
-    color turn = white;
+    Color turn = white;
     bool check = false;
     bool checkmate = false;
 
     bool initialized = false;
 
-    coords startcoords;
-    coords targcoords;
+    Coords start_coords;
+    Coords targ_coords;
 
-    square** board = NULL;
-    coords kingposwhite;
-    coords kingposblack;
+    Square** board = NULL;
+    Coords king_pos_white;
+    Coords king_pos_black;
     
-    bool gamemode;
+    bool game_mode;
     int size = 0;
 
-    bool fancyprint = true;
+    bool fancy_print = true;
     bool quit = false;
 
-    WelcomeScreen();
+    welcomeScreen();
 
-    char menuchoice;
+    char menu_choice;
     do {
         if (initialized == false) {
-            menuchoice = MenuInput();
+            menu_choice = menuInput();
         } else {
-            menuchoice = 'N';
+            menu_choice = 'N';
         }
         
-        switch (menuchoice) {
+        switch (menu_choice) {
         case 'N':
             if (!initialized) {
-                gamemode = GamemodeInput();
-                if (gamemode == 0) {
+                game_mode = gamemodeInput();
+                if (game_mode == 0) {
                     size = 8;
-                    board = CreateBoard(size);
-                    InitializeBoardClassic(board);
+                    board = createBoard(size);
+                    initializeBoardClassic(board);
                 } else {
-                    size = ChessBoardSizeInput();
-                    board = CreateBoard(size);
-                    InitializeBoardRandom(board, size);
+                    size = chessBoardSizeInput();
+                    board = createBoard(size);
+                    initializeBoardRandom(board, size);
 
                     for (int x=0; x<size; x++) {
                         if (board[x][0].type == king) {
-                            kingposblack.x = x;
+                            king_pos_black.x = x;
                         } else if (board[x][size-1].type == king) {
-                            kingposwhite.x = x;
+                            king_pos_white.x = x;
                         }
                     }
-                    kingposblack.y = 0;
-                    kingposwhite.y = size-1;
+                    king_pos_black.y = 0;
+                    king_pos_white.y = size-1;
                 }
-                GetKingPos(board, size, &kingposwhite, &kingposblack);
+                getKingPos(board, size, &king_pos_white, &king_pos_black);
                 initialized = true;
             }
             checkmate = false;
             while (checkmate == false) {
-                Clean();
-                BoardPrint(board, size, fancyprint);
+                clean();
+                boardPrint(board, size, fancy_print);
                 if (turn == black) {
                     printf("C'est au tour des noirs de jouer !\n");
                 } else {
@@ -77,23 +77,23 @@ int main(int argc, char* argv[]) {
                     printf("Votre roi est en échec !\n");
                 }
 
-                switch (ActionInput()) {
+                switch (actionInput()) {
                 case 'J':
                     
                     if (turn == black) {
-                        MoveInput(board, size, turn, &startcoords, &targcoords, &kingposblack);
+                        moveInput(board, size, turn, &start_coords, &targ_coords, &king_pos_black);
                     } else {
-                        MoveInput(board, size, turn, &startcoords, &targcoords, &kingposwhite);
+                        moveInput(board, size, turn, &start_coords, &targ_coords, &king_pos_white);
                     }
                     
-                    MoveExecute(board, size, startcoords, targcoords);
-                    UpdateKingPos(board, size ,targcoords, &kingposwhite, &kingposblack);
+                    moveExecute(board, size, start_coords, targ_coords);
+                    updateKingPos(board, size ,targ_coords, &king_pos_white, &king_pos_black);
 
-                    if (CheckTest(board, size, kingposblack, black) == true) {
-                        checkmate = CheckMateTest(board, size, kingposblack);
+                    if (checkTest(board, size, king_pos_black, black) == true) {
+                        checkmate = checkMateTest(board, size, king_pos_black);
                         check = true;
-                    } else if (CheckTest(board, size, kingposwhite, white) == true) {
-                        checkmate = CheckMateTest(board, size, kingposwhite);
+                    } else if (checkTest(board, size, king_pos_white, white) == true) {
+                        checkmate = checkMateTest(board, size, king_pos_white);
                         check = true;
                     } else {
                         check = false;
@@ -105,54 +105,54 @@ int main(int argc, char* argv[]) {
                     break;
                 
                 case 'S': ;
-                    char savename[20];
-                    SaveNameInput(savename);
-                    ExportBoard(board, size, savename, turn);
+                    char save_name[20];
+                    saveNameInput(save_name);
+                    exportBoard(board, size, save_name, turn);
                     break;
 
                 case 'X': ;
-                    if (QuitConfirmation() == true) {
-                        FreeBoard(&board, size);
+                    if (quitConfirmation() == true) {
+                        freeBoard(&board, size);
                         initialized = false;
                         checkmate = true;
                     }
                     break;
 
                 case 'O':
-                    fancyprint = FancyModeInput();
+                    fancy_print = fancyModeInput();
                     break;
             
                 default:
                     break;
                 }
             }
-            FreeBoard(&board, size);
+            freeBoard(&board, size);
             initialized = false;
             break;
         
         case 'I': ;
-            int linenumber = PrintSaves();
+            int line_number = printSaves();
 
-            if (linenumber >= 0) {
-                saveinfo save = GetSaveInfo(linenumber);
+            if (line_number >= 0) {
+                SaveInfo save = getSaveInfo(line_number);
                 size = save.size;
-                board = CreateBoard(size);
-                ImportBoard(board, size, save.name);
-                GetKingPos(board, size, &kingposwhite, &kingposblack);
+                board = createBoard(size);
+                importBoard(board, size, save.name);
+                getKingPos(board, size, &king_pos_white, &king_pos_black);
                 initialized = true;
                 turn = save.turn;
             }
             break;
         
         case 'Q':
-            if (QuitConfirmation() == true) {
-                QuitScreen();
+            if (quitConfirmation() == true) {
+                quitScreen();
                 quit = true;
             }
             break;
 
         case 'O':
-            fancyprint = FancyModeInput();
+            fancy_print = fancyModeInput();
             break;
 
         default:

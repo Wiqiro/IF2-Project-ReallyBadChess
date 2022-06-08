@@ -4,36 +4,36 @@
 #include <game.h>
 
 
-void Clean();
+void clean();
 
-void InitializeOutputOptions();
+void initializeOutputOptions();
 
-void StdinClear();
+void stdinClear();
 
-char MenuInput();
+char menuInput();
 
-bool GamemodeInput();
+bool gamemodeInput();
 
-int ChessBoardSizeInput();
+int chessBoardSizeInput();
 
-void MoveInput(square** board, int size, bool turn, coords* startcoords, coords* targcoords, coords* kingpos);
+void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords* targ_coords, Coords* king_pos);
 
-char ActionInput();
+char actionInput();
 
-void PrintPiece(square piece, bool fancyprint);
+void printPiece(Square Piece, bool fancy_print);
 
-void BoardPrint(square** board, int size, bool fancyprint);
+void boardPrint(Square** board, int size, bool fancy_print);
 
-void SaveNameInput(char* string);
+void saveNameInput(char* string);
 
-bool FancyModeInput();
+bool fancyModeInput();
 
-bool QuitConfirmation();
+bool quitConfirmation();
 
-int PrintSaves();
+int printSaves();
 
-void WelcomeScreen();
+void welcomeScreen();
 
-void QuitScreen();
+void quitScreen();
 
 #endif
