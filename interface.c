@@ -115,8 +115,7 @@ void MoveInput(square** board, int size, bool turn, coords* startcoords, coords*
         } else {
             targcoords->y = size - input[2] + '0' - 10;
         }
-        //printf("%d %d   %d %d\n", kingpos->x, kingpos->y, targcoords->x, targcoords->y);
-        
+
         if (MoveTest(board, size, *startcoords, *targcoords) == false) {
             printf("Ce mouvement est interdit !\n");
             okmove = false;
@@ -335,6 +334,11 @@ bool FancyModeInput() {
     } else {
         return false;
     }
+}
+
+void CheckMateScreen(square** board, coords kingpos) {
+    Clean();
+    if (board[kingpos.x][kingpos.y].color == white);
 }
 
 bool QuitConfirmation() {
