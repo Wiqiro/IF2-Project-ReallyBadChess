@@ -11,7 +11,6 @@
 #include <string.h>
 
 
-
 typedef enum {
     empty = 0,
     pawn = 1,
@@ -46,199 +45,47 @@ typedef struct saveinfo {
 } saveinfo;
 
 
-
-/**
- * @brief Create a And Initialize Board object (square matrix)
- * 
- * @param size size of the board (nxn)
- * @return square** the board created
- */
 square** CreateBoard(int size);
 
-/**
- * @brief Place the chess pieces randomly (only one king, following the classic rules)
- * 
- * @param board Board to modify
- * @param size Size of the board
- */
 void InitializeBoardRandom(square** board, int size);
 
-
-/**
- * @brief Place the pieces on the specified following the classic chess rules
- * 
- * @param board Board to modify (has to be a 8x8 board)
- */
 void InitializeBoardClassic(square** board);
 
-
-/**
- * @brief Setup the colors of a specified board (black on the two first rows and white on the rest : color does not matter on empty squares)
- * 
- * @param board Board to modify
- * @param size Size of the board
- */
 void InitializeBoardColor(square** board, int size);
 
 void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack);
 
 void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhite, coords* kingposblack);
 
-
-
-/**
- * @brief Free the specified board
- * 
- * @param board Board to free
- * @param size Size of the board
- */
 void FreeBoard(square*** board, int size);
+
 
 
 bool CollisionTest(square** board, int size, coords startpos, coords targpos);
 
-/**
- * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is possible
- * @return false if the move is not possible
- */
 bool MoveTest(square** board, int size, coords startpos, coords targpos);
 
-/**
- * @brief Test if the move of a specified pawn is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool PawnMoveTest(square** board, int size, coords startpos, coords targpos);
 
-
-/**
- * @brief Test if the move of a specified bishop is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool BishopMoveTest(square** board, int size, coords startpos, coords targpos);
 
-
-/**
- * @brief Test if the move of a specified knight is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool KnightMoveTest(square** board, int size, coords startpos, coords targpos);
 
-
-/**
- * @brief Test if the move of a specified rook is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool RookMoveTest(square** board, int size, coords startpos, coords targpos);
 
-
-/**
- * @brief Test if the move of a specified queen is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool QueenMoveTest(square** board, int size, coords startpos, coords targpos);
 
-
-/**
- * @brief Test if the king move is possible --> has to check if the targetted move would result in a Check
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startx The starting column of the piece
- * @param starty The starting row of the piece
- * @param targx The targetted column of move
- * @param targy The targetted row of move
- * @return true if the move is possible
- * @return false if the move is not possible
- */
 bool KingMoveTest(square** board, int size, coords startpos, coords targpos); 
 
-
-/**
- * @brief Test if the king is in a Check position --> has to scan the entire board to determine if a piece can capture the king
- * 
- * @param board 
- * @param size 
- * @param kingposx 
- * @param kingposy 
- * @return true Check 
- * @return false no Check
- */
 bool CheckTest(square** board, int size, coords kingpos, color piececolor);
 
-
-/**
- * @brief Test if the king is in a Checkmate position --> has to call the CheckTest function for every possible king move
- * 
- * @param board 
- * @param size 
- * @param kingposx 
- * @param kingposy 
- * @return true Checkmate position
- * @return false no Checkmate position
- */
 bool CheckMateTest(square** board, int size, coords kingpos);
 
-/**
- * @brief Execute a move (no legit move verification : has to be checked before)
- * 
- * @param board 
- * @param size 
- * @param startx 
- * @param starty 
- * @param targx 
- * @param targy
- */
 void MoveExecute(square** board, int size,coords startpos,coords targpos);
 
 bool CheckTestAfterMove(square** board, int size, coords startpos, coords targpos, coords kingpos, color kingcolor);
+
+
 
 void InitializeSavesIndex();
 

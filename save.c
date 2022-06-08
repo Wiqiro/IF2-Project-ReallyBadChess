@@ -1,23 +1,12 @@
 #include <game.h>
 
-/**
- * @brief Create the file saves.txt if not created
- * 
- */
+
+
 void InitializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
 
-/**
- * @brief add the save to the saves.txt index and create the save file
- * 
- * @param board 
- * @param size 
- * @param savename 
- * @return true 
- * @return false 
- */
 bool ExportBoard(square** board, int size, char* savename, color turn) {
     
     FILE* index = fopen("saves.txt","r+");

@@ -1,13 +1,6 @@
 #include <game.h>
 
 
-
-/**
- * @brief Create Board object (square matrix)
- * 
- * @param size size of the board (nxn)
- * @return square** the board created
- */
 square** CreateBoard(int size) {
     square** board = (square**)malloc(sizeof(square*)*size);
     if (board != NULL) {    //handling potential memory errors
@@ -25,14 +18,6 @@ square** CreateBoard(int size) {
     return board;
 }
 
-
-
-/**
- * @brief Place the chess pieces randomly (only one king, following the classic rules)
- * 
- * @param board Board to modify
- * @param size Size of the board
- */
 void InitializeBoardRandom(square** board, int size){
 
     InitializeBoardColor(board, size);
@@ -52,19 +37,13 @@ void InitializeBoardRandom(square** board, int size){
     for(int i=0; i<size; i++) {
         for (int j=0; j<size; j++) {
             if ((j<2 || j>size-3) && board[i][j].type!=king) {
-                board[i][j].type = rand()%5+1; //Placing a random piece (can't be a king)
+                board[i][j].type = rand()%5+1; //Placing a random piece (no king)
             }
         }
     }
 
 }
 
-
-/**
- * @brief Place the pieces on the specified following the classic chess rules
- * 
- * @param board Board to modify (has to be a 8x8 board)
- */
 void InitializeBoardClassic(square** board){
     
     InitializeBoardColor(board, 8);
@@ -118,16 +97,6 @@ void InitializeBoardColor(square** board, int size) {
     }
 }
 
-/**
- * @brief Get the King Pos object (by adress passing)
- * 
- * @param board board where the function has to find the king
- * @param size size of board
- * @param whitekingposx 
- * @param blackkingposx 
- * @param whitekingposy 
- * @param blackkingposy 
- */
 void GetKingPos(square** board, int size, coords* kingposwhite, coords* kingposblack) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {
@@ -154,12 +123,6 @@ void UpdateKingPos(square** board, int size, coords lastmove, coords* kingposwhi
     }
 }
 
-/**
- * @brief Free the specified board
- * 
- * @param board Board to free
- * @param size Size of the board
- */
 void FreeBoard(square*** board, int size){
     if (*board != NULL) {
         for (int x=0; x<size; x++) {

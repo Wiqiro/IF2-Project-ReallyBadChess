@@ -33,19 +33,6 @@ bool CollisionTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if a move is possible by appending a MoveTest function depending on the type of the piece
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is possible
- * @return false if the move is not possible
- */
 bool MoveTest(square** board, int size, coords startpos, coords targpos) {
     
     switch (board[startpos.x][startpos.y].type) {
@@ -74,18 +61,6 @@ bool MoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-/**
- * @brief Test if the move of a specified pawn is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool PawnMoveTest(square** board, int size, coords startpos, coords targpos) {
 
     int movex = targpos.x-startpos.x;
@@ -105,19 +80,6 @@ bool PawnMoveTest(square** board, int size, coords startpos, coords targpos) {
     return false;
 }
 
-
-/**
- * @brief Test if the move of a specified bishop is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed 
- */
 bool BishopMoveTest(square** board, int size, coords startpos, coords targpos) {
 
     if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y)) {
@@ -127,19 +89,6 @@ bool BishopMoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if the move of a specified knight is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool KnightMoveTest(square** board, int size, coords startpos, coords targpos) {
     int movex = targpos.x-startpos.x;
     int movey = targpos.y-startpos.y;
@@ -151,19 +100,6 @@ bool KnightMoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if the move of a specified rook is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool RookMoveTest(square** board, int size, coords startpos, coords targpos) {
 
     if (targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
@@ -173,19 +109,6 @@ bool RookMoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if the move of a specified queen is possible
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true  if the move is allowed
- * @return false if the move is not allowed
- */
 bool QueenMoveTest(square** board, int size, coords startpos, coords targpos) {
 
     if (abs(targpos.x-startpos.x) == abs(targpos.y-startpos.y) || targpos.x-startpos.x == 0 || targpos.y-startpos.y == 0) {
@@ -195,19 +118,6 @@ bool QueenMoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if the king move is possible --> has to check if the targetted move would result in a Check
- * 
- * @param board Board where the move has to be tested
- * @param size Size of the board
- * @param startpos.x The starting column of the piece
- * @param startpos.y The starting row of the piece
- * @param targpos.x The targetted column of move
- * @param targpos.y The targetted row of move
- * @return true if the move is possible
- * @return false if the move is not possible
- */
 bool KingMoveTest(square** board, int size, coords startpos, coords targpos) {
     int movex = targpos.x-startpos.x;
     int movey = targpos.y-startpos.y;
@@ -219,17 +129,6 @@ bool KingMoveTest(square** board, int size, coords startpos, coords targpos) {
     }
 }
 
-
-/**
- * @brief Test if the king is in a Check position --> has to scan the entire board to determine if a piece can capture the king
- * 
- * @param board 
- * @param size 
- * @param kingposx 
- * @param kingposy 
- * @return true Check 
- * @return false no Check
- */
 bool CheckTest(square** board, int size, coords piecepos, color piececolor) {
     bool check = false;
     coords testpos;
@@ -282,18 +181,6 @@ bool RescueTest(square** board, int size, coords startpos,  coords kingpos) {
     return rescue;
 }
 
-
-
-/**
- * @brief Test if the king is in a Checkmate position
- * 
- * @param board 
- * @param size 
- * @param kingposx 
- * @param kingposy 
- * @return true Checkmate position
- * @return false no Checkmate position
- */
 bool CheckMateTest(square** board, int size, coords kingpos) {
     bool checkmate = true;
     coords testcoords;
@@ -335,16 +222,6 @@ bool CheckMateTest(square** board, int size, coords kingpos) {
     return checkmate;
 }
 
-/**
- * @brief Execute a move (no legit move verification : has to be checked before)
- * 
- * @param board 
- * @param size 
- * @param startpos.x 
- * @param startpos.y 
- * @param targpos.x 
- * @param targpos.y 
- */
 void MoveExecute(square** board, int size, coords startpos, coords targpos) {
     board[targpos.x][targpos.y] = board[startpos.x][startpos.y];
     board[startpos.x][startpos.y].type = empty;

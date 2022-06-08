@@ -9,6 +9,7 @@
     #define OS 1  //assuming that the non-windows systems are linux-based
 #endif
 
+
 void Clean() {
     if(OS == 0) {
         system("cls");
