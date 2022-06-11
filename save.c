@@ -1,8 +1,7 @@
 #include <game.h>
 
 
-
-void initializeSavesIndex() {
+ void initializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
@@ -14,7 +13,6 @@ bool exportBoard(Square** board, int size, char* save_name, Color turn) {
         char buffer[25];
         while (fscanf(index, "%25s",buffer) != EOF) {
             if (strcmp(buffer, save_name) == 0) {
-                printf("A save already has this name !\n");
                 fclose(index);
                 return false;
             }

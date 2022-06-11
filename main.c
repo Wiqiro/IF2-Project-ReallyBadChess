@@ -107,7 +107,15 @@ int main(int argc, char* argv[]) {
                 case 'S': ;
                     char save_name[20];
                     saveNameInput(save_name);
-                    exportBoard(board, size, save_name, turn);
+                    
+                    if (exportBoard(board, size, save_name, turn) == true) {
+                        printf("\nLa partie a été sauvegardée !\nAppuiez sur entrée pour continuer  ");
+                    } else {
+                        printf("\nIl y a eu un problème lors de l'exportation de la sauvagarde: il existe surement déjà une sauvegarde portant ce nom\nAppuiez sur entrée pour continuer  ");
+                    }
+                    stdinClear();
+                    getchar();
+                    
                     break;
 
                 case 'X': ;

@@ -311,9 +311,8 @@ void saveNameInput(char* string) {
                 ok_lenght = true;
             } else {
                 printf("Votre nom contient un caractère interdit (caractère %d)\n", i+1);
-            } 
+            }
         }
-
     } while (ok_lenght == false);
     strncpy(string, buffer, 20);
 }
