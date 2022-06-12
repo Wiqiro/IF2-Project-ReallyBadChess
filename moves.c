@@ -1,6 +1,15 @@
 #include <game.h>
 
-
+/**
+ * @brief Test if there is a a piece between two positions in the board (only for straight or diagonal moves)
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the way is free
+ * @return false if there is an obstacle
+ */
 bool collisionTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     int move_x = targ_pos.x-start_pos.x;
@@ -30,6 +39,16 @@ bool collisionTest(Square** board, int size, Coords start_pos, Coords targ_pos) 
     }
 }
 
+/**
+ * @brief Test if a move is allowed by calling the appropriate function corresponding to the type od the piece
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool moveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     switch (board[start_pos.x][start_pos.y].type) {
@@ -58,6 +77,16 @@ bool moveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     }
 }
 
+/**
+ * @brief Test if the specified move is allowed for a pawn
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool pawnMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     int move_x = targ_pos.x-start_pos.x;
@@ -77,6 +106,16 @@ bool pawnMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     return false;
 }
 
+/**
+ * @brief Test if the specified move is allowed for a bishop by calling the collisionTest function
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool bishopMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     if (abs(targ_pos.x-start_pos.x) == abs(targ_pos.y-start_pos.y)) {
@@ -86,6 +125,16 @@ bool bishopMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos)
     }
 }
 
+/**
+ * @brief Test if the specified move is allowed for a knight
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool knightMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     int move_x = targ_pos.x-start_pos.x;
     int move_y = targ_pos.y-start_pos.y;
@@ -97,6 +146,16 @@ bool knightMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos)
     }
 }
 
+/**
+ * @brief Test if the specified move is allowed for a rook by calling the collisionTest function
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool rookMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     if (targ_pos.x-start_pos.x == 0 || targ_pos.y-start_pos.y == 0) {
@@ -106,6 +165,16 @@ bool rookMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     }
 }
 
+/**
+ * @brief Test if the specified move is allowed for a queen by calling the collisionTest function
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool queenMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
 
     if (abs(targ_pos.x-start_pos.x) == abs(targ_pos.y-start_pos.y) || targ_pos.x-start_pos.x == 0 || targ_pos.y-start_pos.y == 0) {
@@ -115,6 +184,16 @@ bool queenMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) 
     }
 }
 
+/**
+ * @brief Test if the specified move is allowed for a king
+ * 
+ * @param board Board where the move has to be tested
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the piece
+ * @param targ_pos Target coordinates of the piece
+ * @return true if the move is allowed
+ * @return false if the move is not allowed
+ */
 bool kingMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     int move_x = targ_pos.x-start_pos.x;
     int move_y = targ_pos.y-start_pos.y;
@@ -126,6 +205,16 @@ bool kingMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
     }
 }
 
+/**
+ * @brief Test if a piece is in a check position (can be else than a king)
+ * 
+ * @param board Board where the check has to be tested
+ * @param size Size of the board
+ * @param king_pos Position of the king (or another piece)
+ * @param piece_color Color of the piece
+ * @return true if the piece is in  a check position
+ * @return false if the piece is not in a check position
+ */
 bool checkTest(Square** board, int size, Coords piece_pos, Color piece_color) {
     bool check = false;
     Coords test_pos;
@@ -143,6 +232,16 @@ bool checkTest(Square** board, int size, Coords piece_pos, Color piece_color) {
     return check;
 }
 
+/**
+ * @brief Test if a piece can intercept a check by moving it in the path of the check
+ * 
+ * @param board The board where the move has to be tested
+ * @param size The size of the board
+ * @param start_pos The position of the menacing piece
+ * @param king_pos The position of the king
+ * @return true If a rescue is possible
+ * @return false If a rescue is not possible
+ */
 bool RescueTest(Square** board, int size, Coords start_pos,  Coords king_pos) {
 
     Color kingcolor = board[king_pos.x][king_pos.y].color;
@@ -174,6 +273,15 @@ bool RescueTest(Square** board, int size, Coords start_pos,  Coords king_pos) {
     return rescue;
 }
 
+/**
+ * @brief Test if the specified king is in a checkmate position
+ * 
+ * @param board Board where the checkmate has to be tested
+ * @param size Size of the board
+ * @param king_pos Position of the king
+ * @return true if the king is on a checkmate position
+ * @return false if the king is not in a checkmate position
+ */
 bool checkMateTest(Square** board, int size, Coords king_pos) {
     bool checkmate = true;
     Coords test_coords;
@@ -215,11 +323,31 @@ bool checkMateTest(Square** board, int size, Coords king_pos) {
     return checkmate;
 }
 
+/**
+ * @brief Execute the specified move (doesn't check if a move is legal or not)
+ * 
+ * @param board Board where the move has to be executed
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the move
+ * @param targ_pos Target coordinates of a move
+ */
 void moveExecute(Square** board, int size, Coords start_pos, Coords targ_pos) {
     board[targ_pos.x][targ_pos.y] = board[start_pos.x][start_pos.y];
     board[start_pos.x][start_pos.y].type = empty;
 }
 
+/**
+ * @brief Test if the specified move would put the specified king in a checkmate position
+ * 
+ * @param board Board where the checkmate has to be checked
+ * @param size Size of the board
+ * @param start_pos Start coordinates of the move
+ * @param targ_pos Target coordinates of the move
+ * @param king_pos Position of the king
+ * @param kingcolor Color of the king
+ * @return true if the move would put the king in a checkmate position
+ * @return false if the move would not put the king in a checkmate position
+ */
 bool checkTestAfterMove(Square** board, int size, Coords start_pos, Coords targ_pos, Coords king_pos, Color kingcolor) {
 
     Square startpiece = board[start_pos.x][start_pos.y];

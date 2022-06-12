@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
     initializeSavesIndex();
-    clean();
+    clear();
 
     Color turn = white;
     bool check = false;
@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 
     char menu_choice;
     do {
+
         if (initialized == false) {
             menu_choice = menuInput();
         } else {
@@ -66,7 +67,7 @@ int main(int argc, char* argv[]) {
             }
             checkmate = false;
             while (checkmate == false) {
-                clean();
+                clear();
                 boardPrint(board, size, fancy_print);
                 if (turn == black) {
                     printf("C'est au tour des noirs de jouer !\n");
@@ -113,9 +114,10 @@ int main(int argc, char* argv[]) {
                     } else {
                         printf("\nIl y a eu un problème lors de l'exportation de la sauvagarde: il existe surement déjà une sauvegarde portant ce nom\nAppuiez sur entrée pour continuer  ");
                     }
-                    stdinClear();
-                    getchar();
                     
+
+                    getchar();
+                    clear();
                     break;
 
                 case 'X': ;
@@ -124,6 +126,7 @@ int main(int argc, char* argv[]) {
                         initialized = false;
                         checkmate = true;
                     }
+                    clear();
                     break;
 
                 case 'O':
@@ -139,17 +142,40 @@ int main(int argc, char* argv[]) {
             break;
         
         case 'I': ;
-            int line_number = printSaves();
+            char save_action;
+            clear();
+            do {
+                int line_number = printSaves();
+                if (line_number >= 0) {
+                    SaveInfo save = getSaveInfo(line_number);
+                    size = save.size;
+                    board = createBoard(size);
+                    importBoard(board, size, save.name);
+                    clear();
+                    boardPrint(board, save.size, fancy_print);
 
-            if (line_number >= 0) {
-                SaveInfo save = getSaveInfo(line_number);
-                size = save.size;
-                board = createBoard(size);
-                importBoard(board, size, save.name);
-                getKingPos(board, size, &king_pos_white, &king_pos_black);
-                initialized = true;
-                turn = save.turn;
-            }
+                    save_action = saveActionInput();
+                    if (save_action == 'I') {
+                        
+                        getKingPos(board, size, &king_pos_white, &king_pos_black);
+                        initialized = true;
+                        turn = save.turn;
+                    } else {
+                        if (save_action == 'S') {
+                            
+                            ripSave(save.name);
+                            printf("\nLa sauvegarde a été supprimée\nAppuiez sur entrée pour continuer  ");
+                            stdinClean();
+                            getchar();
+                            
+                            
+                        }
+                        freeBoard(&board, size);
+                    }                    
+                }
+                clear();
+            } while (save_action == 'R');
+
             break;
         
         case 'Q':

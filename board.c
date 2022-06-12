@@ -1,6 +1,11 @@
 #include <game.h>
 
-
+/**
+ * @brief Create a Board object (uninitialized square matrix)
+ * 
+ * @param size Size of the board
+ * @return Return the created board
+ */
 Square** createBoard(int size) {
     Square** board = (Square**)malloc(sizeof(Square*)*size);
     if (board != NULL) {    //handling potential memory errors
@@ -18,6 +23,12 @@ Square** createBoard(int size) {
     return board;
 }
 
+/**
+ * @brief Initialize the specified board with random pieces (kings will always be in the first or last row). Uses the initlalizeBoardColor function to set the colors of the squares
+ * 
+ * @param board The board that is going to be initialized
+ * @param size The size of the board
+ */
 void initializeBoardRandom(Square** board, int size){
 
     initializeBoardColor(board, size);
@@ -44,11 +55,16 @@ void initializeBoardRandom(Square** board, int size){
 
 }
 
+/**
+ * @brief Initialize a specified board with the classic pieces layout (only for 8x8 boards). Uses the initlalizeBoardColor function to set the colors of the squares
+ * 
+ * @param board The board that is going to be initialized
+ */
 void initializeBoardClassic(Square** board){
     
     initializeBoardColor(board, 8);
 
-      //placing the empty squares
+    //placing the empty squares
     for (int i = 0; i < 8; i++) {
        for(int j = 2; j < 6; j++) {
         board[i][j].type = empty;
@@ -81,10 +97,14 @@ void initializeBoardClassic(Square** board){
     //placing the kings
     board[4][0].type =  king;
     board[4][7].type =  king;
-
-
 }
 
+/**
+ * @brief Initialize the color of a board by setting the color of the two highest rows to black and the rest to white (color does not matter when the type of the square is empty)
+ * 
+ * @param board The board where the colors are going to be set up
+ * @param size The size of the board
+ */
 void initializeBoardColor(Square** board, int size) {
     for (int x=0; x<size; x++) {
 
@@ -97,6 +117,14 @@ void initializeBoardColor(Square** board, int size) {
     }
 }
 
+/**
+ * @brief Get the position of both kings in a specified board
+ * 
+ * @param board Board where the kings have to be found
+ * @param size The size of the board
+ * @param king_pos_white The coordinates of the white king (modified by the function)
+ * @param king_pos_black The coordinates of the black king (modified by the function)
+ */
 void getKingPos(Square** board, int size, Coords* king_pos_white, Coords* king_pos_black) {
     for (int y=0; y<size; y++) {
         for (int x=0; x<size; x++) {
@@ -113,6 +141,15 @@ void getKingPos(Square** board, int size, Coords* king_pos_white, Coords* king_p
     }
 }
 
+/**
+ * @brief Update the position of both king taking in consideration the last move done 
+ * 
+ * @param board Board where the kings have to be found
+ * @param size Size of the board
+ * @param last_move Last move done in the board
+ * @param king_pos_white The coordinates of the white king (modified by the function)
+ * @param king_pos_black The coordinates of the black king (modified by the function)
+ */
 void updateKingPos(Square** board, int size, Coords last_move, Coords* king_pos_white, Coords* king_pos_black) {
     if (board[last_move.x][last_move.y].type == king) {
         if (board[last_move.x][last_move.y].color == white) {
@@ -123,6 +160,12 @@ void updateKingPos(Square** board, int size, Coords last_move, Coords* king_pos_
     }
 }
 
+/**
+ * @brief Free the specified board
+ * 
+ * @param board Board that is going to be freed
+ * @param size size of the board
+ */
 void freeBoard(Square*** board, int size){
     if (*board != NULL) {
         for (int x=0; x<size; x++) {

@@ -9,8 +9,11 @@
     #define OS 1  //assuming that the non-windows systems are linux-based
 #endif
 
-
-void clean() {
+/**
+ * @brief Clear the console (OS-dependant command)
+ * 
+ */
+void clear() {
     if(OS == 0) {
         system("cls");
     } else {
@@ -18,23 +21,36 @@ void clean() {
     }
 }
 
+/**
+ * @brief Enable UTF-8 for windows
+ * 
+ */
 void initializeOutputOptions() {
     #ifdef _WIN32
         SetConsoleOutputCP(65001);
     #endif
 }
 
-void stdinClear() {
+/**
+ * @brief Clean the Stdin stream
+ * 
+ */
+void stdinClean() {
     char buffer;
     while ((buffer = getchar()) != '\n');
 }
 
+/**
+ * @brief Main menu choice secure input
+ * 
+ * @return char the user input
+ */
 char menuInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            stdinClear();
+            stdinClean();
         }
         printf("\nChoisissez une option ! (N: nouvelle partie  I: importer une sauvegarde  O: options  Q: quitter)  ");
         buffer = toupper(getchar());
@@ -42,11 +58,17 @@ char menuInput() {
     return buffer;
 }
 
+/**
+ * @brief Gamemode choice secure input
+ * 
+ * @return true for Really Bad Chess mode
+ * @return false for Classic mode
+ */
 bool gamemodeInput() {
     char game_mode;
     do {
         if (game_mode != '\n') {
-            stdinClear();
+            stdinClean();
         }
         printf("\nQuel mode de jeu choisissez-vous ? (B: Really bad chest, C: classic)  ");
         scanf("%c",&game_mode);
@@ -61,14 +83,18 @@ bool gamemodeInput() {
     }
 }
 
-
+/**
+ * @brief Secured input for the size of the board
+ * 
+ * @return int the size of the board
+ */
 int chessBoardSizeInput() {
     char input[2];
     int size=0;
     do {
         printf("\nChoisissez à présent la taille de l'échiquer (de 6x6 à 12x12)  ");
 
-        stdinClear();
+        stdinClean();
         scanf("%2[^\n]",input);
         size = strtol(input, NULL, 10);
         
@@ -76,6 +102,16 @@ int chessBoardSizeInput() {
     return size;
 }
 
+/**
+ * @brief Secure input for a piece move (will check)
+ * 
+ * @param board Board where the move has to be checked
+ * @param size Size of the board
+ * @param turn Player turn
+ * @param start_coords Start position of the move (modified by adress passing)
+ * @param targ_coords Target position of the move (modified by adress passing)
+ * @param king_pos Position of the king (has to have the same color as the turn)
+ */
 void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords* targ_coords, Coords* king_pos) {
 
     bool ok_move = false;
@@ -83,7 +119,7 @@ void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords
     do {
         do {
             printf("\nEntrez les coordonnées de la pièce que vous souhaitez bouger: ");
-            stdinClear();
+            stdinClean();
             scanf("%3[^\n]", input);
 
             start_coords->x = toupper(input[0]) - 'A';
@@ -105,7 +141,7 @@ void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords
         } while (!ok_move);
 
         ok_move = true;
-        stdinClear();
+        stdinClean();
         printf("Entrez les coordonnées de la case où vous souhaitez bouger la pièce: ");
         scanf("%3[^\n]", input);
         
@@ -132,12 +168,17 @@ void moveInput(Square** board, int size, bool turn, Coords* start_coords, Coords
     } while (!ok_move);
 }
 
+/**
+ * @brief Secure input for the action to execute before a turn
+ * 
+ * @return char the user input
+ */
 char actionInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            stdinClear();
+            stdinClean();
         }
         printf("\nQue voulez-vous faire ? (J: jouer  S: sauvegarder  O: options  X: abandonner)  ");
         buffer = toupper(getchar());
@@ -146,7 +187,12 @@ char actionInput() {
     return buffer;
 }
 
-
+/**
+ * @brief Print the specified piece
+ * 
+ * @param piece The piece to print
+ * @param fancy_print The print mode (true for UTF-8 characters or false for letters)
+ */
 void printPiece(Square Piece, bool fancy_print) {
 
     if (fancy_print) {
@@ -236,6 +282,13 @@ void printPiece(Square Piece, bool fancy_print) {
     }
 }
 
+/**
+ * @brief Print the specified board
+ * 
+ * @param board Board to print
+ * @param size Size of the board
+ * @param fancy_print The print mode (true for UTF-8 characters or false for letters)
+ */
 void boardPrint(Square** board, int size, bool fancy_print) {
 
     printf(" ╭");
@@ -286,6 +339,11 @@ void boardPrint(Square** board, int size, bool fancy_print) {
     printf("────╯\n");
 }
 
+/**
+ * @brief Secured input for the name of the save
+ * 
+ * @param string The name of the save (modified by adress passing)
+ */
 void saveNameInput(char* string) {
 
     char buffer[21];
@@ -293,7 +351,7 @@ void saveNameInput(char* string) {
     bool ok_lenght = false;
 
     do {
-        stdinClear();
+        stdinClean();
         printf("\nSous quel nom voulez-vous sauvegarder votre partie ?  ");
         scanf("%21[^\n]", buffer);
         buffer_size = strlen(buffer);
@@ -315,14 +373,21 @@ void saveNameInput(char* string) {
         }
     } while (ok_lenght == false);
     strncpy(string, buffer, 20);
+    stdinClean();
 }
 
+/**
+ * @brief Secured input for the display mode
+ * 
+ * @return true for Fancy mode
+ * @return false for Letters mode
+ */
 bool fancyModeInput() {
 
     char buffer;
     do {
         if (buffer != '\n') {
-            stdinClear();
+            stdinClean();
         }
         printf("\nQuel mode d'affichage choisissze-vous ? (F: fancy  L: lettres) ");
         buffer = toupper(getchar());
@@ -335,17 +400,24 @@ bool fancyModeInput() {
     }
 }
 
+
 void CheckMateScreen(Square** board, Coords king_pos) {
-    clean();
+    clear();
     if (board[king_pos.x][king_pos.y].color == white);
 }
 
+/**
+ * @brief Secured input for quit confirmation
+ * 
+ * @return true if the user want to quit
+ * @return false if the user want to stay
+ */
 bool quitConfirmation() {
     char buffer;
     do {
         printf("\nVoulez-vous vraiment quitter ? (O: oui N: non)  ");
         if (buffer != '\n') {
-            stdinClear();
+            stdinClean();
         }
         buffer = toupper(getchar());
     } while (buffer != 'O' && buffer != 'N');
@@ -356,38 +428,53 @@ bool quitConfirmation() {
     }
 }
 
-
+/**
+ * @brief Print the saves and collect secure unput for the save number
+ * 
+ * @return int the save number
+ */
 int printSaves() {
 
-    clean();
+    clear();
     printf("Gestion des sauvegardes\n\n");
     char buffer[4][50];
+    
     int i = 1;
-    long long int time;
     FILE* index = fopen("saves.txt","r");
     if (index != NULL) {
         while (fscanf(index, "%50s\t%50s\t%50s\t%50s\n", buffer[0], buffer[1], buffer[2], buffer[3]) != EOF) {
-            time = strtoll(buffer[2], NULL, 10);
+            time_t raw_time = strtoll(buffer[2], NULL, 10);
+            int save_name_lenght = strlen(buffer[0]);
+            struct tm* save_time = localtime(&raw_time);
 
-            printf("%d: %s\t\t(%sx%s)  \t%lld\n", i, buffer[0], buffer[1], buffer[1], time);
+            printf("%d: %s", i, buffer[0]);
+            for (int j = 0; j < 23 - save_name_lenght; j++) {
+                printf(" ");
+            }
+            printf("(%sx%s)",buffer[1], buffer[1]);
+            if (buffer[1][1] == '\0') {
+                printf("  ");
+            }
+            printf("            %02d/%02d/%04d  %02d:%02d\n",save_time->tm_mday, save_time->tm_mon+1, save_time->tm_year+1900, save_time->tm_hour, save_time->tm_min);
             i++;
         }
     }
     fclose(index);
 
     if (i == 1) {
-        clean();
+        clear();
         printf("Aucune sauvegarde n'a été trouvée ...\n\nAppuiez sur entrée pour retourner au menu ");
-        stdinClear();
+        stdinClean();
+        getchar();
         return -1;
     } else {
         char input[4];
         int save_number;
         do {
             if (input[0] != '\n' && input[1] != '\n') {
-                stdinClear();
+                stdinClean();
             }
-            printf("\nEntrez le numéro de la sauvegarde que vous souhaitez importer  ");
+            printf("\nEntrez le numéro de votre sauvegarde  ");
             fgets(input, 3, stdin);
             save_number = strtol(input, NULL, 10);
 
@@ -396,11 +483,33 @@ int printSaves() {
             }
 
         } while (save_number < 1 || save_number >= i);
-        printf("%d", save_number);  
         return save_number;
     }
 }
 
+/**
+ * @brief Secure input for action when selecting a save
+ * 
+ * @return char the user input
+ */
+char saveActionInput() {
+
+    char buffer = '\n';
+    do {
+        if (buffer != '\n') {
+            stdinClean();
+        }
+        printf("\nQue voulez-vous faire ? (I: importer  S: supprimer  R: retour)  ");
+        buffer = toupper(getchar());
+
+    } while (buffer != 'I' && buffer != 'S' && buffer != 'R');
+    return buffer;
+}
+
+/**
+ * @brief Print the welcome screen
+ * 
+ */
 void welcomeScreen() {
     printf(" /$$$$$$$  /$$$$$$$$  /$$$$$$  /$$       /$$       /$$     /$$       /$$$$$$$   /$$$$$$  /$$$$$$$         /$$$$$$  /$$   /$$ /$$$$$$$$  /$$$$$$   /$$$$$$ \n");
     printf("| $$__  $$| $$_____/ /$$__  $$| $$      | $$      |  $$   /$$/      | $$__  $$ /$$__  $$| $$__  $$       /$$__  $$| $$  | $$| $$_____/ /$$__  $$ /$$__  $$\n");
@@ -413,8 +522,12 @@ void welcomeScreen() {
     printf("Appuiez sur entrée pour commencer  ");
 }
 
+/**
+ * @brief Print quit screen
+ * 
+ */
 void quitScreen() {
-    clean();
+    clear();
     printf(" /$$$$$$$$ /$$   /$$  /$$$$$$  /$$   /$$ /$$   /$$  /$$$$$$\n");
     printf("|__  $$__/| $$  | $$ /$$__  $$| $$$ | $$| $$  /$$/ /$$__  $$\n");
     printf("   | $$   | $$  | $$| $$  \\ $$| $$$$| $$| $$ /$$/ | $$  \\__/\n");
@@ -440,6 +553,6 @@ void quitScreen() {
     printf("| $$      | $$$$$$$$| $$  | $$    | $$     /$$$$$$| $$ \\  $$|  $$$$$$/\n");
     printf("|__/      |________/|__/  |__/    |__/    |______/|__/  \\__/ \\______/\n\n");
     printf("Appuiez sur entrée pour quitter  ");
-    stdinClear();
+    stdinClean();
     getchar();
 }

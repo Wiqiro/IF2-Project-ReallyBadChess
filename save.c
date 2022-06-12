@@ -1,11 +1,24 @@
 #include <game.h>
 
-
+/**
+ * @brief Initialize the "saves.txt" index by creating it if inexistant
+ * 
+ */
  void initializeSavesIndex() {
     FILE* index = fopen("saves.txt","a+");
     fclose(index);
 }
 
+/**
+ * @brief Export the specified board in a ".save" file and add it to the "saves.txt" index
+ * 
+ * @param board Board that has to be exported
+ * @param size Size of the board
+ * @param save_name Name of the save
+ * @param turn 
+ * @return true if the board was correctly exported
+ * @return false if there was an error was exporting the board
+ */
 bool exportBoard(Square** board, int size, char* save_name, Color turn) {
     
     FILE* index = fopen("saves.txt","r+");
@@ -42,6 +55,12 @@ bool exportBoard(Square** board, int size, char* save_name, Color turn) {
     return true;
 }
 
+/**
+ * @brief Get the informations relative to a save in the "save.txt" index
+ * 
+ * @param line_number Line that has to be parsed
+ * @return SaveInfo the informations relatives to the save
+ */
 SaveInfo getSaveInfo(int line_number) {
     SaveInfo save;
 
@@ -57,6 +76,13 @@ SaveInfo getSaveInfo(int line_number) {
     return save;
 }
 
+/**
+ * @brief Import the specified save in a board (the board has to be created before with the right size)
+ * 
+ * @param board The board where the save will be imported
+ * @param size The size of the board
+ * @param save_name The name of the save that is going to be imported
+ */
 void importBoard(Square** board, int size, char* save_name) {
 
     char file_name[1024];
@@ -74,7 +100,11 @@ void importBoard(Square** board, int size, char* save_name) {
     }
 }
 
-
+/**
+ * @brief Delete the specified save ".save" file and delete its corresponding line in the "saves.txt" index (DOES NOT WORK ON WINDOWS)
+ * 
+ * @param save_name The name of the save that has to be deleted
+ */
 void ripSave(char* save_name) {
 
     char file_name[1024];
@@ -83,7 +113,7 @@ void ripSave(char* save_name) {
     remove(file_name);
 
     FILE* index = fopen("saves.txt","r");
-    char new_string[5000];
+    char new_string[5000] = "";
     if (index != NULL) {
         char buffer[1024];
         while (fscanf(index, "%s",buffer) != EOF) {
@@ -96,6 +126,7 @@ void ripSave(char* save_name) {
             }
         }
     }
+
     fclose(index);
     index = fopen("saves.txt","w");
     if (index != NULL) {

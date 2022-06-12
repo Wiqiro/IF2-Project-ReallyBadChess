@@ -213,6 +213,18 @@ bool kingMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos);
 bool checkTest(Square** board, int size, Coords king_pos, Color piece_color);
 
 /**
+ * @brief Test if a piece can intercept a check by moving it in the path of the check
+ * 
+ * @param board The board where the move has to be tested
+ * @param size The size of the board
+ * @param start_pos The position of the menacing piece
+ * @param king_pos The position of the king
+ * @return true If a rescue is possible
+ * @return false If a rescue is not possible
+ */
+bool RescueTest(Square** board, int size, Coords start_pos,  Coords king_pos);
+
+/**
  * @brief Test if the specified king is in a checkmate position
  * 
  * @param board Board where the checkmate has to be tested
