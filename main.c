@@ -99,8 +99,10 @@ int main(int argc, char* argv[]) {
                     } else {
                         check = false;
                     }
-                    if (checkmate) {
-                        printf("CHECKMATE");
+                    if (checkmate == true) {
+                        clear();
+                        boardPrint(board, size, fancy_print);
+                        checkMateDialogue(!turn);
                     }
                     turn = !turn;
                     break;
@@ -122,8 +124,8 @@ int main(int argc, char* argv[]) {
 
                 case 'X': ;
                     if (quitConfirmation() == true) {
-                        freeBoard(&board, size);
-                        initialized = false;
+                        boardPrint(board, size, fancy_print);
+                        abandonDialogue(turn);
                         checkmate = true;
                     }
                     clear();

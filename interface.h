@@ -95,6 +95,16 @@ void saveNameInput(char* string);
 bool fancyModeInput();
 
 /**
+ * @brief Print the checkmate dialogue depending on the winner
+ * 
+ * @param king_color the color of the king
+ */
+void checkMateDialogue(Color king_color);
+
+
+void abandonDialogue(Color turn);
+
+/**
  * @brief Secured input for quit confirmation
  * 
  * @return true if the user want to quit

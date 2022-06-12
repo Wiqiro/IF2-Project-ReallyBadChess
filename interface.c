@@ -401,9 +401,26 @@ bool fancyModeInput() {
 }
 
 
-void CheckMateScreen(Square** board, Coords king_pos) {
-    clear();
-    if (board[king_pos.x][king_pos.y].color == white);
+void checkMateDialogue(Color king_color) {
+    if (king_color == white) {
+        printf("Le roi blanc est en échec et mat : les noirs remportent la partie !");
+    } else {
+        printf("Le roi noir est en échec et mat : les blancs remportent la partie !");
+    }
+    printf("\n\nAppuiez sur entrée pour retourner au menu  ");
+    stdinClean();
+    getchar();
+}
+
+void abandonDialogue(Color turn) {
+    if (turn == white) {
+        printf("Vous avez abandonné : les noirs remportent la partie !");
+    } else {
+        printf("Vous avez abandonné : les blancs remportent la partie !");
+    }
+    printf("\n\nAppuiez sur entrée pour retourner au menu  ");
+    stdinClean();
+    getchar();
 }
 
 /**
