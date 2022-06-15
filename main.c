@@ -28,11 +28,11 @@ int main(int argc, char* argv[]) {
     bool fancy_print = true;
     bool quit = false;
 
-    welcomeScreen();
+    
 
     char menu_choice;
     do {
-
+        welcomeScreen();
         if (initialized == false) {
             menu_choice = menuInput();
         } else {
@@ -108,6 +108,7 @@ int main(int argc, char* argv[]) {
                     break;
                 
                 case 'S': ;
+                    
                     char save_name[20];
                     saveNameInput(save_name);
                     
@@ -123,7 +124,9 @@ int main(int argc, char* argv[]) {
                     break;
 
                 case 'X': ;
+                
                     if (quitConfirmation() == true) {
+                        clear();
                         boardPrint(board, size, fancy_print);
                         abandonDialogue(turn);
                         checkmate = true;
@@ -169,8 +172,6 @@ int main(int argc, char* argv[]) {
                             printf("\nLa sauvegarde a été supprimée\nAppuiez sur entrée pour continuer  ");
                             stdinClean();
                             getchar();
-                            
-                            
                         }
                         freeBoard(&board, size);
                     }                    
@@ -185,10 +186,12 @@ int main(int argc, char* argv[]) {
                 quitScreen();
                 quit = true;
             }
+            clear();
             break;
 
         case 'O':
             fancy_print = fancyModeInput();
+            clear();
             break;
 
         default:
