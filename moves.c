@@ -99,7 +99,7 @@ bool pawnMoveTest(Square** board, int size, Coords start_pos, Coords targ_pos) {
             return true;
         }
 
-    } else if (move_x == 0 && ((board[start_pos.x][start_pos.y].color == black && targ_pos.y == 3) || (board[start_pos.x][start_pos.y].color == white && targ_pos.y == size-4))) {
+    } else if (move_x == 0 && ((board[start_pos.x][start_pos.y].color == black && targ_pos.y == 3 && start_pos.y == 1) || (board[start_pos.x][start_pos.y].color == white && start_pos.y == size-2 && targ_pos.y == size-4))) {
         return true;
     }
 
